@@ -1,11 +1,12 @@
 import React from 'react';
 import MarkdownEditor from './MarkdownEditor';
-import DocumentVersionControl from './Versions'
+
+import DocumentSharing from './DocumentSharing'
 
 function App() {
   return (
     <div>
-      <DocumentVersionControl />
+      <DocumentSharing />
     </div>
   );
 }
