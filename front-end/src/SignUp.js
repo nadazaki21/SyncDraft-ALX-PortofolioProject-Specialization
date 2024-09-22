@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import logo from './assets/logo.png'; // Same logo used in previous pages
+import './AbstractBackground.css'; // Import the background styles
 
 const SignupPage = () => {
     const [firstName, setFirstName] = useState('');
@@ -20,7 +21,7 @@ const SignupPage = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Signup failed');
+                throw new Error('Failed to create an account');
             }
 
             // Handle successful signup
@@ -31,22 +32,28 @@ const SignupPage = () => {
         }
     };
 
+    const switchToLogin = () => {
+        // Logic to switch to login page
+        console.log('Switch to login page');
+    };
+
     return (
         <div className="flex h-screen items-center justify-center bg-gray-50 relative">
             {/* Background Container */}
             <div className="absolute inset-0 z-0 overflow-hidden">
                 {/* Adjusted abstract shapes */}
-                <div className="absolute top-0 left-0 w-64 h-64 bg-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
-                <div className="absolute top-0 right-0 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
-                <div className="absolute bottom-0 left-32 w-80 h-80 bg-pink-400 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
+                <div className="absolute top-0 left-0 w-64 h-64 bg-blue-300 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
+                <div className="absolute top-0 right-0 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
+                <div className="absolute bottom-0 left-32 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
             </div>
 
             {/* Signup Form */}
+
             <div className="w-full max-w-md bg-white p-8 rounded shadow-lg z-10">
                 <div className="flex flex-col items-center mb-6">
                     <img src={logo} alt="SyncDraft Logo" className="w-12 h-12 bg-gray-400 rounded-full mb-4" />
-                    <h1 className="text-2xl font-bold">Create your SyncDraft account</h1>
-                    <p className="text-gray-600">Sign up to get started</p>
+                    <h1 className="text-2xl font-bold">Join SyncDraft</h1>
+                    <p className="text-gray-600">Create your account</p>
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700">First Name</label>
@@ -85,6 +92,15 @@ const SignupPage = () => {
                 >
                     Sign Up
                 </button>
+                <p className="text-gray-600 text-center mt-4">
+                    Already have an account?{' '}
+                    <span
+                        className="text-blue-500 cursor-pointer hover:underline"
+                        onClick={switchToLogin}
+                    >
+                        Login here
+                    </span>
+                </p>
             </div>
         </div>
     );
