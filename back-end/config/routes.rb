@@ -15,7 +15,12 @@ Rails.application.routes.draw do
   # root "posts#index"
   
   # Documents APIs routes
-    namespace :api do
-      resources :documents
+  namespace :api do
+    resources :documents, only: [:index, :show, :create, :update, :destroy] do
+      collection do
+        get 'recent'  # Fetch recent documents opened by the user
+      end
     end
+    get 'user/activity', to: 'documents#user_activity'
+  end
 end
