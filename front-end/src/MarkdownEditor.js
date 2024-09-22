@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'quill/dist/quill.snow.css'; // Import Quill's styles
 import Quill from 'quill';
+import logo from './assets/logo.png'
 
 const MarkdownEditor = () => {
     const [selectedDocument, setSelectedDocument] = useState(null);
@@ -14,13 +15,39 @@ const MarkdownEditor = () => {
             quillInstance.current = new Quill(quillRef.current, {
                 theme: 'snow',
                 modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline'], // toggled buttons
-                        ['link', 'image'], // add's image and link
-                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                        [{ 'color': [] }, { 'background': [] }], // dropdown with defaults
-                        ['clean'] // remove formatting button
-                    ],
+                    toolbar: {
+                        container: [
+                            [{ 'header': [1, 2, false] }], // Header options
+                            ['bold', 'italic', 'underline'], // toggled buttons
+                            ['link', 'image'], // add's image and link
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                            [{ 'color': [] }, { 'background': [] }], // dropdown with defaults
+                            ['clean'] // remove formatting button
+                        ],
+                        handlers: {
+                            'bold': function() {
+                                this.quill.format('bold', !this.quill.getFormat().bold);
+                            },
+                            'italic': function() {
+                                this.quill.format('italic', !this.quill.getFormat().italic);
+                            },
+                            'underline': function() {
+                                this.quill.format('underline', !this.quill.getFormat().underline);
+                            },
+                            'link': function() {
+                                const url = prompt('Enter URL');
+                                if (url) {
+                                    this.quill.format('link', url);
+                                }
+                            },
+                            'image': function() {
+                                const url = prompt('Enter image URL');
+                                if (url) {
+                                    this.quill.insertEmbed(this.quill.getSelection().index, 'image', url);
+                                }
+                            },
+                        },
+                    },
                 },
             });
         }
@@ -30,10 +57,11 @@ const MarkdownEditor = () => {
         <div className="flex h-screen">
             <div className="w-1/4 bg-gray-100 p-4">
                 <div className="flex items-center mb-6">
-                    <div className="w-4 h-4 bg-gray-400 rounded-full mr-2"></div>
-                    <span className="text-xl font-bold">MarkDown</span>
+                    <img src={logo} alt="SyncDraft Logo" className="w-4 h-4 bg-gray-400 rounded-full mr-2"></img>
+                    <span className="text-xl font-bold">SyncDraft</span>
                 </div>
                 <button className="w-full bg-gray-800 text-white py-2 px-4 rounded mb-4">New Document</button>
+                <h2 className="text-lg font-semibold mb-2">Most recent:</h2>
                 <ul>
                     {documents.map((doc, index) => (
                         <li
@@ -50,10 +78,10 @@ const MarkdownEditor = () => {
                 <div className="flex justify-between items-center mb-4">
                     <h1 className="text-2xl font-bold">Untitled Document</h1>
                     <div className="flex items-center">
-                        <i className="fas fa-user-circle text-2xl mr-2"></i>
-                        <i className="fas fa-users text-2xl mr-2"></i>
-                        <button className="bg-gray-200 text-gray-800 py-1 px-3 rounded mr-2">Share</button>
-                        <button className="bg-gray-200 text-gray-800 py-1 px-3 rounded">Save</button>
+                        <i className="fas fa-user-circle text-2xl mr-2" title="User Profile"></i>
+                        <i className="fas fa-users text-2xl mr-2" title="Share with Users"></i>
+                        <button className="bg-gray-200 text-gray-800 py-1 px-3 rounded mr-2" title="Share">Share</button>
+                        <button className="bg-gray-200 text-gray-800 py-1 px-3 rounded" title="Save">Save</button>
                     </div>
                 </div>
                 <div ref={quillRef} className="h-96 bg-white border rounded"></div>
