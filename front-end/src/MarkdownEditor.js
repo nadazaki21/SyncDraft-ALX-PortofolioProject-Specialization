@@ -1,10 +1,30 @@
-import React, { useState } from 'react';
-//import './MarkdownEditor.css'; // Assuming you'll style it using Tailwind
+import React, { useEffect, useRef, useState } from 'react';
+import 'quill/dist/quill.snow.css'; // Import Quill's styles
+import Quill from 'quill';
 
 const MarkdownEditor = () => {
     const [selectedDocument, setSelectedDocument] = useState(null);
-
+    const quillRef = useRef(null); // Reference for the Quill editor
+    const quillInstance = useRef(null); // Reference to store the Quill instance
     const documents = ["Document 1", "Document 2", "Document 3"];
+
+    useEffect(() => {
+        // Initialize Quill editor only if it hasn't been initialized yet
+        if (!quillInstance.current) {
+            quillInstance.current = new Quill(quillRef.current, {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'], // toggled buttons
+                        ['link', 'image'], // add's image and link
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        [{ 'color': [] }, { 'background': [] }], // dropdown with defaults
+                        ['clean'] // remove formatting button
+                    ],
+                },
+            });
+        }
+    }, []);
 
     return (
         <div className="flex h-screen">
@@ -36,7 +56,7 @@ const MarkdownEditor = () => {
                         <button className="bg-gray-200 text-gray-800 py-1 px-3 rounded">Save</button>
                     </div>
                 </div>
-                <textarea className="w-full h-96 p-4 bg-white border rounded" placeholder="Start typing your Markdown here..."></textarea>
+                <div ref={quillRef} className="h-96 bg-white border rounded"></div>
             </div>
         </div>
     );
