@@ -341,3 +341,92 @@ puma (6.4.3) lib/puma/request.rb:99:in `handle_request'
 puma (6.4.3) lib/puma/server.rb:464:in `process_client'
 puma (6.4.3) lib/puma/server.rb:245:in `block in run'
 puma (6.4.3) lib/puma/thread_pool.rb:155:in `block in spawn_thread'
+  [1m[35m (21.4ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (11.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.9ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (8.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2024-09-22 17:44:26.413995', '2024-09-22 17:44:26.414000') RETURNING "key"[0m
+Migrating to CreateUsers (20240920164823)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (14.0ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "name" character varying, "username" character varying, "email" character varying, "password_hash" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920164823') RETURNING "version"[0m
+  [1m[36mTRANSACTION (1.5ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateDocuments (20240920171546)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (14.1ms)[0m  [1m[35mCREATE TABLE "documents" ("id" bigserial primary key, "title" character varying, "content" jsonb, "created_by_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_6dd87d46e1"
+FOREIGN KEY ("created_by_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (4.3ms)[0m  [1m[35mCREATE INDEX "index_documents_on_created_by_id" ON "documents" ("created_by_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920171546') RETURNING "version"[0m
+  [1m[36mTRANSACTION (1.1ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreatePermissions (20240920172433)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (12.0ms)[0m  [1m[35mCREATE TABLE "permissions" ("id" bigserial primary key, "user_id" bigint NOT NULL, "document_id" bigint NOT NULL, "access_type" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_d9cfa3c257"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+, CONSTRAINT "fk_rails_e5fcc70a17"
+FOREIGN KEY ("document_id")
+  REFERENCES "documents" ("id")
+)[0m
+  [1m[35m (4.0ms)[0m  [1m[35mCREATE INDEX "index_permissions_on_user_id" ON "permissions" ("user_id")[0m
+  [1m[35m (3.0ms)[0m  [1m[35mCREATE INDEX "index_permissions_on_document_id" ON "permissions" ("document_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920172433') RETURNING "version"[0m
+  [1m[36mTRANSACTION (2.0ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/" for 127.0.0.1 at 2024-09-22 20:44:37 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /home/sherbine/.rbenv/versions/3.3.5/lib/ruby/gems/3.3.0/gems/railties-7.1.4/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /home/sherbine/.rbenv/versions/3.3.5/lib/ruby/gems/3.3.0/gems/railties-7.1.4/lib/rails/templates/rails/welcome/index.html.erb (Duration: 0.9ms | Allocations: 367)
+Completed 200 OK in 14ms (Views: 4.4ms | ActiveRecord: 0.0ms | Allocations: 4755)
+
+
+Started GET "/documents" for 127.0.0.1 at 2024-09-22 20:44:44 +0300
+  
+ActionController::RoutingError (No route matches [GET] "/documents"):
+  
+Started GET "/favicon.ico" for 127.0.0.1 at 2024-09-22 20:44:44 +0300
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/api/documents" for 127.0.0.1 at 2024-09-22 20:45:00 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (1.1ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 76ms (Views: 21.4ms | ActiveRecord: 6.8ms | Allocations: 15104)
+
+
+Started GET "/" for 127.0.0.1 at 2024-09-22 20:45:37 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /home/sherbine/.rbenv/versions/3.3.5/lib/ruby/gems/3.3.0/gems/railties-7.1.4/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /home/sherbine/.rbenv/versions/3.3.5/lib/ruby/gems/3.3.0/gems/railties-7.1.4/lib/rails/templates/rails/welcome/index.html.erb (Duration: 1.3ms | Allocations: 367)
+Completed 200 OK in 16ms (Views: 5.8ms | ActiveRecord: 0.0ms | Allocations: 4146)
+
+
+Started GET "/documents/1" for 127.0.0.1 at 2024-09-22 20:45:45 +0300
+  
+ActionController::RoutingError (No route matches [GET] "/documents/1"):
+  
+Started GET "/api/documents/1" for 127.0.0.1 at 2024-09-22 20:45:51 +0300
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mDocument Load (0.4ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:44:in `set_document'
+Completed 404 Not Found in 57ms (ActiveRecord: 12.0ms | Allocations: 12978)
+
+
+  
+ActiveRecord::RecordNotFound (Couldn't find Document with 'id'=1):
+  
+app/controllers/api/documents_controller.rb:44:in `set_document'
+Started GET "/api/documents/" for 127.0.0.1 at 2024-09-22 20:45:55 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (1.2ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 4ms (Views: 2.6ms | ActiveRecord: 1.2ms | Allocations: 771)
+
+
