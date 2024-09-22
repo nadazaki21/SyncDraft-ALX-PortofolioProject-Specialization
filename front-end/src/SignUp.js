@@ -35,10 +35,10 @@ const SignupPage = () => {
         <div className="flex h-screen items-center justify-center bg-gray-50 relative">
             {/* Background Container */}
             <div className="absolute inset-0 z-0 overflow-hidden">
-                {/* Add your abstract shapes and textures here */}
-                <div className="absolute top-0 left-0 w-48 h-48 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
-                <div className="absolute top-0 right-0 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
-                <div className="absolute bottom-0 left-32 w-64 h-64 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
+                {/* Adjusted abstract shapes */}
+                <div className="absolute top-0 left-0 w-64 h-64 bg-blue-400 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
+                <div className="absolute top-0 right-0 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
+                <div className="absolute bottom-0 left-32 w-80 h-80 bg-pink-400 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
             </div>
 
             {/* Signup Form */}
