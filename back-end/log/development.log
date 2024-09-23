@@ -474,3 +474,897 @@ Processing by Api::DocumentsController#update as */*
 Completed 200 OK in 70ms (Views: 0.5ms | ActiveRecord: 20.8ms | Allocations: 15697)
 
 
+Started GET "/ws" for ::1 at 2024-09-23 19:50:47 +0300
+  
+ActiveRecord::DatabaseConnectionError (There is an issue connecting to your database with your username/password, username: mahmoud.
+
+Please check your database configuration to ensure the username/password are valid.
+):
+  
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:76:in `rescue in new_client'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:68:in `new_client'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:980:in `connect'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:992:in `reconnect'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:685:in `block in reconnect!'
+activesupport (7.1.4) lib/active_support/concurrency/null_lock.rb:9:in `synchronize'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:684:in `reconnect!'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:786:in `block in verify!'
+activesupport (7.1.4) lib/active_support/concurrency/null_lock.rb:9:in `synchronize'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:777:in `verify!'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:794:in `connect!'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:1000:in `block in with_raw_connection'
+activesupport (7.1.4) lib/active_support/concurrency/null_lock.rb:9:in `synchronize'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:999:in `with_raw_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:1112:in `valid_raw_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:616:in `get_database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/schema_cache.rb:374:in `database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/schema_cache.rb:70:in `database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/schema_cache.rb:200:in `database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:870:in `database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:644:in `check_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:680:in `new_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:730:in `checkout_new_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:709:in `try_to_checkout_new_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:654:in `acquire_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:353:in `checkout'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:182:in `connection'
+activerecord (7.1.4) lib/active_record/migration/pending_migration_connection.rb:8:in `establish_temporary_connection'
+activerecord (7.1.4) lib/active_record/migration.rb:774:in `block in pending_migrations'
+activerecord (7.1.4) lib/active_record/migration.rb:773:in `each'
+activerecord (7.1.4) lib/active_record/migration.rb:773:in `pending_migrations'
+activerecord (7.1.4) lib/active_record/migration.rb:752:in `check_pending_migrations'
+activerecord (7.1.4) lib/active_record/migration.rb:644:in `block (2 levels) in call'
+activesupport (7.1.4) lib/active_support/file_update_checker.rb:85:in `execute'
+activerecord (7.1.4) lib/active_record/migration.rb:649:in `block in call'
+activerecord (7.1.4) lib/active_record/migration.rb:641:in `synchronize'
+activerecord (7.1.4) lib/active_record/migration.rb:641:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/callbacks.rb:29:in `block in call'
+activesupport (7.1.4) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (7.1.4) lib/action_dispatch/middleware/callbacks.rb:28:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/actionable_exceptions.rb:16:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/debug_exceptions.rb:29:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/show_exceptions.rb:31:in `call'
+railties (7.1.4) lib/rails/rack/logger.rb:37:in `call_app'
+railties (7.1.4) lib/rails/rack/logger.rb:24:in `block in call'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:139:in `block in tagged'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:39:in `tagged'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:139:in `tagged'
+activesupport (7.1.4) lib/active_support/broadcast_logger.rb:241:in `method_missing'
+railties (7.1.4) lib/rails/rack/logger.rb:24:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/remote_ip.rb:92:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/request_id.rb:28:in `call'
+rack (3.1.7) lib/rack/runtime.rb:24:in `call'
+activesupport (7.1.4) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:59:in `block in call'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:24:in `collect_events'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:58:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/static.rb:25:in `call'
+rack (3.1.7) lib/rack/sendfile.rb:114:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/host_authorization.rb:141:in `call'
+railties (7.1.4) lib/rails/engine.rb:536:in `call'
+puma (6.4.3) lib/puma/configuration.rb:272:in `call'
+puma (6.4.3) lib/puma/request.rb:100:in `block in handle_request'
+puma (6.4.3) lib/puma/thread_pool.rb:378:in `with_force_shutdown'
+puma (6.4.3) lib/puma/request.rb:99:in `handle_request'
+puma (6.4.3) lib/puma/server.rb:464:in `process_client'
+puma (6.4.3) lib/puma/server.rb:245:in `block in run'
+puma (6.4.3) lib/puma/thread_pool.rb:155:in `block in spawn_thread'
+Started GET "/ws" for ::1 at 2024-09-23 19:50:52 +0300
+  
+ActiveRecord::DatabaseConnectionError (There is an issue connecting to your database with your username/password, username: mahmoud.
+
+Please check your database configuration to ensure the username/password are valid.
+):
+  
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:76:in `rescue in new_client'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:68:in `new_client'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:980:in `connect'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:992:in `reconnect'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:685:in `block in reconnect!'
+activesupport (7.1.4) lib/active_support/concurrency/null_lock.rb:9:in `synchronize'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:684:in `reconnect!'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:786:in `block in verify!'
+activesupport (7.1.4) lib/active_support/concurrency/null_lock.rb:9:in `synchronize'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:777:in `verify!'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:794:in `connect!'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:1000:in `block in with_raw_connection'
+activesupport (7.1.4) lib/active_support/concurrency/null_lock.rb:9:in `synchronize'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:999:in `with_raw_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:1112:in `valid_raw_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:616:in `get_database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/schema_cache.rb:374:in `database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/schema_cache.rb:70:in `database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/schema_cache.rb:200:in `database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:870:in `database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:644:in `check_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:680:in `new_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:730:in `checkout_new_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:709:in `try_to_checkout_new_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:654:in `acquire_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:353:in `checkout'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:182:in `connection'
+activerecord (7.1.4) lib/active_record/migration/pending_migration_connection.rb:8:in `establish_temporary_connection'
+activerecord (7.1.4) lib/active_record/migration.rb:774:in `block in pending_migrations'
+activerecord (7.1.4) lib/active_record/migration.rb:773:in `each'
+activerecord (7.1.4) lib/active_record/migration.rb:773:in `pending_migrations'
+activerecord (7.1.4) lib/active_record/migration.rb:752:in `check_pending_migrations'
+activerecord (7.1.4) lib/active_record/migration.rb:644:in `block (2 levels) in call'
+activesupport (7.1.4) lib/active_support/file_update_checker.rb:85:in `execute'
+activerecord (7.1.4) lib/active_record/migration.rb:649:in `block in call'
+activerecord (7.1.4) lib/active_record/migration.rb:641:in `synchronize'
+activerecord (7.1.4) lib/active_record/migration.rb:641:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/callbacks.rb:29:in `block in call'
+activesupport (7.1.4) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (7.1.4) lib/action_dispatch/middleware/callbacks.rb:28:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/actionable_exceptions.rb:16:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/debug_exceptions.rb:29:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/show_exceptions.rb:31:in `call'
+railties (7.1.4) lib/rails/rack/logger.rb:37:in `call_app'
+railties (7.1.4) lib/rails/rack/logger.rb:24:in `block in call'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:139:in `block in tagged'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:39:in `tagged'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:139:in `tagged'
+activesupport (7.1.4) lib/active_support/broadcast_logger.rb:241:in `method_missing'
+railties (7.1.4) lib/rails/rack/logger.rb:24:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/remote_ip.rb:92:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/request_id.rb:28:in `call'
+rack (3.1.7) lib/rack/runtime.rb:24:in `call'
+activesupport (7.1.4) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:59:in `block in call'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:24:in `collect_events'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:58:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/static.rb:25:in `call'
+rack (3.1.7) lib/rack/sendfile.rb:114:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/host_authorization.rb:141:in `call'
+railties (7.1.4) lib/rails/engine.rb:536:in `call'
+puma (6.4.3) lib/puma/configuration.rb:272:in `call'
+puma (6.4.3) lib/puma/request.rb:100:in `block in handle_request'
+puma (6.4.3) lib/puma/thread_pool.rb:378:in `with_force_shutdown'
+puma (6.4.3) lib/puma/request.rb:99:in `handle_request'
+puma (6.4.3) lib/puma/server.rb:464:in `process_client'
+puma (6.4.3) lib/puma/server.rb:245:in `block in run'
+puma (6.4.3) lib/puma/thread_pool.rb:155:in `block in spawn_thread'
+Started GET "/ws" for ::1 at 2024-09-23 19:51:00 +0300
+  
+ActiveRecord::DatabaseConnectionError (There is an issue connecting to your database with your username/password, username: mahmoud.
+
+Please check your database configuration to ensure the username/password are valid.
+):
+  
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:76:in `rescue in new_client'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:68:in `new_client'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:980:in `connect'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:992:in `reconnect'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:685:in `block in reconnect!'
+activesupport (7.1.4) lib/active_support/concurrency/null_lock.rb:9:in `synchronize'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:684:in `reconnect!'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:786:in `block in verify!'
+activesupport (7.1.4) lib/active_support/concurrency/null_lock.rb:9:in `synchronize'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:777:in `verify!'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:794:in `connect!'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:1000:in `block in with_raw_connection'
+activesupport (7.1.4) lib/active_support/concurrency/null_lock.rb:9:in `synchronize'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:999:in `with_raw_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:1112:in `valid_raw_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:616:in `get_database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/schema_cache.rb:374:in `database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/schema_cache.rb:70:in `database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/schema_cache.rb:200:in `database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract_adapter.rb:870:in `database_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/postgresql_adapter.rb:644:in `check_version'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:680:in `new_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:730:in `checkout_new_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:709:in `try_to_checkout_new_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:654:in `acquire_connection'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:353:in `checkout'
+activerecord (7.1.4) lib/active_record/connection_adapters/abstract/connection_pool.rb:182:in `connection'
+activerecord (7.1.4) lib/active_record/migration/pending_migration_connection.rb:8:in `establish_temporary_connection'
+activerecord (7.1.4) lib/active_record/migration.rb:774:in `block in pending_migrations'
+activerecord (7.1.4) lib/active_record/migration.rb:773:in `each'
+activerecord (7.1.4) lib/active_record/migration.rb:773:in `pending_migrations'
+activerecord (7.1.4) lib/active_record/migration.rb:752:in `check_pending_migrations'
+activerecord (7.1.4) lib/active_record/migration.rb:644:in `block (2 levels) in call'
+activesupport (7.1.4) lib/active_support/file_update_checker.rb:85:in `execute'
+activerecord (7.1.4) lib/active_record/migration.rb:649:in `block in call'
+activerecord (7.1.4) lib/active_record/migration.rb:641:in `synchronize'
+activerecord (7.1.4) lib/active_record/migration.rb:641:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/callbacks.rb:29:in `block in call'
+activesupport (7.1.4) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (7.1.4) lib/action_dispatch/middleware/callbacks.rb:28:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/actionable_exceptions.rb:16:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/debug_exceptions.rb:29:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/show_exceptions.rb:31:in `call'
+railties (7.1.4) lib/rails/rack/logger.rb:37:in `call_app'
+railties (7.1.4) lib/rails/rack/logger.rb:24:in `block in call'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:139:in `block in tagged'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:39:in `tagged'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:139:in `tagged'
+activesupport (7.1.4) lib/active_support/broadcast_logger.rb:241:in `method_missing'
+railties (7.1.4) lib/rails/rack/logger.rb:24:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/remote_ip.rb:92:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/request_id.rb:28:in `call'
+rack (3.1.7) lib/rack/runtime.rb:24:in `call'
+activesupport (7.1.4) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:59:in `block in call'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:24:in `collect_events'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:58:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/static.rb:25:in `call'
+rack (3.1.7) lib/rack/sendfile.rb:114:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/host_authorization.rb:141:in `call'
+railties (7.1.4) lib/rails/engine.rb:536:in `call'
+puma (6.4.3) lib/puma/configuration.rb:272:in `call'
+puma (6.4.3) lib/puma/request.rb:100:in `block in handle_request'
+puma (6.4.3) lib/puma/thread_pool.rb:378:in `with_force_shutdown'
+puma (6.4.3) lib/puma/request.rb:99:in `handle_request'
+puma (6.4.3) lib/puma/server.rb:464:in `process_client'
+puma (6.4.3) lib/puma/server.rb:245:in `block in run'
+puma (6.4.3) lib/puma/thread_pool.rb:155:in `block in spawn_thread'
+Started GET "/ws" for ::1 at 2024-09-23 19:51:50 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActiveRecord::PendingMigrationError (
+
+Migrations are pending. To resolve this issue, run:
+
+        bin/rails db:migrate
+
+You have 3 pending migrations:
+
+db/migrate/20240920164823_create_users.rb
+db/migrate/20240920171546_create_documents.rb
+db/migrate/20240920172433_create_permissions.rb
+
+
+):
+  
+activerecord (7.1.4) lib/active_record/migration.rb:755:in `check_pending_migrations'
+activerecord (7.1.4) lib/active_record/migration.rb:644:in `block (2 levels) in call'
+activesupport (7.1.4) lib/active_support/file_update_checker.rb:85:in `execute'
+activerecord (7.1.4) lib/active_record/migration.rb:649:in `block in call'
+activerecord (7.1.4) lib/active_record/migration.rb:641:in `synchronize'
+activerecord (7.1.4) lib/active_record/migration.rb:641:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/callbacks.rb:29:in `block in call'
+activesupport (7.1.4) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (7.1.4) lib/action_dispatch/middleware/callbacks.rb:28:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/actionable_exceptions.rb:16:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/debug_exceptions.rb:29:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/show_exceptions.rb:31:in `call'
+railties (7.1.4) lib/rails/rack/logger.rb:37:in `call_app'
+railties (7.1.4) lib/rails/rack/logger.rb:24:in `block in call'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:139:in `block in tagged'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:39:in `tagged'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:139:in `tagged'
+activesupport (7.1.4) lib/active_support/broadcast_logger.rb:241:in `method_missing'
+railties (7.1.4) lib/rails/rack/logger.rb:24:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/remote_ip.rb:92:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/request_id.rb:28:in `call'
+rack (3.1.7) lib/rack/runtime.rb:24:in `call'
+activesupport (7.1.4) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:59:in `block in call'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:24:in `collect_events'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:58:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/static.rb:25:in `call'
+rack (3.1.7) lib/rack/sendfile.rb:114:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/host_authorization.rb:141:in `call'
+railties (7.1.4) lib/rails/engine.rb:536:in `call'
+puma (6.4.3) lib/puma/configuration.rb:272:in `call'
+puma (6.4.3) lib/puma/request.rb:100:in `block in handle_request'
+puma (6.4.3) lib/puma/thread_pool.rb:378:in `with_force_shutdown'
+puma (6.4.3) lib/puma/request.rb:99:in `handle_request'
+puma (6.4.3) lib/puma/server.rb:464:in `process_client'
+puma (6.4.3) lib/puma/server.rb:245:in `block in run'
+puma (6.4.3) lib/puma/thread_pool.rb:155:in `block in spawn_thread'
+Started GET "/ws" for ::1 at 2024-09-23 19:52:54 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActiveRecord::PendingMigrationError (
+
+Migrations are pending. To resolve this issue, run:
+
+        bin/rails db:migrate
+
+You have 3 pending migrations:
+
+db/migrate/20240920164823_create_users.rb
+db/migrate/20240920171546_create_documents.rb
+db/migrate/20240920172433_create_permissions.rb
+
+
+):
+  
+activerecord (7.1.4) lib/active_record/migration.rb:755:in `check_pending_migrations'
+activerecord (7.1.4) lib/active_record/migration.rb:644:in `block (2 levels) in call'
+activesupport (7.1.4) lib/active_support/file_update_checker.rb:85:in `execute'
+activerecord (7.1.4) lib/active_record/migration.rb:649:in `block in call'
+activerecord (7.1.4) lib/active_record/migration.rb:641:in `synchronize'
+activerecord (7.1.4) lib/active_record/migration.rb:641:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/callbacks.rb:29:in `block in call'
+activesupport (7.1.4) lib/active_support/callbacks.rb:101:in `run_callbacks'
+actionpack (7.1.4) lib/action_dispatch/middleware/callbacks.rb:28:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/actionable_exceptions.rb:16:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/debug_exceptions.rb:29:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/show_exceptions.rb:31:in `call'
+railties (7.1.4) lib/rails/rack/logger.rb:37:in `call_app'
+railties (7.1.4) lib/rails/rack/logger.rb:24:in `block in call'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:139:in `block in tagged'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:39:in `tagged'
+activesupport (7.1.4) lib/active_support/tagged_logging.rb:139:in `tagged'
+activesupport (7.1.4) lib/active_support/broadcast_logger.rb:241:in `method_missing'
+railties (7.1.4) lib/rails/rack/logger.rb:24:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/remote_ip.rb:92:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/request_id.rb:28:in `call'
+rack (3.1.7) lib/rack/runtime.rb:24:in `call'
+activesupport (7.1.4) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:59:in `block in call'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:24:in `collect_events'
+actionpack (7.1.4) lib/action_dispatch/middleware/server_timing.rb:58:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/static.rb:25:in `call'
+rack (3.1.7) lib/rack/sendfile.rb:114:in `call'
+actionpack (7.1.4) lib/action_dispatch/middleware/host_authorization.rb:141:in `call'
+railties (7.1.4) lib/rails/engine.rb:536:in `call'
+puma (6.4.3) lib/puma/configuration.rb:272:in `call'
+puma (6.4.3) lib/puma/request.rb:100:in `block in handle_request'
+puma (6.4.3) lib/puma/thread_pool.rb:378:in `with_force_shutdown'
+puma (6.4.3) lib/puma/request.rb:99:in `handle_request'
+puma (6.4.3) lib/puma/server.rb:464:in `process_client'
+puma (6.4.3) lib/puma/server.rb:245:in `block in run'
+puma (6.4.3) lib/puma/thread_pool.rb:155:in `block in spawn_thread'
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.6ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+Migrating to CreateUsers (20240920164823)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (123.6ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "name" character varying, "username" character varying, "email" character varying, "password_hash" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920164823') RETURNING "version"[0m
+  [1m[36mTRANSACTION (14.4ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateDocuments (20240920171546)
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (94.5ms)[0m  [1m[35mCREATE TABLE "documents" ("id" bigserial primary key, "title" character varying, "content" jsonb, "created_by_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_6dd87d46e1"
+FOREIGN KEY ("created_by_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (50.4ms)[0m  [1m[35mCREATE INDEX "index_documents_on_created_by_id" ON "documents" ("created_by_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920171546') RETURNING "version"[0m
+  [1m[36mTRANSACTION (15.1ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreatePermissions (20240920172433)
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (73.3ms)[0m  [1m[35mCREATE TABLE "permissions" ("id" bigserial primary key, "user_id" bigint NOT NULL, "document_id" bigint NOT NULL, "access_type" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_d9cfa3c257"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+, CONSTRAINT "fk_rails_e5fcc70a17"
+FOREIGN KEY ("document_id")
+  REFERENCES "documents" ("id")
+)[0m
+  [1m[35m (32.0ms)[0m  [1m[35mCREATE INDEX "index_permissions_on_user_id" ON "permissions" ("user_id")[0m
+  [1m[35m (31.0ms)[0m  [1m[35mCREATE INDEX "index_permissions_on_document_id" ON "permissions" ("document_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920172433') RETURNING "version"[0m
+  [1m[36mTRANSACTION (33.7ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started OPTIONS "/users" for ::1 at 2024-09-23 19:55:45 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActionController::RoutingError (No route matches [OPTIONS] "/users"):
+  
+Started POST "/users" for ::1 at 2024-09-23 20:00:19 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActionController::RoutingError (uninitialized constant UsersController):
+  
+Started POST "/users" for ::1 at 2024-09-23 20:03:45 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+NoMethodError (undefined method `before_action' for UsersController:Class):
+  
+app/controllers/users_controller.rb:2:in `<class:UsersController>'
+app/controllers/users_controller.rb:1:in `<main>'
+Started GET "/ws" for ::1 at 2024-09-23 20:07:53 +0300
+  
+ActionController::RoutingError (No route matches [GET] "/ws"):
+  
+Started POST "/users" for ::1 at 2024-09-23 20:09:17 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"Nada Zaki", "email"=>"nada@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"Nada Zaki", "email"=>"nada@gmail.com"}}
+Completed 500 Internal Server Error in 123ms (ActiveRecord: 12.2ms | Allocations: 40689)
+
+
+  
+NoMethodError (undefined method `password_digest' for #<User id: nil, name: "Nada Zaki", username: nil, email: "nada@gmail.com", password_hash: nil, created_at: nil, updated_at: nil>
+Did you mean?  password_salt):
+  
+app/controllers/users_controller.rb:18:in `create'
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreatePermissions (20240920172433)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.9ms)[0m  [1m[35mDROP TABLE "permissions"[0m
+  [1m[36mActiveRecord::SchemaMigration Destroy (0.6ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = '20240920172433'[0m
+  [1m[36mTRANSACTION (224.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateDocuments (20240920171546)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.5ms)[0m  [1m[35mDROP TABLE "documents"[0m
+  [1m[36mActiveRecord::SchemaMigration Destroy (0.6ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = '20240920171546'[0m
+  [1m[36mTRANSACTION (114.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateUsers (20240920164823)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.2ms)[0m  [1m[35mDROP TABLE "users"[0m
+  [1m[36mActiveRecord::SchemaMigration Destroy (0.5ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = '20240920164823'[0m
+  [1m[36mTRANSACTION (83.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+Migrating to CreateUsers (20240920164823)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (220.3ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "name" character varying, "username" character varying, "email" character varying, "password_digest" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920164823') RETURNING "version"[0m
+  [1m[36mTRANSACTION (11.0ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateDocuments (20240920171546)
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (123.0ms)[0m  [1m[35mCREATE TABLE "documents" ("id" bigserial primary key, "title" character varying, "content" jsonb, "created_by_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_6dd87d46e1"
+FOREIGN KEY ("created_by_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (50.7ms)[0m  [1m[35mCREATE INDEX "index_documents_on_created_by_id" ON "documents" ("created_by_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920171546') RETURNING "version"[0m
+  [1m[36mTRANSACTION (8.9ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreatePermissions (20240920172433)
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (92.8ms)[0m  [1m[35mCREATE TABLE "permissions" ("id" bigserial primary key, "user_id" bigint NOT NULL, "document_id" bigint NOT NULL, "access_type" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_d9cfa3c257"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+, CONSTRAINT "fk_rails_e5fcc70a17"
+FOREIGN KEY ("document_id")
+  REFERENCES "documents" ("id")
+)[0m
+  [1m[35m (96.2ms)[0m  [1m[35mCREATE INDEX "index_permissions_on_user_id" ON "permissions" ("user_id")[0m
+  [1m[35m (328.2ms)[0m  [1m[35mCREATE INDEX "index_permissions_on_document_id" ON "permissions" ("document_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920172433') RETURNING "version"[0m
+  [1m[36mTRANSACTION (147.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started POST "/users" for ::1 at 2024-09-23 20:12:47 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"Nada Zaki", "email"=>"nada@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"Nada Zaki", "email"=>"nada@gmail.com"}}
+Completed 422 Unprocessable Content in 93ms (Views: 0.2ms | ActiveRecord: 8.3ms | Allocations: 39196)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:15:35 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"Nada Zaki", "email"=>"nada@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"Nada Zaki", "email"=>"nada@gmail.com"}}
+Completed 422 Unprocessable Content in 5ms (Views: 0.4ms | ActiveRecord: 0.0ms | Allocations: 725)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:15:44 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"Nada Zaki", "email"=>"nada@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"Nada Zaki", "email"=>"nada@gmail.com"}}
+Completed 422 Unprocessable Content in 102ms (Views: 0.2ms | ActiveRecord: 8.1ms | Allocations: 39196)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:18:06 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"nada", "email"=>"nada@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"nada", "email"=>"nada@gmail.com"}}
+Completed 422 Unprocessable Content in 2ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 725)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:18:23 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"nada", "email"=>"nada@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"nada", "email"=>"nada@gmail.com"}}
+Completed 422 Unprocessable Content in 7ms (Views: 0.2ms | ActiveRecord: 3.0ms | Allocations: 3956)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:18:31 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"nada", "email"=>"nada@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"nada", "email"=>"nada@gmail.com"}}
+Completed 422 Unprocessable Content in 154ms (Views: 0.2ms | ActiveRecord: 15.4ms | Allocations: 39209)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:19:02 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"nada", "email"=>"nada@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"nada", "email"=>"nada@gmail.com"}}
+Completed 422 Unprocessable Content in 96ms (Views: 0.2ms | ActiveRecord: 7.8ms | Allocations: 39211)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:19:56 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"nada", "email"=>"nada@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"nada", "email"=>"nada@gmail.com"}}
+Completed 422 Unprocessable Content in 99ms (Views: 0.2ms | ActiveRecord: 8.2ms | Allocations: 39252)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:24:44 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"nada", "email"=>"nada@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"nada", "email"=>"nada@gmail.com"}}
+Completed 422 Unprocessable Content in 93ms (Views: 0.2ms | ActiveRecord: 8.1ms | Allocations: 39230)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:31:36 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (2.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"nada", "email"=>"nada@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"nada", "email"=>"nada@gmail.com"}}
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:22:in `create'
+  [1m[36mUser Exists? (5.5ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nada@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:22:in `create'
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/users_controller.rb:22:in `create'
+Completed 422 Unprocessable Content in 522ms (Views: 0.6ms | ActiveRecord: 36.3ms | Allocations: 45837)
+
+
+  [1m[36mUser Load (1.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nada@gmail.com"], ["LIMIT", 1]]
+Started POST "/users" for ::1 at 2024-09-23 20:34:47 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (2.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"hi", "email"=>"hi@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"hi", "email"=>"hi@gmail.com"}}
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:22:in `create'
+  [1m[36mUser Exists? (5.4ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hi@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:22:in `create'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/users_controller.rb:22:in `create'
+Completed 422 Unprocessable Content in 338ms (Views: 0.6ms | ActiveRecord: 40.3ms | Allocations: 44595)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:35:56 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"no", "email"=>"no@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"no", "email"=>"no@gmail.com"}}
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:22:in `create'
+  [1m[36mUser Exists? (4.9ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "no@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:22:in `create'
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/users_controller.rb:22:in `create'
+Completed 422 Unprocessable Content in 18ms (Views: 0.5ms | ActiveRecord: 6.5ms | Allocations: 2565)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:36:39 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (2.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"yes", "email"=>"yes@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"yes", "email"=>"yes@gmail.com"}}
+Completed 422 Unprocessable Content in 437ms (Views: 1.0ms | ActiveRecord: 33.2ms | Allocations: 39227)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:47:57 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"yes", "email"=>"yes@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"yes", "email"=>"yes@gmail.com"}}
+Completed 500 Internal Server Error in 9ms (ActiveRecord: 6.1ms | Allocations: 19739)
+
+
+  
+TypeError (no implicit conversion of ActionController::Parameters into String):
+  
+app/controllers/users_controller.rb:46:in `+'
+app/controllers/users_controller.rb:46:in `user_params'
+app/controllers/users_controller.rb:11:in `create'
+Started POST "/users" for ::1 at 2024-09-23 20:48:32 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"yes", "email"=>"yes@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"yes", "email"=>"yes@gmail.com"}}
+Completed 422 Unprocessable Content in 96ms (Views: 0.2ms | ActiveRecord: 8.2ms | Allocations: 39163)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:52:07 +0300
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"yes", "email"=>"yes@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"yes", "email"=>"yes@gmail.com"}}
+Completed 422 Unprocessable Content in 4ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 685)
+
+
+Started POST "/users" for ::1 at 2024-09-23 20:54:42 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"yes", "email"=>"yes@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"yes", "email"=>"yes@gmail.com"}}
+Completed 500 Internal Server Error in 97ms (ActiveRecord: 8.8ms | Allocations: 37146)
+
+
+  
+ActiveModel::ForbiddenAttributesError (ActiveModel::ForbiddenAttributesError):
+  
+app/controllers/users_controller.rb:24:in `create'
+Started POST "/users" for ::1 at 2024-09-23 20:58:06 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"yes", "email"=>"yes@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"yes", "email"=>"yes@gmail.com"}}
+Completed 422 Unprocessable Content in 101ms (Views: 0.2ms | ActiveRecord: 7.5ms | Allocations: 39167)
+
+
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateUsers (20240920164823)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (16.2ms)[0m  [1m[35mDROP TABLE "users"[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreatePermissions (20240920172433)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.8ms)[0m  [1m[35mDROP TABLE "permissions"[0m
+  [1m[36mActiveRecord::SchemaMigration Destroy (0.5ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = '20240920172433'[0m
+  [1m[36mTRANSACTION (17.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateDocuments (20240920171546)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.5ms)[0m  [1m[35mDROP TABLE "documents"[0m
+  [1m[36mActiveRecord::SchemaMigration Destroy (0.7ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = '20240920171546'[0m
+  [1m[36mTRANSACTION (8.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateUsers (20240920164823)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.5ms)[0m  [1m[35mDROP TABLE "users"[0m
+  [1m[36mActiveRecord::SchemaMigration Destroy (0.5ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = '20240920164823'[0m
+  [1m[36mTRANSACTION (46.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.6ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+Migrating to CreateUsers (20240920164823)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (128.7ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "name" character varying, "email" character varying, "password_digest" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920164823') RETURNING "version"[0m
+  [1m[36mTRANSACTION (20.7ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateDocuments (20240920171546)
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (100.7ms)[0m  [1m[35mCREATE TABLE "documents" ("id" bigserial primary key, "title" character varying, "content" jsonb, "created_by_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_6dd87d46e1"
+FOREIGN KEY ("created_by_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (50.3ms)[0m  [1m[35mCREATE INDEX "index_documents_on_created_by_id" ON "documents" ("created_by_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920171546') RETURNING "version"[0m
+  [1m[36mTRANSACTION (13.0ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreatePermissions (20240920172433)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (107.8ms)[0m  [1m[35mCREATE TABLE "permissions" ("id" bigserial primary key, "user_id" bigint NOT NULL, "document_id" bigint NOT NULL, "access_type" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_d9cfa3c257"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+, CONSTRAINT "fk_rails_e5fcc70a17"
+FOREIGN KEY ("document_id")
+  REFERENCES "documents" ("id")
+)[0m
+  [1m[35m (50.9ms)[0m  [1m[35mCREATE INDEX "index_permissions_on_user_id" ON "permissions" ("user_id")[0m
+  [1m[35m (44.6ms)[0m  [1m[35mCREATE INDEX "index_permissions_on_document_id" ON "permissions" ("document_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920172433') RETURNING "version"[0m
+  [1m[36mTRANSACTION (18.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started POST "/users" for ::1 at 2024-09-23 21:00:43 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"yes", "email"=>"yes@gmail.com", "password"=>"[FILTERED]", "user"=>{"name"=>"yes", "email"=>"yes@gmail.com"}}
+Completed 422 Unprocessable Content in 96ms (Views: 0.3ms | ActiveRecord: 8.5ms | Allocations: 38629)
+
+
+Started POST "/users" for ::1 at 2024-09-23 21:08:19 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"yes", "email"=>"yes@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (1.7ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "yes"], ["email", "yes@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-23 18:08:20.005017"], ["updated_at", "2024-09-23 18:08:20.005017"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (401.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 659ms (Views: 0.5ms | ActiveRecord: 407.5ms | Allocations: 8999)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-23 21:08:20 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"user"=>{"name"=>"yes", "email"=>"yes@gmail.com", "password"=>"[FILTERED]"}, "access_token"=>{"user"=>{"name"=>"yes", "email"=>"yes@gmail.com", "password"=>"[FILTERED]"}}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:6:in `create'
+Completed 401 Unauthorized in 12ms (Views: 0.4ms | ActiveRecord: 0.7ms | Allocations: 4051)
+
+
+Started POST "/users" for ::1 at 2024-09-23 21:10:08 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"yarabi", "email"=>"hhh@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (1.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "yarabi"], ["email", "hhh@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-23 18:10:08.625165"], ["updated_at", "2024-09-23 18:10:08.625165"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (17.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 268ms (Views: 0.3ms | ActiveRecord: 18.8ms | Allocations: 2256)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-23 21:10:08 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"name"=>"yarabi", "email"=>"hhh@gmail.com", "access_token"=>{"name"=>"yarabi", "email"=>"hhh@gmail.com"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hhh@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:6:in `create'
+Completed 401 Unauthorized in 231ms (Views: 0.2ms | ActiveRecord: 0.3ms | Allocations: 870)
+
+
+Started POST "/users" for ::1 at 2024-09-23 21:11:00 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"mmm", "email"=>"hhmmmh@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (1.3ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "mmm"], ["email", "hhmmmh@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-23 18:11:00.741966"], ["updated_at", "2024-09-23 18:11:00.741966"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (446.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 745ms (Views: 0.8ms | ActiveRecord: 448.1ms | Allocations: 2130)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-23 21:11:01 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hhmmmh@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hhmmmh@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hhmmmh@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:6:in `create'
+Completed 200 OK in 244ms (Views: 0.3ms | ActiveRecord: 0.6ms | Allocations: 789)
+
+
+Started POST "/users" for ::1 at 2024-09-23 21:11:43 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"Nada ", "email"=>"nadazaki@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (1.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Nada "], ["email", "nadazaki@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-23 18:11:43.967378"], ["updated_at", "2024-09-23 18:11:43.967378"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (10.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 260ms (Views: 0.3ms | ActiveRecord: 12.6ms | Allocations: 2107)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-23 21:11:43 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"nadazaki@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"nadazaki@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nadazaki@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:6:in `create'
+Completed 200 OK in 230ms (Views: 0.3ms | ActiveRecord: 0.3ms | Allocations: 692)
+
+
+Started POST "/users" for ::1 at 2024-09-23 21:15:35 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"trial ", "email"=>"trial@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (1.1ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "trial "], ["email", "trial@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-23 18:15:35.782859"], ["updated_at", "2024-09-23 18:15:35.782859"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (18.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 258ms (Views: 0.5ms | ActiveRecord: 24.7ms | Allocations: 5875)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-23 21:15:35 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"trial@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"trial@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "trial@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 235ms (Views: 0.3ms | ActiveRecord: 0.4ms | Allocations: 1266)
+
+
+Started POST "/users" for ::1 at 2024-09-23 21:16:20 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"hihi", "email"=>"hihi@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (1.3ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "hihi"], ["email", "hihi@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-23 18:16:20.959111"], ["updated_at", "2024-09-23 18:16:20.959111"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (13.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 239ms (Views: 0.2ms | ActiveRecord: 15.4ms | Allocations: 2176)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-23 21:16:20 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hihi@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hihi@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hihi@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 226ms (Views: 0.4ms | ActiveRecord: 0.3ms | Allocations: 692)
+
+
+Started POST "/users" for ::1 at 2024-09-23 21:17:07 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"hihi", "email"=>"hhihi@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (2.0ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "hihi"], ["email", "hhihi@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-23 18:17:07.887827"], ["updated_at", "2024-09-23 18:17:07.887827"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (41.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 305ms (Views: 0.5ms | ActiveRecord: 43.6ms | Allocations: 2107)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-23 21:17:07 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hhihi@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hhihi@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hhihi@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 231ms (Views: 0.3ms | ActiveRecord: 1.0ms | Allocations: 692)
+
+
+Started POST "/users" for ::1 at 2024-09-23 21:17:11 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"hihi", "email"=>"hhihi@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (1.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "hihi"], ["email", "hhihi@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-23 18:17:11.652200"], ["updated_at", "2024-09-23 18:17:11.652200"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (12.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 240ms (Views: 0.3ms | ActiveRecord: 14.0ms | Allocations: 2133)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-23 21:17:11 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hhihi@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hhihi@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hhihi@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 230ms (Views: 0.3ms | ActiveRecord: 0.2ms | Allocations: 693)
+
+
+Started POST "/users" for ::1 at 2024-09-23 21:17:36 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"hihi", "email"=>"hhihi@gmail.comljkh", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (2.1ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "hihi"], ["email", "hhihi@gmail.comljkh"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-23 18:17:36.426430"], ["updated_at", "2024-09-23 18:17:36.426430"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (264.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 576ms (Views: 0.7ms | ActiveRecord: 266.7ms | Allocations: 2108)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-23 21:17:36 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hhihi@gmail.comljkh", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hhihi@gmail.comljkh", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hhihi@gmail.comljkh"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 314ms (Views: 0.3ms | ActiveRecord: 0.8ms | Allocations: 691)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-23 21:22:48 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"nadazaki@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"nadazaki@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nadazaki@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 284ms (Views: 0.3ms | ActiveRecord: 6.3ms | Allocations: 11437)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-23 21:22:55 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"nadazaki@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"nadazaki@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nadazaki@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 265ms (Views: 0.6ms | ActiveRecord: 0.3ms | Allocations: 707)
+
+

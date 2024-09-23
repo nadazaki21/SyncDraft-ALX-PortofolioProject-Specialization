@@ -14,16 +14,16 @@ class Api::DocumentsController < ApplicationController
       render json: @recent_documents, only: [:id, :title, :updated_at]
   end
 
-    # GET /api/user/activity
-    def user_activity
-      # Count documents created by the current user
-      created_count = Document.where(created_by_id: current_user.id).count
-  
-      # Count documents shared with the current user
-      shared_count = Document.joins(:shared_users).where(shared_users: { user_id: current_user.id }).count
-  
-      render json: { documents_created: created_count, documents_shared: shared_count }
-    end
+  # GET /api/user/activity
+  def user_activity
+    # Count documents created by the current user
+    created_count = Document.where(created_by_id: current_user.id).count
+
+    # Count documents shared with the current user
+    shared_count = Document.joins(:shared_users).where(shared_users: { user_id: current_user.id }).count
+
+    render json: { documents_created: created_count, documents_shared: shared_count }
+  end
 
   # POST /api/documents
   def create

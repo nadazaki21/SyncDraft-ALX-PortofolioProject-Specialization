@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
+  resources :users, only: [:show, :create, :destroy]
+  resources :access_tokens , only: [:create] 
+
   
   # This line mounts the Action Cable server to the /cable endpoint.
   # This is how your front end will connect to the WebSocket.

@@ -28,5 +28,19 @@ module SyncDraft
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    Rails.application.config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins 'http://localhost:3001'  # The origin where your frontend is running
+        
+        resource '*',
+          headers: :any,
+          methods: [:get, :post, :put, :patch, :delete, :options, :head],
+          credentials: true # If you need cookies or authorization headers
+      end
+    end
+
+    
+    
   end
 end

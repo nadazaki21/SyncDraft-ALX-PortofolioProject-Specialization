@@ -1,4 +1,4 @@
-class UsersController 
+class UsersController < ApplicationController
     before_action :set_user, only: [:show, :destroy]
   
     # GET /users/:id
@@ -8,12 +8,11 @@ class UsersController
   
     # POST /users
     def create
-        modified_params = user_params
-        modified_params[:username] = user_params[:email].split('@')[0]
-        modified_params = user_params
 
-        
-        @user = User.new(modified_params)
+        puts "Received parameters:"
+        puts params.inspect
+
+        @user = User.new(user_params)
         
         if @user.save
             render json: @user, status: :created
@@ -39,7 +38,10 @@ class UsersController
   
     # Strong params for user creation
     def user_params
-      params.require(:user).permit(:name, :email, :password)
+      parameters = params.require(:user).permit(:name, :email, :password)
+      puts ( " in user params function the params are")
+      puts (parameters)
+      return parameters
       # these will be sent as json to the post reuest but rails parses them into a hash 
     end
 end

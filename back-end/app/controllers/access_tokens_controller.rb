@@ -1,8 +1,7 @@
-class AccessTokenController < ApplicationController
+class AccessTokensController < ApplicationController
 
     # on logging in or signing up  we'll call this function to create a token 
     def create
-
         @user = User.find_by(email: params[:email])
 
         if @user&.authenticate(params[:password]) # Authenticate using has_secure_password

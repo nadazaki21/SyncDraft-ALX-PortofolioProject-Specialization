@@ -10,26 +10,37 @@ const LoginPage = () => {
     const handleLogin = async () => {
         setError(null);
         try {
-            const response = await fetch('YOUR_LOGIN_API_ENDPOINT_HERE', {
+            const loginResponse = await fetch('http://localhost:3000/access_tokens', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({
+                        email: email,
+                        password: password,
+                }),
             });
-
-            if (!response.ok) {
-                throw new Error('Invalid email or password');
+    
+            if (!loginResponse.ok) {
+                throw new Error('Failed to log in');
             }
-
-            const result = await response.json();
+    
+            const result = await loginResponse.json();
             console.log('Login successful:', result);
+    
+            // Save JWT token in local storage
+            localStorage.setItem('jwtToken', result.token);
+            console.log('Saved JWT token:', localStorage.getItem('jwtToken'));
+    
+            // You can redirect or update the UI after successful signup
+            window.location.href = '/dashboard';  // Redirect to dashboard after signup
         } catch (error) {
             setError(error.message);
         }
     };
 
     const switchToSignup = () => {
+        window.location.href = '/signup';
         console.log('Switch to signup page');
     };
 

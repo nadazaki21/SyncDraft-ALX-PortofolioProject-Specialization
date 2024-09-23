@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import logo from './assets/logo.png';
+import search from './assets/search.png'
+import logout from './assets/logout.png'
+
 
 const Dashboard = () => {
   const [documents, setDocuments] = useState([]);
@@ -39,28 +43,40 @@ const Dashboard = () => {
     fetchUserActivity();
   }, []);
 
+
+  const handleLogout = () => {
+    localStorage.removeItem('jwtToken'); // Remove the JWT token
+    window.location.href = '/login';  // Redirect to the login page
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white shadow p-4 flex justify-between items-center">
         <div className="flex items-center">
-          <div className="bg-blue-500 rounded-full w-10 h-10"></div>
+          <img src={logo} alt="SyncDraft Logo" className="bg-blue-500 rounded-full w-10 h-10"></img>
           <h1 className="ml-2 text-2xl font-bold text-gray-800">SyncDraft</h1>
         </div>
         <div className="flex items-center space-x-4">
           <i className="fas fa-search text-gray-600"></i>
           <i className="fas fa-bell text-gray-600"></i>
-          <div className="bg-blue-500 rounded-full w-8 h-8"></div>
+          {/* <img src={search} alt="Search"  className="bg-yellow-100 rounded-full w-12 h-12"></img> */}
+          <div className="bg-blue-100 rounded-full shadow  w-12 h-10" >
+            <button  className=" text-xl font-semibold text-gray-800"  onClick={handleLogout}>
+            <img src={logout} alt="Logout"  className="bg-yellow-100 rounded-full w-12 h-12"></img>
+            </button>
+          </div>
         </div>
       </header>
 
       {/* Main Content */}
       <main className="p-6">
         {/* Action Buttons */}
-        <div className="flex justify-between items-center mb-6">
-          <button className="bg-blue-600 text-white px-4 py-2 rounded flex items-center shadow-md hover:bg-blue-700 transition">
+        <div className="bg-white shadow p-4 flex justify-between items-center mb-6">
+          <button className="bg-blue-900 text-white px-4 py-2 rounded flex items-center shadow-md hover:bg-blue-700 transition">
             <i className="fas fa-plus mr-2"></i> New Document
           </button>
+          <img src={search} alt="Search"  className="bg-yellow-100 rounded-full w-12 h-12"></img>
         </div>
 
         {/* Recent Documents & User Activity */}

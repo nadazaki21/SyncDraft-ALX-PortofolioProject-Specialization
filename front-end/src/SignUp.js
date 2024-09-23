@@ -3,37 +3,72 @@ import logo from './assets/logo.png'; // Same logo used in previous pages
 import './AbstractBackground.css'; // Import the background styles
 
 const SignupPage = () => {
-    const [firstName, setFirstName] = useState('');
+    const [Name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
 
     const handleSignup = async () => {
         setError(null);
-        // Add signup logic here with API call
+    
         try {
-            const response = await fetch('YOUR_SIGNUP_API_ENDPOINT_HERE', {
+            // First API call: Create the user
+            const createUserResponse = await fetch('http://localhost:3000/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ firstName, email, password }),
+                body: JSON.stringify({
+                    user: { // Correctly wrapping parameters in "user"
+                        name: Name,
+                        email: email,
+                        password: password,
+                    },
+                }),
             });
 
-            if (!response.ok) {
+
+            if (!createUserResponse.ok) {
                 throw new Error('Failed to create an account');
             }
-
-            // Handle successful signup
-            const result = await response.json();
-            console.log('Signup successful:', result);
+    
+            // If user creation is successful, proceed to login
+            const user = await createUserResponse.json();
+            console.log('User created:', user);
+    
+            // Second API call: Generate JWT after the user is created
+            const loginResponse = await fetch('http://localhost:3000/access_tokens', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                        email: email,
+                        password: password,
+                }),
+            });
+    
+            if (!loginResponse.ok) {
+                throw new Error('Failed to log in');
+            }
+    
+            const result = await loginResponse.json();
+            console.log('Login successful:', result);
+    
+            // Save JWT token in local storage
+            localStorage.setItem('jwtToken', result.token);
+            console.log('Saved JWT token:', localStorage.getItem('jwtToken'));
+    
+            // You can redirect or update the UI after successful signup
+            window.location.href = '/dashboard';  // Redirect to dashboard after signup
         } catch (error) {
             setError(error.message);
         }
     };
+    
 
     const switchToLogin = () => {
-        // Logic to switch to login page
+        window.location.href = '/login'; 
         console.log('Switch to login page');
     };
 
@@ -60,9 +95,9 @@ const SignupPage = () => {
                     <input
                         type="text"
                         className="w-full p-3 border rounded-lg bg-gray-100"
-                        placeholder="Enter your first name"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder="Enter your Name"
+                        value={Name}
+                        onChange={(e) => setName(e.target.value)}
                     />
                 </div>
                 <div className="mb-4">
