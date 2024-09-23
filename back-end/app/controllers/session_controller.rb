@@ -1,4 +1,4 @@
-class SessionController < ApplicationController
+class SessionController
 
     # on signing up or logging in, the user would already be created
     def create
@@ -17,13 +17,5 @@ class SessionController < ApplicationController
         # Clearing the session (logging out)
         session[:user_id] = nil
         render json: { message: "Logged out successfully" }, status: :ok
-    end
-
-
-    private
-    # not used yet 
-    def generate_jwt(user)
-        payload = { user_id: user.id, exp: 24.hours.from_now.to_i }
-        JWT.encode(payload, Rails.application.credentials.secret_key_base)
     end
 end

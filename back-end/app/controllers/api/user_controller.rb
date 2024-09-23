@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class UsersController 
     before_action :set_user, only: [:show, :destroy]
   
     # GET /users/:id
@@ -10,6 +10,8 @@ class UsersController < ApplicationController
     def create
         modified_params = user_params
         modified_params[:username] = user_params[:email].split('@')[0]
+        modified_params = user_params
+
         
         @user = User.new(modified_params)
         
