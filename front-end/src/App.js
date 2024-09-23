@@ -6,26 +6,19 @@ import LoginPage from './Login';
 import SignupPage from './SignUp';
 import Dashboard from './dashboard';
 import ProtectedRoute from './ProtectedRoute';
+import DocumentVersionControl from './Versions';
+
 
 function App() {
   return (
-    // <SignupPage/>
+    // <Dashboard/>
     <Router>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         {/* Protect the dashboard route */}
         <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* <Route
-          path="/dashboard"
+          path="/"
           element={
             <ProtectedRoute>
               <Dashboard />
@@ -34,13 +27,24 @@ function App() {
         />
 
         <Route
-          path="/dashboard"
+          path="/permissions"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <DocumentSharing />
             </ProtectedRoute>
           }
-        /> */}
+        />
+
+        <Route
+          path="/versions"
+          element={
+            <ProtectedRoute>
+              <DocumentVersionControl />
+            </ProtectedRoute>
+          }
+        />
+
+       
 
 
 

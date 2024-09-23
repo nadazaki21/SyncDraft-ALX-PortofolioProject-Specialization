@@ -11,6 +11,24 @@ const Dashboard = () => {
     documentsCreated: 0,
     documentsShared: 0,
   });
+  const [requests, setRequests] = useState([
+    // fake hardcoded data for testin how would requests look 
+    {
+      id: 1,
+      document_title: 'Project Plan',
+      requester_name: 'John Doe',
+      permission_type: 'Editor',
+      created_at: '2024-09-23T10:20:30Z',
+    },
+    {
+      id: 2,
+      document_title: 'Budget Report',
+      requester_name: 'Jane Smith',
+      permission_type: 'Viewer',
+      created_at: '2024-09-22T08:15:45Z',
+    }
+  ]);
+
 
   // Fetch recent documents
   useEffect(() => {
@@ -43,6 +61,21 @@ const Dashboard = () => {
     fetchUserActivity();
   }, []);
 
+  // fetch user current requests 
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const response = await axios.get('END_POINT_PLACEHOLDR');  // Adjust the API endpoint based on your backend
+        setRequests(response.data);
+      } catch (error) {
+        console.error('Error fetching requests:', error);
+      }
+    };
+  
+    fetchRequests();
+  }, []);
+  
+
 
   const handleLogout = () => {
     localStorage.removeItem('jwtToken'); // Remove the JWT token
@@ -63,7 +96,7 @@ const Dashboard = () => {
           {/* <img src={search} alt="Search"  className="bg-yellow-100 rounded-full w-12 h-12"></img> */}
           <div className="bg-blue-100 rounded-full shadow  w-12 h-10" >
             <button  className=" text-xl font-semibold text-gray-800"  onClick={handleLogout}>
-            <img src={logout} alt="Logout"  className="bg-yellow-100 rounded-full w-12 h-12"></img>
+            <img src={logout} alt="Logout"  className="bg-yellow-50 rounded-full w-12 h-12"></img>
             </button>
           </div>
         </div>
@@ -76,7 +109,7 @@ const Dashboard = () => {
           <button className="bg-blue-900 text-white px-4 py-2 rounded flex items-center shadow-md hover:bg-blue-700 transition">
             <i className="fas fa-plus mr-2"></i> New Document
           </button>
-          <img src={search} alt="Search"  className="bg-yellow-100 rounded-full w-12 h-12"></img>
+          <img src={search} alt="Search"  className="bg-yellow-50 rounded-full w-12 h-12"></img>
         </div>
 
         {/* Recent Documents & User Activity */}
@@ -129,6 +162,41 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Requests Section */}
+        <div className="bg-white p-6 rounded shadow mb-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Requests</h2>
+          <div className="space-y-4">
+            {requests.length > 0 ? (
+              requests.map((request) => (
+                <div key={request.id} className="flex items-center justify-between p-2 border-b">
+                  <div>
+                    <h3 className="font-semibold text-gray-800">{request.document_title}</h3>
+                    <p className="text-gray-600 text-sm">
+                      Request from <span className="font-semibold">{request.requester_name}</span> 
+                      to access as <span className="font-semibold">{request.permission_type}</span>
+                    </p>
+                    <p className="text-gray-500 text-xs">
+                      Requested on {new Date(request.created_at).toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="flex space-x-2">
+                    <button className="bg-green-500 text-white px-4 py-1 rounded shadow hover:bg-green-600">
+                      Accept
+                    </button>
+                    <button className="bg-red-500 text-white px-4 py-1 rounded shadow hover:bg-red-600">
+                      Decline
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-600">No requests available.</p>
+            )}
+          </div>
+        </div>
+
+
       </main>
     </div>
   );
