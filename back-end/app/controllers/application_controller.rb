@@ -4,15 +4,15 @@ class ApplicationController < ActionController::API
     attr_reader :current_user
     def authenticate_request
         token = request.headers['Authorization']&.split(' ')&.last
-        Rails.logger.debug("JWT Token: #{token}") # Log the token to check if it's being received
+        # Rails.logger.debug("JWT Token: #{token}") # Log the token to check if it's being received
     
         decoded_token = decode_jwt(token)
     
         if decoded_token
-            Rails.logger.debug("Decoded JWT: #{decoded_token.inspect}") # Log the decoded token
+            # Rails.logger.debug("Decoded JWT: #{decoded_token.inspect}") # Log the decoded token
     
             @current_user = User.find_by(id: decoded_token["user_id"])
-            Rails.logger.debug("Current User: #{@current_user.inspect}") # Log the current user
+            # Rails.logger.debug("Current User: #{@current_user.inspect}") # Log the current user
     
             if @current_user.nil?
                 render json: { error: 'User not found' }, status: :unauthorized
