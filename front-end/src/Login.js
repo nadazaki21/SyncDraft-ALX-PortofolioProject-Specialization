@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import logo from './assets/logo.png'; // Same logo used in previous pages
 import './AbstractBackground.css'; // New CSS file for abstract background styles
+const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -10,7 +11,7 @@ const LoginPage = () => {
     const handleLogin = async () => {
         setError(null);
         try {
-            const loginResponse = await fetch('http://localhost:3000/access_tokens', {
+            const loginResponse = await fetch(`${baseURL}/access_tokens`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import 'quill/dist/quill.snow.css'; // Import Quill's styles
 import Quill from 'quill';
 import logo from './assets/logo.png';
+import axios from 'axios';
+
+const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const MarkdownEditor = () => {
     const [selectedDocument, setSelectedDocument] = useState(null);
@@ -35,12 +38,14 @@ const MarkdownEditor = () => {
         // Fetch recent documents when the component mounts
         const fetchDocuments = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/documents/');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch documents');
-                }
-                const data = await response.json();
-                setDocuments(data); // Assuming the data is an array of documents
+                const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage
+                const response = await axios.get(`${baseURL}/api/documents`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+                    },
+                });
+    
+                setDocuments(response.data); // Assuming the response data is an array of documents
             } catch (error) {
                 console.error('Error fetching documents:', error);
             }
@@ -54,12 +59,14 @@ const MarkdownEditor = () => {
         const fetchDocumentName = async () => {
             if (selectedDocument !== null) {
                 try {
-                    const response = await fetch(`http://localhost:3000/api/documents/${selectedDocument}`);
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch document name');
-                    }
-                    const data = await response.json();
-                    setDocumentName(data.title); // Assuming the document has a title field
+                    const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage
+                    const response = await axios.get(`${baseURL}/api/documents/${selectedDocument}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+                        },
+                    });
+    
+                    setDocumentName(response.data.title); // Assuming the document has a title field
                 } catch (error) {
                     console.error('Error fetching document name:', error);
                 }
@@ -71,28 +78,30 @@ const MarkdownEditor = () => {
 
     const handleSave = async () => {
         const delta = quillInstance.current.getContents(); // Get delta JSON
-
+    
         // Call your API to save the document
         try {
-            const response = await fetch('YOUR_API_ENDPOINT_HERE', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    content: delta,
+            const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage
+    
+            const response = await axios.post(
+                `${baseURL}/api/documents/${selectedDocument}`,  // Assuming you are saving a specific document
+                {
+                    content: delta,         // Delta JSON containing the document content
                     documentId: selectedDocument, // Send the document ID if needed
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to save document');
-            }
-
-            const result = await response.json();
-            console.log('Document saved successfully:', result);
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+                    },
+                }
+            );
+    
+            // Handle success response
+            console.log('Document saved successfully:', response.data);
         } catch (error) {
-            console.error('Error saving document:', error);
+            // Handle error
+            console.error('Error saving document:', error.response ? error.response.data : error.message);
         }
     };
 

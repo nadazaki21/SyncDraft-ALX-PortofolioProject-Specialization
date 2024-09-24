@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import logo from './assets/logo.png'; // Same logo used in previous pages
 import './AbstractBackground.css'; // Import the background styles
+const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const SignupPage = () => {
     const [Name, setName] = useState('');
@@ -13,7 +14,7 @@ const SignupPage = () => {
     
         try {
             // First API call: Create the user
-            const createUserResponse = await fetch('http://localhost:3000/users', {
+            const createUserResponse = await fetch(`${baseURL}/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,7 +38,7 @@ const SignupPage = () => {
             console.log('User created:', user);
     
             // Second API call: Generate JWT after the user is created
-            const loginResponse = await fetch('http://localhost:3000/access_tokens', {
+            const loginResponse = await fetch(`${baseURL}/access_tokens`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

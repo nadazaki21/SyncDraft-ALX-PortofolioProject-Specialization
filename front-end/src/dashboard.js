@@ -3,7 +3,7 @@ import axios from 'axios';
 import logo from './assets/logo.png';
 import search from './assets/search.png'
 import logout from './assets/logout.png'
-
+const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const Dashboard = () => {
   const [documents, setDocuments] = useState([]);
@@ -36,7 +36,7 @@ const Dashboard = () => {
       try {
         const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage or your preferred storage
         console.log('Saved JWT token:', token);
-        const response = await axios.get('http://localhost:3000/api/documents/', {
+        const response = await axios.get(`${baseURL}/api/documents`, {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the Authorization header
           },
@@ -55,7 +55,7 @@ const Dashboard = () => {
     const fetchUserActivity = async () => {
       try {
         const token = localStorage.getItem('jwtToken');
-        const response = await axios.get('http://localhost:3000/api/user/activity/', {
+        const response = await axios.get(`${baseURL}/api/user/activity`, {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the Authorization header
           },  

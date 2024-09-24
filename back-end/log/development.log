@@ -4319,3 +4319,368 @@ Completed 200 OK in 16ms (Views: 4.0ms | ActiveRecord: 3.3ms | Allocations: 2722
 Completed 200 OK in 15ms (Views: 0.2ms | ActiveRecord: 4.6ms | Allocations: 2979)
 
 
+Started GET "/api/documents/" for ::1 at 2024-09-24 22:39:38 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (1.2ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 100ms (Views: 10.9ms | ActiveRecord: 16.4ms | Allocations: 29140)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 22:39:40 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 13ms (Views: 3.7ms | ActiveRecord: 1.7ms | Allocations: 1698)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 22:39:40 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (1.2ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 12ms (Views: 3.2ms | ActiveRecord: 2.2ms | Allocations: 1673)
+
+
+Started GET "/" for ::1 at 2024-09-24 22:44:14 +0300
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /home/sherbine/.rbenv/versions/3.3.5/lib/ruby/gems/3.3.0/gems/railties-7.1.4/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /home/sherbine/.rbenv/versions/3.3.5/lib/ruby/gems/3.3.0/gems/railties-7.1.4/lib/rails/templates/rails/welcome/index.html.erb (Duration: 0.9ms | Allocations: 365)
+Completed 200 OK in 12ms (Views: 4.1ms | ActiveRecord: 0.0ms | Allocations: 4064)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:48:01 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (2.0ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (1.1ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 51ms (Views: 3.4ms | ActiveRecord: 11.4ms | Allocations: 4469)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:48:01 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (1.1ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 11ms (Views: 2.9ms | ActiveRecord: 2.1ms | Allocations: 1689)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:48:13 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (0.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 6ms (Views: 1.7ms | ActiveRecord: 1.3ms | Allocations: 1689)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:48:15 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (1.3ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 17ms (Views: 7.9ms | ActiveRecord: 2.3ms | Allocations: 1684)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:48:15 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (0.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 10ms (Views: 2.3ms | ActiveRecord: 1.6ms | Allocations: 1674)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:48:34 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (0.9ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 8ms (Views: 2.5ms | ActiveRecord: 1.8ms | Allocations: 1808)
+
+
+Started GET "/api/user/activity" for ::1 at 2024-09-24 22:48:34 +0300
+Processing by Api::DocumentsController#user_activity as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "documents" WHERE "documents"."created_by_id" = $1[0m  [["created_by_id", 3]]
+  ↳ app/controllers/api/documents_controller.rb:22:in `user_activity'
+  [1m[36mDocument Count (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "documents" INNER JOIN "permissions" ON "permissions"."document_id" = "documents"."id" WHERE "permissions"."user_id" = $1[0m  [["user_id", 3]]
+  ↳ app/controllers/api/documents_controller.rb:27:in `user_activity'
+Completed 200 OK in 21ms (Views: 0.2ms | ActiveRecord: 4.2ms | Allocations: 4223)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:48:36 +0300
+Processing by Api::DocumentsController#index as HTML
+Started GET "/api/user/activity" for ::1 at 2024-09-24 22:48:36 +0300
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (1.1ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.9ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 16ms (Views: 4.5ms | ActiveRecord: 3.5ms | Allocations: 2081)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:48:36 +0300
+Processing by Api::DocumentsController#user_activity as HTML
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Count (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "documents" WHERE "documents"."created_by_id" = $1[0m  [["created_by_id", 3]]
+  ↳ app/controllers/api/documents_controller.rb:22:in `user_activity'
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Count (2.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "documents" INNER JOIN "permissions" ON "permissions"."document_id" = "documents"."id" WHERE "permissions"."user_id" = $1[0m  [["user_id", 3]]
+  ↳ app/controllers/api/documents_controller.rb:27:in `user_activity'
+Completed 200 OK in 34ms (Views: 0.2ms | ActiveRecord: 4.2ms | Allocations: 2921)
+
+
+Started GET "/api/user/activity" for ::1 at 2024-09-24 22:48:36 +0300
+Processing by Api::DocumentsController#user_activity as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "documents" WHERE "documents"."created_by_id" = $1[0m  [["created_by_id", 3]]
+  ↳ app/controllers/api/documents_controller.rb:22:in `user_activity'
+  [1m[36mDocument Count (1.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "documents" INNER JOIN "permissions" ON "permissions"."document_id" = "documents"."id" WHERE "permissions"."user_id" = $1[0m  [["user_id", 3]]
+  ↳ app/controllers/api/documents_controller.rb:27:in `user_activity'
+Completed 200 OK in 13ms (Views: 0.2ms | ActiveRecord: 2.0ms | Allocations: 1522)
+
+
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (1.4ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (1.1ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 52ms (Views: 2.9ms | ActiveRecord: 12.1ms | Allocations: 7713)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:56:08 +0300
+Started GET "/api/user/activity" for ::1 at 2024-09-24 22:56:08 +0300
+Processing by Api::DocumentsController#index as HTML
+Processing by Api::DocumentsController#user_activity as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Count (1.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "documents" WHERE "documents"."created_by_id" = $1[0m  [["created_by_id", 3]]
+  ↳ app/controllers/api/documents_controller.rb:22:in `user_activity'
+  [1m[36mPermission Pluck (3.0ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Count (2.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "documents" INNER JOIN "permissions" ON "permissions"."document_id" = "documents"."id" WHERE "permissions"."user_id" = $1[0m  [["user_id", 3]]
+  ↳ app/controllers/api/documents_controller.rb:27:in `user_activity'
+  [1m[36mDocument Load (2.1ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+Completed 200 OK in 42ms (Views: 0.2ms | ActiveRecord: 10.8ms | Allocations: 7070)
+
+
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 48ms (Views: 4.8ms | ActiveRecord: 12.4ms | Allocations: 9232)
+
+
+Started GET "/api/user/activity" for ::1 at 2024-09-24 22:56:08 +0300
+Started GET "/api/documents" for ::1 at 2024-09-24 22:56:08 +0300
+Processing by Api::DocumentsController#user_activity as HTML
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (1.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mDocument Count (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "documents" WHERE "documents"."created_by_id" = $1[0m  [["created_by_id", 3]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  ↳ app/controllers/api/documents_controller.rb:22:in `user_activity'
+  [1m[36mDocument Count (1.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "documents" INNER JOIN "permissions" ON "permissions"."document_id" = "documents"."id" WHERE "permissions"."user_id" = $1[0m  [["user_id", 3]]
+  [1m[36mPermission Pluck (2.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:27:in `user_activity'
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+Completed 200 OK in 20ms (Views: 0.1ms | ActiveRecord: 3.0ms | Allocations: 2884)
+
+
+  [1m[36mDocument Load (0.9ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 21ms (Views: 2.7ms | ActiveRecord: 3.7ms | Allocations: 3273)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:56:13 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 8ms (Views: 2.4ms | ActiveRecord: 1.5ms | Allocations: 1674)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:56:13 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (0.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.3ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 6ms (Views: 1.7ms | ActiveRecord: 1.1ms | Allocations: 1674)
+
+
+Started GET "/api/documents/1" for ::1 at 2024-09-24 22:56:14 +0300
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Load (0.2ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:66:in `set_document'
+Completed 200 OK in 4ms (Views: 0.3ms | ActiveRecord: 0.5ms | Allocations: 1122)
+
+
+Started GET "/api/documents/2" for ::1 at 2024-09-24 22:56:15 +0300
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:66:in `set_document'
+Completed 200 OK in 7ms (Views: 0.6ms | ActiveRecord: 1.1ms | Allocations: 985)
+
+
+Started GET "/api/documents/1" for ::1 at 2024-09-24 22:56:15 +0300
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:66:in `set_document'
+Completed 200 OK in 7ms (Views: 0.7ms | ActiveRecord: 0.9ms | Allocations: 986)
+
+
+Started GET "/api/documents/2" for ::1 at 2024-09-24 22:56:16 +0300
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:66:in `set_document'
+Completed 200 OK in 7ms (Views: 0.4ms | ActiveRecord: 1.3ms | Allocations: 985)
+
+
+Started GET "/api/documents/1" for ::1 at 2024-09-24 22:56:16 +0300
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:66:in `set_document'
+Completed 200 OK in 10ms (Views: 0.6ms | ActiveRecord: 1.4ms | Allocations: 985)
+
+
+Started GET "/api/documents/2" for ::1 at 2024-09-24 22:56:20 +0300
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:66:in `set_document'
+Completed 200 OK in 8ms (Views: 0.6ms | ActiveRecord: 1.1ms | Allocations: 984)
+
+
+Started GET "/api/documents/1" for ::1 at 2024-09-24 22:56:20 +0300
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Load (0.4ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:66:in `set_document'
+Completed 200 OK in 6ms (Views: 0.4ms | ActiveRecord: 0.7ms | Allocations: 984)
+
+
+Started GET "/api/documents/2" for ::1 at 2024-09-24 22:56:21 +0300
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Load (0.4ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:66:in `set_document'
+Completed 200 OK in 7ms (Views: 0.6ms | ActiveRecord: 0.8ms | Allocations: 984)
+
+
+Started GET "/api/documents/1" for ::1 at 2024-09-24 22:56:21 +0300
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:66:in `set_document'
+Completed 200 OK in 4ms (Views: 0.3ms | ActiveRecord: 1.0ms | Allocations: 984)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:57:28 +0300
+Started GET "/api/documents/1" for ::1 at 2024-09-24 22:57:28 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (0.9ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 10ms (Views: 2.9ms | ActiveRecord: 1.8ms | Allocations: 1789)
+
+
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:66:in `set_document'
+Completed 200 OK in 8ms (Views: 0.5ms | ActiveRecord: 0.9ms | Allocations: 985)
+
+
+Started POST "/api/documents/1" for ::1 at 2024-09-24 22:57:32 +0300
+  
+ActionController::RoutingError (No route matches [POST] "/api/documents/1"):
+  
+Started GET "/api/documents" for ::1 at 2024-09-24 22:58:23 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 10ms (Views: 2.6ms | ActiveRecord: 1.5ms | Allocations: 1674)
+
+
+Started GET "/api/documents" for ::1 at 2024-09-24 22:58:23 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:76:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.8ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (2))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 9ms (Views: 2.3ms | ActiveRecord: 1.6ms | Allocations: 1673)
+
+
