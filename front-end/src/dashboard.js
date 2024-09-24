@@ -54,7 +54,12 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUserActivity = async () => {
       try {
-        const response = await axios.get('/api/user/activity');
+        const token = localStorage.getItem('jwtToken');
+        const response = await axios.get('http://localhost:3000/api/user/activity/', {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },  
+        });
         setUserActivity({
           documentsCreated: response.data.documents_created,
           documentsShared: response.data.documents_shared,

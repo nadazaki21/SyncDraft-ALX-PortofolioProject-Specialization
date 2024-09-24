@@ -20,10 +20,12 @@ class Api::DocumentsController < ApplicationController
   def user_activity
     # Count documents created by the current user
     created_count = Document.where(created_by_id: current_user.id).count
-
-    # Count documents shared with the current user
-    shared_count = Document.joins(:shared_users).where(shared_users: { user_id: current_user.id }).count
-
+  
+    # Count documents shared with the current user (where they have permission)
+    shared_count = Document.joins(:permissions)
+                           .where(permissions: { user_id: current_user.id })
+                           .count
+  
     render json: { documents_created: created_count, documents_shared: shared_count }
   end
 
