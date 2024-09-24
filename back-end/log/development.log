@@ -1368,3 +1368,2645 @@ Processing by AccessTokensController#create as */*
 Completed 200 OK in 265ms (Views: 0.6ms | ActiveRecord: 0.3ms | Allocations: 707)
 
 
+  [1m[35m (17.9ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (9.8ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.6ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (2.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2024-09-23 23:13:45.736937', '2024-09-23 23:13:45.736944') RETURNING "key"[0m
+Migrating to CreateUsers (20240920164823)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (13.4ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "name" character varying, "email" character varying, "password_digest" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.8ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920164823') RETURNING "version"[0m
+  [1m[36mTRANSACTION (1.6ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateDocuments (20240920171546)
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (16.9ms)[0m  [1m[35mCREATE TABLE "documents" ("id" bigserial primary key, "title" character varying, "content" jsonb, "created_by_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_6dd87d46e1"
+FOREIGN KEY ("created_by_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (4.5ms)[0m  [1m[35mCREATE INDEX "index_documents_on_created_by_id" ON "documents" ("created_by_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920171546') RETURNING "version"[0m
+  [1m[36mTRANSACTION (1.6ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreatePermissions (20240920172433)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (20.1ms)[0m  [1m[35mCREATE TABLE "permissions" ("id" bigserial primary key, "user_id" bigint NOT NULL, "document_id" bigint NOT NULL, "access_type" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_d9cfa3c257"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+, CONSTRAINT "fk_rails_e5fcc70a17"
+FOREIGN KEY ("document_id")
+  REFERENCES "documents" ("id")
+)[0m
+  [1m[35m (3.6ms)[0m  [1m[35mCREATE INDEX "index_permissions_on_user_id" ON "permissions" ("user_id")[0m
+  [1m[35m (3.4ms)[0m  [1m[35mCREATE INDEX "index_permissions_on_document_id" ON "permissions" ("document_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920172433') RETURNING "version"[0m
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateRequests (20240923200832)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (7.8ms)[0m  [1m[35mCREATE TABLE "requests" ("id" bigserial primary key, "permission" integer, "document_id" bigint NOT NULL, "to_user_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_d67ebfc404"
+FOREIGN KEY ("document_id")
+  REFERENCES "documents" ("id")
+, CONSTRAINT "fk_rails_b461c2c25f"
+FOREIGN KEY ("to_user_id")
+  REFERENCES "to_users" ("id")
+)[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreatePermissions (20240920172433)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (6.3ms)[0m  [1m[35mDROP TABLE "permissions"[0m
+  [1m[36mActiveRecord::SchemaMigration Destroy (1.2ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = '20240920172433'[0m
+  [1m[36mTRANSACTION (2.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_try_advisory_lock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+Migrating to CreatePermissions (20240920172433)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (22.4ms)[0m  [1m[35mCREATE TABLE "permissions" ("id" bigserial primary key, "user_id" bigint NOT NULL, "document_id" bigint NOT NULL, "access_type" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_d9cfa3c257"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+, CONSTRAINT "fk_rails_e5fcc70a17"
+FOREIGN KEY ("document_id")
+  REFERENCES "documents" ("id")
+)[0m
+  [1m[35m (4.4ms)[0m  [1m[35mCREATE INDEX "index_permissions_on_user_id" ON "permissions" ("user_id")[0m
+  [1m[35m (3.1ms)[0m  [1m[35mCREATE INDEX "index_permissions_on_document_id" ON "permissions" ("document_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240920172433') RETURNING "version"[0m
+  [1m[36mTRANSACTION (1.7ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateRequests (20240923200832)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (8.1ms)[0m  [1m[35mCREATE TABLE "requests" ("id" bigserial primary key, "permission" integer, "document_id" bigint NOT NULL, "user_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_d67ebfc404"
+FOREIGN KEY ("document_id")
+  REFERENCES "documents" ("id")
+, CONSTRAINT "fk_rails_8ead8b1e6b"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (2.9ms)[0m  [1m[35mCREATE INDEX "index_requests_on_document_id" ON "requests" ("document_id")[0m
+  [1m[35m (2.7ms)[0m  [1m[35mCREATE INDEX "index_requests_on_user_id" ON "requests" ("user_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240923200832') RETURNING "version"[0m
+  [1m[36mTRANSACTION (1.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_advisory_unlock(6882624913672427640)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started POST "/users" for ::1 at 2024-09-24 02:17:11 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"mahmoud", "email"=>"mahmoud@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Exists? (2.9ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "mahmoud@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (1.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "mahmoud"], ["email", "mahmoud@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-23 23:17:12.478577"], ["updated_at", "2024-09-23 23:17:12.478577"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (7.7ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 327ms (Views: 0.4ms | ActiveRecord: 24.4ms | Allocations: 15836)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 02:17:12 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"mahmoud@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"mahmoud@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "mahmoud@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 239ms (Views: 0.3ms | ActiveRecord: 0.9ms | Allocations: 1089)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 02:18:05 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"mahmoud@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"mahmoud@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "mahmoud@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 236ms (Views: 0.3ms | ActiveRecord: 0.6ms | Allocations: 596)
+
+
+Started GET "/api/documents/2" for ::1 at 2024-09-24 17:12:49 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (4.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mDocument Load (2.4ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:62:in `set_document'
+Completed 404 Not Found in 91ms (ActiveRecord: 24.4ms | Allocations: 12910)
+
+
+  
+ActiveRecord::RecordNotFound (Couldn't find Document with 'id'=2):
+  
+app/controllers/api/documents_controller.rb:62:in `set_document'
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:12:54 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 3ms (Views: 1.8ms | ActiveRecord: 0.7ms | Allocations: 831)
+
+
+Started POST "/users" for ::1 at 2024-09-24 17:21:44 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"sherbine", "email"=>"sherbine@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Exists? (3.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "sherbine@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (2.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "sherbine"], ["email", "sherbine@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-24 14:21:45.370151"], ["updated_at", "2024-09-24 14:21:45.370151"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (5.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 368ms (Views: 0.3ms | ActiveRecord: 25.3ms | Allocations: 11695)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 17:21:45 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"sherbine@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"sherbine@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "sherbine@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 237ms (Views: 0.3ms | ActiveRecord: 1.0ms | Allocations: 956)
+
+
+Started POST "/users" for ::1 at 2024-09-24 17:22:36 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"hoda", "email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Exists? (2.8ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (0.5ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "hoda"], ["email", "hoda@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-24 14:22:36.311369"], ["updated_at", "2024-09-24 14:22:36.311369"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (8.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 253ms (Views: 0.4ms | ActiveRecord: 11.5ms | Allocations: 2520)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 17:22:36 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 239ms (Views: 0.3ms | ActiveRecord: 0.3ms | Allocations: 581)
+
+
+Started GET "/api/documents/1" for ::1 at 2024-09-24 17:45:25 +0300
+Processing by Api::DocumentsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:62:in `set_document'
+Completed 200 OK in 61ms (Views: 0.6ms | ActiveRecord: 8.3ms | Allocations: 6844)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:46:08 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (0.9ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 3ms (Views: 1.7ms | ActiveRecord: 0.9ms | Allocations: 639)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:46:20 +0300
+Processing by Api::DocumentsController#index as */*
+  [1m[36mDocument Load (1.0ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 5ms (Views: 3.1ms | ActiveRecord: 1.0ms | Allocations: 639)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:46:20 +0300
+Processing by Api::DocumentsController#index as */*
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 5ms (Views: 4.5ms | ActiveRecord: 0.6ms | Allocations: 640)
+
+
+Started GET "/api/documents/1" for ::1 at 2024-09-24 17:46:21 +0300
+Processing by Api::DocumentsController#show as */*
+  Parameters: {"id"=>"1"}
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:62:in `set_document'
+Completed 200 OK in 5ms (Views: 0.5ms | ActiveRecord: 0.6ms | Allocations: 522)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:46:29 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 6ms (Views: 4.9ms | ActiveRecord: 0.5ms | Allocations: 638)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:46:29 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 5ms (Views: 4.3ms | ActiveRecord: 0.5ms | Allocations: 638)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 17:46:37 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"Sherbine@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"Sherbine@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "Sherbine@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 401 Unauthorized in 7ms (Views: 0.3ms | ActiveRecord: 0.6ms | Allocations: 466)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 17:46:42 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"Sherbine@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"Sherbine@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "Sherbine@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 401 Unauthorized in 7ms (Views: 0.2ms | ActiveRecord: 0.6ms | Allocations: 462)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 17:46:50 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"Sherbine@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"Sherbine@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "Sherbine@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 401 Unauthorized in 4ms (Views: 0.2ms | ActiveRecord: 0.4ms | Allocations: 462)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 17:47:06 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"mahmoud@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"mahmoud@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "mahmoud@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 268ms (Views: 0.3ms | ActiveRecord: 0.6ms | Allocations: 581)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:47:07 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (2.1ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 8ms (Views: 5.9ms | ActiveRecord: 2.1ms | Allocations: 638)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:47:07 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (1.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 13ms (Views: 10.2ms | ActiveRecord: 1.7ms | Allocations: 638)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:47:16 +0300
+Processing by Api::DocumentsController#index as */*
+  [1m[36mDocument Load (1.0ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 4ms (Views: 2.6ms | ActiveRecord: 0.9ms | Allocations: 640)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:47:16 +0300
+Processing by Api::DocumentsController#index as */*
+  [1m[36mDocument Load (1.0ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 4ms (Views: 2.6ms | ActiveRecord: 1.0ms | Allocations: 639)
+
+
+Started GET "/api/documents/1" for ::1 at 2024-09-24 17:47:17 +0300
+Processing by Api::DocumentsController#show as */*
+  Parameters: {"id"=>"1"}
+  [1m[36mDocument Load (0.3ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE "documents"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/api/documents_controller.rb:62:in `set_document'
+Completed 200 OK in 2ms (Views: 0.3ms | ActiveRecord: 0.3ms | Allocations: 509)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:47:25 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 3ms (Views: 2.6ms | ActiveRecord: 0.5ms | Allocations: 638)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:47:25 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 3ms (Views: 1.9ms | ActiveRecord: 0.5ms | Allocations: 638)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 17:47:34 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"sherbine@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"sherbine@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "sherbine@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 279ms (Views: 0.3ms | ActiveRecord: 0.7ms | Allocations: 581)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:47:34 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 4ms (Views: 3.2ms | ActiveRecord: 0.6ms | Allocations: 638)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:47:34 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 4ms (Views: 2.9ms | ActiveRecord: 0.7ms | Allocations: 638)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 17:47:56 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (1.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:7:in `index'
+Completed 200 OK in 4ms (Views: 2.3ms | ActiveRecord: 1.5ms | Allocations: 638)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:16:58 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 6ms (ActiveRecord: 0.0ms | Allocations: 1919)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:16:58 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 93)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started POST "/access_tokens" for ::1 at 2024-09-24 18:17:04 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 318ms (Views: 0.3ms | ActiveRecord: 10.0ms | Allocations: 8202)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:17:05 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 94)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:17:05 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 93)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:17:07 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms | Allocations: 93)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:17:08 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 93)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:17:44 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 7ms (ActiveRecord: 0.0ms | Allocations: 1910)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:17:45 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 93)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:18:00 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (1.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 33ms (ActiveRecord: 0.0ms | Allocations: 8998)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:18:01 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 94)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:18:12 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 94)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:18:12 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 94)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:25:53 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 6ms (ActiveRecord: 0.0ms | Allocations: 1911)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:25:54 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 93)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:25:55 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 93)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:25:55 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 93)
+
+
+  
+NameError (undefined local variable or method `current_user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:28:09 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 44ms (ActiveRecord: 0.0ms | Allocations: 8993)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:28:09 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 95)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:31:07 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 95)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:31:09 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 95)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:31:09 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 94)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:31:33 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 24ms (ActiveRecord: 0.0ms | Allocations: 8996)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:31:33 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 95)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:7:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:33:01 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 356)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:33:02 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 94)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 18:33:20 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 132)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 18:33:21 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 77)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 18:33:21 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 77)
+
+
+Started POST "/users" for ::1 at 2024-09-24 18:34:57 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"nada", "email"=>"nada@gmail.com", "password"=>"[FILTERED]"}}
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 153)
+
+
+Started POST "/users" for ::1 at 2024-09-24 18:35:57 +0300
+Processing by UsersController#create as */*
+  Parameters: {"user"=>{"name"=>"nada", "email"=>"nada@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Exists? (2.9ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nada@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mUser Create (1.3ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "nada"], ["email", "nada@gmail.com"], ["password_digest", "[FILTERED]"], ["created_at", "2024-09-24 15:35:57.423383"], ["updated_at", "2024-09-24 15:35:57.423383"]]
+  ↳ app/controllers/users_controller.rb:17:in `create'
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:17:in `create'
+Completed 201 Created in 319ms (Views: 0.3ms | ActiveRecord: 18.1ms | Allocations: 13621)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 18:35:57 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"nada@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"nada@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nada@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 239ms (Views: 0.3ms | ActiveRecord: 0.8ms | Allocations: 1107)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:35:57 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 165)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:35:57 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 18:36:07 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 278ms (Views: 0.3ms | ActiveRecord: 0.6ms | Allocations: 589)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:36:07 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:36:07 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:44:25 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:44:25 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 18:44:31 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"nada@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"nada@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nada@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 313ms (Views: 0.3ms | ActiveRecord: 7.7ms | Allocations: 3345)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 18:44:44 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"nada@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"nada@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nada@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 259ms (Views: 0.4ms | ActiveRecord: 0.5ms | Allocations: 598)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:44:45 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:44:45 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 18:44:55 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 262ms (Views: 0.3ms | ActiveRecord: 0.5ms | Allocations: 599)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:44:56 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:44:56 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:55:46 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 172)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:55:47 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:56:19 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 172)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 18:56:19 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:50:32 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 172)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:50:32 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:50:49 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 385)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:50:49 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 92)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:51:04 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 186)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:51:04 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 94)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:51:13 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 172)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:51:13 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:52:05 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 171)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:52:05 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:52:24 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 171)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:52:24 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:54:39 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 172)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:54:39 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:55:08 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 171)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:55:08 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:55:19 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 385)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:55:19 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 92)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:56:03 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 170)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:56:03 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 92)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:57:07 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 172)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:57:07 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:57:25 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 387)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:57:25 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:57:56 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 172)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:57:56 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:57:56 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.6ms | ActiveRecord: 0.0ms | Allocations: 94)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:57:56 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:58:07 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 387)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:58:07 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:58:22 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.3ms | ActiveRecord: 0.0ms | Allocations: 401)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:58:22 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 94)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:58:33 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (1.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:8:in `index'
+Completed 200 OK in 75ms (Views: 30.2ms | ActiveRecord: 12.3ms | Allocations: 19045)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:58:33 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:8:in `index'
+Completed 200 OK in 2ms (Views: 1.7ms | ActiveRecord: 0.5ms | Allocations: 654)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:58:44 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 174)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:58:44 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:58:53 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:8:in `index'
+Completed 200 OK in 15ms (Views: 6.7ms | ActiveRecord: 3.5ms | Allocations: 5512)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:58:53 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents"[0m
+  ↳ app/controllers/api/documents_controller.rb:8:in `index'
+Completed 200 OK in 3ms (Views: 2.1ms | ActiveRecord: 0.6ms | Allocations: 639)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:59:04 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 172)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:59:04 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:59:10 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 4ms (ActiveRecord: 0.0ms | Allocations: 1937)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:59:10 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms | Allocations: 95)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:59:12 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 94)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:59:12 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 94)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:59:22 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 183)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 19:59:22 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 95)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:00:57 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 2ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 183)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:00:57 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 95)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:01:03 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 172)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:01:03 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:01:18 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 172)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:01:18 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:01:25 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 4ms (ActiveRecord: 0.0ms | Allocations: 1920)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:01:25 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 93)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:02:01 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 5ms (ActiveRecord: 0.0ms | Allocations: 1912)
+
+
+  
+NoMethodError (undefined method `user_id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:02:01 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 93)
+
+
+  
+NoMethodError (undefined method `user_id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:02:10 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 170)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:02:10 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 92)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:03:25 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 92)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:03:25 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 94)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:03:30 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:03:30 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 20:07:47 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 500 Internal Server Error in 328ms (ActiveRecord: 14.1ms | Allocations: 10517)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/access_tokens_controller.rb:18:in `generate_jwt'
+app/controllers/access_tokens_controller.rb:8:in `create'
+Started POST "/access_tokens" for ::1 at 2024-09-24 20:08:07 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 500 Internal Server Error in 275ms (ActiveRecord: 6.8ms | Allocations: 5755)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/access_tokens_controller.rb:18:in `generate_jwt'
+app/controllers/access_tokens_controller.rb:8:in `create'
+Started POST "/access_tokens" for ::1 at 2024-09-24 20:08:51 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 265ms (Views: 0.3ms | ActiveRecord: 4.0ms | Allocations: 5952)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:08:52 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 166)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:08:52 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 20:09:24 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 267ms (Views: 0.4ms | ActiveRecord: 7.4ms | Allocations: 5873)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:09:24 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 2ms (Views: 0.3ms | ActiveRecord: 0.0ms | Allocations: 165)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:09:24 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 20:09:31 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 259ms (Views: 0.3ms | ActiveRecord: 0.6ms | Allocations: 585)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:09:31 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:09:31 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 20:10:41 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 253ms (Views: 0.3ms | ActiveRecord: 0.5ms | Allocations: 583)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:10:42 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:10:42 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:11:33 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:11:36 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:11:36 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:11:54 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:11:56 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:11:56 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:13:24 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:13:27 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:13:27 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:14:15 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:14:17 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:14:17 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:15:42 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:15:45 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:15:45 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:15:49 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:15:51 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 94)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:15:51 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:15:58 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.1ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:16:01 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 2ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:16:01 +0300
+Processing by Api::DocumentsController#index as HTML
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 93)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:51:25 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 86ms (ActiveRecord: 4.6ms | Allocations: 6621)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:51:30 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 4ms (ActiveRecord: 0.4ms | Allocations: 694)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:51:30 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.3ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:51:46 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 4ms (ActiveRecord: 0.4ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:51:50 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 4ms (ActiveRecord: 0.3ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:51:50 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.3ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:52:24 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 5ms (ActiveRecord: 0.7ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:52:24 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.1ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:54:52 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 0.2ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:54:53 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 10ms (ActiveRecord: 0.2ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:55:34 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 4ms (ActiveRecord: 0.7ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:55:34 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.2ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started POST "/access_tokens" for ::1 at 2024-09-24 20:57:23 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 241ms (Views: 0.3ms | ActiveRecord: 0.5ms | Allocations: 588)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:57:24 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 4ms (ActiveRecord: 0.7ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:57:24 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 0.2ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:57:54 +0300
+Processing by Api::DocumentsController#index as */*
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 76)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:57:54 +0300
+Processing by Api::DocumentsController#index as */*
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 0ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 76)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:59:14 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 5ms (ActiveRecord: 0.3ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:59:16 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 5ms (ActiveRecord: 0.4ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 20:59:16 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.2ms | Allocations: 692)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:00:01 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 25ms (ActiveRecord: 2.7ms | Allocations: 4994)
+
+
+  
+NameError (undefined local variable or method `user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:00:01 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.2ms | Allocations: 693)
+
+
+  
+NameError (undefined local variable or method `user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:00:05 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 5ms (ActiveRecord: 0.3ms | Allocations: 691)
+
+
+  
+NameError (undefined local variable or method `user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:00:06 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.2ms | Allocations: 691)
+
+
+  
+NameError (undefined local variable or method `user' for an instance of Api::DocumentsController):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:00:45 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 26ms (ActiveRecord: 1.8ms | Allocations: 4917)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:00:45 +0300
+Processing by Api::DocumentsController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:10:in `authenticate_request'
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.2ms | Allocations: 695)
+
+
+  
+NoMethodError (undefined method `id' for nil):
+  
+app/controllers/api/documents_controller.rb:8:in `index'
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:01:49 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 136)
+
+
+  
+NameError (undefined local variable or method `jwtToken' for an instance of Api::DocumentsController):
+  
+app/controllers/application_controller.rb:7:in `authenticate_request'
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:01:49 +0300
+Processing by Api::DocumentsController#index as HTML
+Completed 500 Internal Server Error in 0ms (ActiveRecord: 0.0ms | Allocations: 90)
+
+
+  
+NameError (undefined local variable or method `jwtToken' for an instance of Api::DocumentsController):
+  
+app/controllers/application_controller.rb:7:in `authenticate_request'
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:03:23 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODcwNDR9.6El7VMZcBS838tgtd4FsWLVkMJo-1J72_f-DlpnUotE
+Decoded JWT: {"user_id"=>3, "exp"=>1727287044}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: nil
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 60ms (Views: 0.2ms | ActiveRecord: 9.1ms | Allocations: 13186)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:03:23 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODcwNDR9.6El7VMZcBS838tgtd4FsWLVkMJo-1J72_f-DlpnUotE
+Decoded JWT: {"user_id"=>3, "exp"=>1727287044}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: nil
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 4ms (Views: 0.2ms | ActiveRecord: 0.3ms | Allocations: 726)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:05:31 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODcwNDR9.6El7VMZcBS838tgtd4FsWLVkMJo-1J72_f-DlpnUotE
+Decoded JWT: {"user_id"=>3, "exp"=>1727287044}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (2.4ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (1.9ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR user_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 500 Internal Server Error in 60ms (ActiveRecord: 13.3ms | Allocations: 15551)
+
+
+  
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "user_id" does not exist
+LINE 1: ...s".* FROM "documents" WHERE (created_by_id = 3 OR user_id IN...
+                                                             ^
+):
+  
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:05:31 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODcwNDR9.6El7VMZcBS838tgtd4FsWLVkMJo-1J72_f-DlpnUotE
+Decoded JWT: {"user_id"=>3, "exp"=>1727287044}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.4ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR user_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 500 Internal Server Error in 6ms (ActiveRecord: 1.1ms | Allocations: 1760)
+
+
+  
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "user_id" does not exist
+LINE 1: ...s".* FROM "documents" WHERE (created_by_id = 3 OR user_id IN...
+                                                             ^
+):
+  
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:06:41 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODcwNDR9.6El7VMZcBS838tgtd4FsWLVkMJo-1J72_f-DlpnUotE
+Decoded JWT: {"user_id"=>3, "exp"=>1727287044}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.4ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.8ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 53ms (Views: 11.3ms | ActiveRecord: 11.0ms | Allocations: 14378)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:06:41 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODcwNDR9.6El7VMZcBS838tgtd4FsWLVkMJo-1J72_f-DlpnUotE
+Decoded JWT: {"user_id"=>3, "exp"=>1727287044}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (3.3ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 12ms (Views: 2.4ms | ActiveRecord: 4.3ms | Allocations: 1702)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 21:07:14 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"nada@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"nada@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nada@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 256ms (Views: 0.4ms | ActiveRecord: 0.4ms | Allocations: 914)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:07:15 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODc2MzV9.OxwFo-rREdoDKSWkOWSWvdmAuYuf5LvHma_RpkvsgYw
+Decoded JWT: {"user_id"=>4, "exp"=>1727287635}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.8ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.8ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 10ms (Views: 2.5ms | ActiveRecord: 1.9ms | Allocations: 1634)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:07:15 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODc2MzV9.OxwFo-rREdoDKSWkOWSWvdmAuYuf5LvHma_RpkvsgYw
+Decoded JWT: {"user_id"=>4, "exp"=>1727287635}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 12ms (Views: 2.2ms | ActiveRecord: 1.7ms | Allocations: 1633)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 21:07:22 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 274ms (Views: 0.3ms | ActiveRecord: 0.6ms | Allocations: 592)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:07:23 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODc2NDN9.rDqOHylrCTFH8vA5yStqss-_vmjQAlv6qYY3GNNhh2w
+Decoded JWT: {"user_id"=>3, "exp"=>1727287643}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (2.1ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 15ms (Views: 4.0ms | ActiveRecord: 2.9ms | Allocations: 1697)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:07:23 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODc2NDN9.rDqOHylrCTFH8vA5yStqss-_vmjQAlv6qYY3GNNhh2w
+Decoded JWT: {"user_id"=>3, "exp"=>1727287643}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 31ms (Views: 2.1ms | ActiveRecord: 1.3ms | Allocations: 1698)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:08:03 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: null
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 112)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:08:06 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: null
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 2ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 104)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:08:06 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: null
+Filter chain halted as :authenticate_request rendered or redirected
+Completed 401 Unauthorized in 1ms (Views: 0.2ms | ActiveRecord: 0.0ms | Allocations: 104)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:08:11 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODc2NDN9.rDqOHylrCTFH8vA5yStqss-_vmjQAlv6qYY3GNNhh2w
+Decoded JWT: {"user_id"=>3, "exp"=>1727287643}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.3ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 9ms (Views: 2.3ms | ActiveRecord: 1.0ms | Allocations: 1697)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:08:13 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODc2NDN9.rDqOHylrCTFH8vA5yStqss-_vmjQAlv6qYY3GNNhh2w
+Decoded JWT: {"user_id"=>3, "exp"=>1727287643}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (1.2ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (1.0ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 13ms (Views: 3.2ms | ActiveRecord: 2.4ms | Allocations: 1697)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:08:13 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODc2NDN9.rDqOHylrCTFH8vA5yStqss-_vmjQAlv6qYY3GNNhh2w
+Decoded JWT: {"user_id"=>3, "exp"=>1727287643}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 9ms (Views: 2.4ms | ActiveRecord: 1.2ms | Allocations: 1698)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:11:00 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODc2NDN9.rDqOHylrCTFH8vA5yStqss-_vmjQAlv6qYY3GNNhh2w
+Decoded JWT: {"user_id"=>3, "exp"=>1727287643}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.4ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.4ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 8ms (Views: 1.9ms | ActiveRecord: 1.1ms | Allocations: 1697)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:11:00 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODc2NDN9.rDqOHylrCTFH8vA5yStqss-_vmjQAlv6qYY3GNNhh2w
+Decoded JWT: {"user_id"=>3, "exp"=>1727287643}
+  [1m[36mUser Load (1.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (2.3ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 18ms (Views: 4.3ms | ActiveRecord: 4.3ms | Allocations: 1697)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:11:04 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODc2NDN9.rDqOHylrCTFH8vA5yStqss-_vmjQAlv6qYY3GNNhh2w
+Decoded JWT: {"user_id"=>3, "exp"=>1727287643}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 13ms (Views: 3.2ms | ActiveRecord: 1.3ms | Allocations: 1698)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:11:04 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODc2NDN9.rDqOHylrCTFH8vA5yStqss-_vmjQAlv6qYY3GNNhh2w
+Decoded JWT: {"user_id"=>3, "exp"=>1727287643}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 9ms (Views: 2.4ms | ActiveRecord: 1.3ms | Allocations: 1697)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 21:11:11 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"nada@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"nada@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nada@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 255ms (Views: 0.3ms | ActiveRecord: 0.6ms | Allocations: 584)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:11:11 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODc4NzF9.kf940KCioA-tAYOe2eYzvzp5vdBp6dOna3lct6TVLgM
+Decoded JWT: {"user_id"=>4, "exp"=>1727287871}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 10ms (Views: 1.9ms | ActiveRecord: 1.4ms | Allocations: 1636)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:11:11 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODc4NzF9.kf940KCioA-tAYOe2eYzvzp5vdBp6dOna3lct6TVLgM
+Decoded JWT: {"user_id"=>4, "exp"=>1727287871}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 9ms (Views: 2.5ms | ActiveRecord: 1.1ms | Allocations: 1636)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:12:13 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODc4NzF9.kf940KCioA-tAYOe2eYzvzp5vdBp6dOna3lct6TVLgM
+Decoded JWT: {"user_id"=>4, "exp"=>1727287871}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 8ms (Views: 2.2ms | ActiveRecord: 1.4ms | Allocations: 1635)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:12:13 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODc4NzF9.kf940KCioA-tAYOe2eYzvzp5vdBp6dOna3lct6TVLgM
+Decoded JWT: {"user_id"=>4, "exp"=>1727287871}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.4ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 7ms (Views: 2.2ms | ActiveRecord: 1.1ms | Allocations: 1633)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:12:23 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODc4NzF9.kf940KCioA-tAYOe2eYzvzp5vdBp6dOna3lct6TVLgM
+Decoded JWT: {"user_id"=>4, "exp"=>1727287871}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 10ms (Views: 1.6ms | ActiveRecord: 1.3ms | Allocations: 1633)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:12:23 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODc4NzF9.kf940KCioA-tAYOe2eYzvzp5vdBp6dOna3lct6TVLgM
+Decoded JWT: {"user_id"=>4, "exp"=>1727287871}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 9ms (Views: 1.4ms | ActiveRecord: 1.4ms | Allocations: 1633)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:12:37 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODc4NzF9.kf940KCioA-tAYOe2eYzvzp5vdBp6dOna3lct6TVLgM
+Decoded JWT: {"user_id"=>4, "exp"=>1727287871}
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (1.1ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 14ms (Views: 2.1ms | ActiveRecord: 2.5ms | Allocations: 1636)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:12:37 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODc4NzF9.kf940KCioA-tAYOe2eYzvzp5vdBp6dOna3lct6TVLgM
+Decoded JWT: {"user_id"=>4, "exp"=>1727287871}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 9ms (Views: 2.1ms | ActiveRecord: 1.9ms | Allocations: 1637)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 21:12:45 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"mahmoud@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"mahmoud@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "mahmoud@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 250ms (Views: 0.3ms | ActiveRecord: 0.3ms | Allocations: 584)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:12:46 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MjcyODc5NjV9.1og2LK5VjKrnszpLnoZ6MOGenhlRCXVnwI6kQX-ZVW8
+Decoded JWT: {"user_id"=>1, "exp"=>1727287965}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 1, name: "mahmoud", email: "mahmoud@gmail.com", password_digest: [FILTERED], created_at: "2024-09-23 23:17:12.478577000 +0000", updated_at: "2024-09-23 23:17:12.478577000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 1], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 1 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 11ms (Views: 3.5ms | ActiveRecord: 1.5ms | Allocations: 1634)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:12:46 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MjcyODc5NjV9.1og2LK5VjKrnszpLnoZ6MOGenhlRCXVnwI6kQX-ZVW8
+Decoded JWT: {"user_id"=>1, "exp"=>1727287965}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 1, name: "mahmoud", email: "mahmoud@gmail.com", password_digest: [FILTERED], created_at: "2024-09-23 23:17:12.478577000 +0000", updated_at: "2024-09-23 23:17:12.478577000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 1], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 1 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 9ms (Views: 2.1ms | ActiveRecord: 1.5ms | Allocations: 1636)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 21:12:52 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"nada@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"nada@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nada@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 278ms (Views: 0.3ms | ActiveRecord: 0.6ms | Allocations: 583)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:12:53 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODc5NzN9.hU3JvPi9Go4C0wsCFXAQ9_0-rPUMzvURfRCzdTfsqXQ
+Decoded JWT: {"user_id"=>4, "exp"=>1727287973}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.4ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 9ms (Views: 1.7ms | ActiveRecord: 1.2ms | Allocations: 1636)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:12:53 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODc5NzN9.hU3JvPi9Go4C0wsCFXAQ9_0-rPUMzvURfRCzdTfsqXQ
+Decoded JWT: {"user_id"=>4, "exp"=>1727287973}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 9ms (Views: 1.8ms | ActiveRecord: 1.6ms | Allocations: 1636)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 21:13:00 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 255ms (Views: 0.3ms | ActiveRecord: 0.3ms | Allocations: 584)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:13:00 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODc5ODB9.l1x8al7ZJJXxcbUvQq__2Kg8TmWHH0XPRZr8D62HNCo
+Decoded JWT: {"user_id"=>3, "exp"=>1727287980}
+  [1m[36mUser Load (1.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 12ms (Views: 2.7ms | ActiveRecord: 2.4ms | Allocations: 1699)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:13:01 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODc5ODB9.l1x8al7ZJJXxcbUvQq__2Kg8TmWHH0XPRZr8D62HNCo
+Decoded JWT: {"user_id"=>3, "exp"=>1727287980}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 12ms (Views: 3.7ms | ActiveRecord: 1.4ms | Allocations: 1697)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 21:13:48 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"nada@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"nada@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nada@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 256ms (Views: 0.4ms | ActiveRecord: 5.3ms | Allocations: 5875)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:13:48 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgwMjh9.EnCT71RHFHtsgJfmpDxPWeqfeZBrzTKESdrQJ4-srN4
+Decoded JWT: {"user_id"=>4, "exp"=>1727288028}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 38ms (Views: 8.6ms | ActiveRecord: 3.1ms | Allocations: 5324)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:13:48 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgwMjh9.EnCT71RHFHtsgJfmpDxPWeqfeZBrzTKESdrQJ4-srN4
+Decoded JWT: {"user_id"=>4, "exp"=>1727288028}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (1.1ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 15ms (Views: 4.5ms | ActiveRecord: 2.1ms | Allocations: 1658)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:14:47 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgwMjh9.EnCT71RHFHtsgJfmpDxPWeqfeZBrzTKESdrQJ4-srN4
+Decoded JWT: {"user_id"=>4, "exp"=>1727288028}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 13ms (Views: 2.5ms | ActiveRecord: 1.7ms | Allocations: 1652)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:14:47 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgwMjh9.EnCT71RHFHtsgJfmpDxPWeqfeZBrzTKESdrQJ4-srN4
+Decoded JWT: {"user_id"=>4, "exp"=>1727288028}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR created_by_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 8ms (Views: 1.8ms | ActiveRecord: 1.1ms | Allocations: 1652)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:17:45 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgwMjh9.EnCT71RHFHtsgJfmpDxPWeqfeZBrzTKESdrQJ4-srN4
+Decoded JWT: {"user_id"=>4, "exp"=>1727288028}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.4ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 47ms (Views: 2.1ms | ActiveRecord: 5.8ms | Allocations: 10373)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:17:45 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgwMjh9.EnCT71RHFHtsgJfmpDxPWeqfeZBrzTKESdrQJ4-srN4
+Decoded JWT: {"user_id"=>4, "exp"=>1727288028}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 7ms (Views: 1.5ms | ActiveRecord: 1.4ms | Allocations: 1654)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:17:57 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgwMjh9.EnCT71RHFHtsgJfmpDxPWeqfeZBrzTKESdrQJ4-srN4
+Decoded JWT: {"user_id"=>4, "exp"=>1727288028}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (3.4ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (3.2ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR user_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 500 Internal Server Error in 57ms (ActiveRecord: 13.8ms | Allocations: 10438)
+
+
+  
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "user_id" does not exist
+LINE 1: ...s".* FROM "documents" WHERE (created_by_id = 4 OR user_id IN...
+                                                             ^
+):
+  
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:17:57 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgwMjh9.EnCT71RHFHtsgJfmpDxPWeqfeZBrzTKESdrQJ4-srN4
+Decoded JWT: {"user_id"=>4, "exp"=>1727288028}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR user_id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 500 Internal Server Error in 6ms (ActiveRecord: 1.3ms | Allocations: 1750)
+
+
+  
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "user_id" does not exist
+LINE 1: ...s".* FROM "documents" WHERE (created_by_id = 4 OR user_id IN...
+                                                             ^
+):
+  
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:18:08 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgwMjh9.EnCT71RHFHtsgJfmpDxPWeqfeZBrzTKESdrQJ4-srN4
+Decoded JWT: {"user_id"=>4, "exp"=>1727288028}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (2.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 65ms (Views: 5.9ms | ActiveRecord: 12.6ms | Allocations: 10371)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:18:09 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgwMjh9.EnCT71RHFHtsgJfmpDxPWeqfeZBrzTKESdrQJ4-srN4
+Decoded JWT: {"user_id"=>4, "exp"=>1727288028}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 24ms (Views: 9.3ms | ActiveRecord: 1.4ms | Allocations: 1654)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 21:18:13 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"nada@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"nada@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nada@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 258ms (Views: 1.5ms | ActiveRecord: 0.5ms | Allocations: 784)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:18:13 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgyOTN9.LOHLL-wOn71Sf4o2Oe7FJGDBq3uKgtdCVQgBE7-iuAQ
+Decoded JWT: {"user_id"=>4, "exp"=>1727288293}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (1.0ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 21ms (Views: 3.7ms | ActiveRecord: 2.0ms | Allocations: 1652)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:18:13 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgyOTN9.LOHLL-wOn71Sf4o2Oe7FJGDBq3uKgtdCVQgBE7-iuAQ
+Decoded JWT: {"user_id"=>4, "exp"=>1727288293}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.4ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 8ms (Views: 1.8ms | ActiveRecord: 1.2ms | Allocations: 1654)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:18:28 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgyOTN9.LOHLL-wOn71Sf4o2Oe7FJGDBq3uKgtdCVQgBE7-iuAQ
+Decoded JWT: {"user_id"=>4, "exp"=>1727288293}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 26ms (Views: 11.9ms | ActiveRecord: 6.7ms | Allocations: 4446)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:18:28 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgyOTN9.LOHLL-wOn71Sf4o2Oe7FJGDBq3uKgtdCVQgBE7-iuAQ
+Decoded JWT: {"user_id"=>4, "exp"=>1727288293}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 10ms (Views: 2.6ms | ActiveRecord: 1.4ms | Allocations: 1720)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:18:41 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgyOTN9.LOHLL-wOn71Sf4o2Oe7FJGDBq3uKgtdCVQgBE7-iuAQ
+Decoded JWT: {"user_id"=>4, "exp"=>1727288293}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.4ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 9ms (Views: 1.6ms | ActiveRecord: 1.8ms | Allocations: 1719)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:18:41 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgyOTN9.LOHLL-wOn71Sf4o2Oe7FJGDBq3uKgtdCVQgBE7-iuAQ
+Decoded JWT: {"user_id"=>4, "exp"=>1727288293}
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.9ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 10ms (Views: 2.6ms | ActiveRecord: 2.5ms | Allocations: 1719)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:18:50 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgyOTN9.LOHLL-wOn71Sf4o2Oe7FJGDBq3uKgtdCVQgBE7-iuAQ
+Decoded JWT: {"user_id"=>4, "exp"=>1727288293}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 14ms (Views: 4.8ms | ActiveRecord: 1.3ms | Allocations: 1653)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:18:50 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgyOTN9.LOHLL-wOn71Sf4o2Oe7FJGDBq3uKgtdCVQgBE7-iuAQ
+Decoded JWT: {"user_id"=>4, "exp"=>1727288293}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (1.0ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 12ms (Views: 2.5ms | ActiveRecord: 1.8ms | Allocations: 1653)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:18:59 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgyOTN9.LOHLL-wOn71Sf4o2Oe7FJGDBq3uKgtdCVQgBE7-iuAQ
+Decoded JWT: {"user_id"=>4, "exp"=>1727288293}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.8ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.9ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 11ms (Views: 2.7ms | ActiveRecord: 2.0ms | Allocations: 1719)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:18:59 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgyOTN9.LOHLL-wOn71Sf4o2Oe7FJGDBq3uKgtdCVQgBE7-iuAQ
+Decoded JWT: {"user_id"=>4, "exp"=>1727288293}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (1.1ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (2.7ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 14ms (Views: 2.7ms | ActiveRecord: 3.9ms | Allocations: 1719)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 21:19:05 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"hoda@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"hoda@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "hoda@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 257ms (Views: 0.3ms | ActiveRecord: 0.2ms | Allocations: 584)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:19:05 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODgzNDV9.eFWktjgVFvCrPJn_7MCBDaKvKX6zBON4r5ZcWXEeOD8
+Decoded JWT: {"user_id"=>3, "exp"=>1727288345}
+  [1m[36mUser Load (1.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 11ms (Views: 2.9ms | ActiveRecord: 2.2ms | Allocations: 1718)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:19:05 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODgzNDV9.eFWktjgVFvCrPJn_7MCBDaKvKX6zBON4r5ZcWXEeOD8
+Decoded JWT: {"user_id"=>3, "exp"=>1727288345}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.7ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 11ms (Views: 3.6ms | ActiveRecord: 2.0ms | Allocations: 1716)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:19:31 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODgzNDV9.eFWktjgVFvCrPJn_7MCBDaKvKX6zBON4r5ZcWXEeOD8
+Decoded JWT: {"user_id"=>3, "exp"=>1727288345}
+  [1m[36mUser Load (1.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 68ms (Views: 9.2ms | ActiveRecord: 13.7ms | Allocations: 13112)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:19:31 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJleHAiOjE3MjcyODgzNDV9.eFWktjgVFvCrPJn_7MCBDaKvKX6zBON4r5ZcWXEeOD8
+Decoded JWT: {"user_id"=>3, "exp"=>1727288345}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 3, name: "hoda", email: "hoda@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 14:22:36.311369000 +0000", updated_at: "2024-09-24 14:22:36.311369000 +0000">
+  [1m[36mPermission Pluck (0.4ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 3], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.4ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 3 OR id IN (NULL))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 7ms (Views: 2.2ms | ActiveRecord: 1.1ms | Allocations: 1701)
+
+
+Started POST "/access_tokens" for ::1 at 2024-09-24 21:19:36 +0300
+Processing by AccessTokensController#create as */*
+  Parameters: {"email"=>"nada@gmail.com", "password"=>"[FILTERED]", "access_token"=>{"email"=>"nada@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "nada@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/access_tokens_controller.rb:5:in `create'
+Completed 200 OK in 279ms (Views: 0.5ms | ActiveRecord: 0.5ms | Allocations: 781)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:19:36 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgzNzZ9.5xQ7rnoFUqUbmoSdcDROXIE1R4ThDiwFVO4t3xWBT3Y
+Decoded JWT: {"user_id"=>4, "exp"=>1727288376}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.8ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 11ms (Views: 1.9ms | ActiveRecord: 1.6ms | Allocations: 1700)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:19:36 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgzNzZ9.5xQ7rnoFUqUbmoSdcDROXIE1R4ThDiwFVO4t3xWBT3Y
+Decoded JWT: {"user_id"=>4, "exp"=>1727288376}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 9ms (Views: 1.9ms | ActiveRecord: 1.4ms | Allocations: 1700)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:19:46 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgzNzZ9.5xQ7rnoFUqUbmoSdcDROXIE1R4ThDiwFVO4t3xWBT3Y
+Decoded JWT: {"user_id"=>4, "exp"=>1727288376}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.6ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 13ms (Views: 2.6ms | ActiveRecord: 1.3ms | Allocations: 1700)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:19:46 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgzNzZ9.5xQ7rnoFUqUbmoSdcDROXIE1R4ThDiwFVO4t3xWBT3Y
+Decoded JWT: {"user_id"=>4, "exp"=>1727288376}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (1.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 11ms (Views: 2.6ms | ActiveRecord: 2.3ms | Allocations: 1700)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:19:54 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgzNzZ9.5xQ7rnoFUqUbmoSdcDROXIE1R4ThDiwFVO4t3xWBT3Y
+Decoded JWT: {"user_id"=>4, "exp"=>1727288376}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (0.5ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.5ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 50ms (Views: 7.7ms | ActiveRecord: 12.8ms | Allocations: 13143)
+
+
+Started GET "/api/documents/" for ::1 at 2024-09-24 21:19:54 +0300
+Processing by Api::DocumentsController#index as HTML
+JWT Token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE3MjcyODgzNzZ9.5xQ7rnoFUqUbmoSdcDROXIE1R4ThDiwFVO4t3xWBT3Y
+Decoded JWT: {"user_id"=>4, "exp"=>1727288376}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:14:in `authenticate_request'
+Current User: #<User id: 4, name: "nada", email: "nada@gmail.com", password_digest: [FILTERED], created_at: "2024-09-24 15:35:57.423383000 +0000", updated_at: "2024-09-24 15:35:57.423383000 +0000">
+  [1m[36mPermission Pluck (2.4ms)[0m  [1m[34mSELECT "permissions"."document_id" FROM "permissions" WHERE "permissions"."user_id" = $1 AND "permissions"."access_type" IN ($2, $3)[0m  [["user_id", 4], ["access_type", "1"], ["access_type", "2"]]
+  ↳ app/controllers/api/documents_controller.rb:74:in `permissioned_document_ids'
+  [1m[36mDocument Load (0.6ms)[0m  [1m[34mSELECT "documents".* FROM "documents" WHERE (created_by_id = 4 OR id IN (1))[0m
+  ↳ app/controllers/api/documents_controller.rb:9:in `index'
+Completed 200 OK in 12ms (Views: 2.0ms | ActiveRecord: 3.3ms | Allocations: 1722)
+
+

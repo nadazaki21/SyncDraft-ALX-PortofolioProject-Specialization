@@ -2,7 +2,7 @@ class SessionController
 
     # on signing up or logging in, the user would already be created
     def create
-        @current_user = User.find_by(email: params[:email])
+        @user = User.find_by(email: params[:email])
 
         if @user && @user.authenticate(params[:password])
             # Storing the user's ID in the session

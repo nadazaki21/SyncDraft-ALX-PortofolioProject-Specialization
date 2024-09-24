@@ -35,7 +35,7 @@ const MarkdownEditor = () => {
         // Fetch recent documents when the component mounts
         const fetchDocuments = async () => {
             try {
-                const response = await fetch('YOUR_API_ENDPOINT_FOR_DOCUMENTS');
+                const response = await fetch('http://localhost:3000/api/documents/');
                 if (!response.ok) {
                     throw new Error('Failed to fetch documents');
                 }
@@ -54,7 +54,7 @@ const MarkdownEditor = () => {
         const fetchDocumentName = async () => {
             if (selectedDocument !== null) {
                 try {
-                    const response = await fetch(`YOUR_API_ENDPOINT_FOR_DOCUMENTS/${selectedDocument}`);
+                    const response = await fetch(`http://localhost:3000/api/documents/${selectedDocument}`);
                     if (!response.ok) {
                         throw new Error('Failed to fetch document name');
                     }

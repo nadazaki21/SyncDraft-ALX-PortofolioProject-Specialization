@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   resources :users, only: [:show, :create, :destroy]
-  resources :access_tokens , only: [:create] 
+  resources :access_tokens , only: [:create, :destroy, :update, :show] 
 
   
   # This line mounts the Action Cable server to the /cable endpoint.

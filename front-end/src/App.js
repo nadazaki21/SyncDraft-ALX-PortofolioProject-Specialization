@@ -27,6 +27,15 @@ function App() {
         />
 
         <Route
+          path="/editor"
+          element={
+            <ProtectedRoute>
+              <MarkdownEditor />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/permissions"
           element={
             <ProtectedRoute>

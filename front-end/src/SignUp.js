@@ -60,7 +60,7 @@ const SignupPage = () => {
             console.log('Saved JWT token:', localStorage.getItem('jwtToken'));
     
             // You can redirect or update the UI after successful signup
-            window.location.href = '/dashboard';  // Redirect to dashboard after signup
+            window.location.href = '/';  // Redirect to dashboard after signup
         } catch (error) {
             setError(error.message);
         }

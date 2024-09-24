@@ -34,7 +34,13 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchRecentDocuments = async () => {
       try {
-        const response = await axios.get('/api/documents/recent');
+        const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage or your preferred storage
+        console.log('Saved JWT token:', token);
+        const response = await axios.get('http://localhost:3000/api/documents/', {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        });
         setDocuments(response.data);
       } catch (error) {
         console.error('Error fetching recent documents:', error);
@@ -126,7 +132,7 @@ const Dashboard = () => {
                     <div key={doc.id} className="flex items-center justify-between p-2 border-b">
                       <div className="flex items-center">
                         <div className="bg-blue-600 rounded-full w-10 h-10 flex items-center justify-center">
-                          <span className="text-white font-bold">MD</span>
+                          <span className="text-white font-bold">SD</span>
                         </div>
                         <div className="ml-4">
                           <h3 className="font-semibold text-gray-800">{doc.title}</h3>
