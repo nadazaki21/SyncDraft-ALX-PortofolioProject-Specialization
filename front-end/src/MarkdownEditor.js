@@ -55,56 +55,65 @@ const MarkdownEditor = () => {
     }, []);
 
     useEffect(() => {
-        // Fetch document name when a document is selected
         const fetchDocumentName = async () => {
             if (selectedDocument !== null) {
                 try {
-                    const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage
+                    const token = localStorage.getItem('jwtToken');
                     const response = await axios.get(`${baseURL}/api/documents/${selectedDocument}`, {
                         headers: {
-                            Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+                            Authorization: `Bearer ${token}`,
                         },
                     });
     
-                    setDocumentName(response.data.title); // Assuming the document has a title field
+                    setDocumentName(response.data.title);
+    
+                    const content = JSON.parse(response.data.content); // Parse if it's a string
+                    quillInstance.current.setContents(content); // Set the Delta content directly
                 } catch (error) {
-                    console.error('Error fetching document name:', error);
+                    console.error('Error fetching document:', error);
                 }
             }
         };
-
+    
         fetchDocumentName();
     }, [selectedDocument]);
 
     const handleSave = async () => {
         const delta = quillInstance.current.getContents(); // Get delta JSON
+        const contentJson = JSON.stringify(delta); // Convert to JSON string
     
-        // Call your API to save the document
+        console.log('Saving document...');
+    
         try {
             const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage
     
-            const response = await axios.post(
-                `${baseURL}/api/documents/${selectedDocument}`,  // Assuming you are saving a specific document
+            const response = await axios.put(
+                `${baseURL}/api/documents/${selectedDocument}`,  // Update specific document
                 {
-                    content: delta,         // Delta JSON containing the document content
-                    documentId: selectedDocument, // Send the document ID if needed
+                    content: contentJson,         // JSON string of the content
+                    documentId: selectedDocument, // Document ID
                 },
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+                        Authorization: `Bearer ${token}`, // JWT token
                     },
                 }
             );
     
-            // Handle success response
+            // Optionally update the editor with the saved content
             console.log('Document saved successfully:', response.data);
+            quillInstance.current.setContents(delta); // Set the current content back to the editor
+            
         } catch (error) {
             // Handle error
             console.error('Error saving document:', error.response ? error.response.data : error.message);
+            alert('Failed to save document. Please try again.'); // User feedback
         }
     };
+    
 
+    
     return (
         <div className="flex h-screen">
             <div className="w-1/4 bg-gray-100 p-4">

@@ -67,7 +67,7 @@ class Api::DocumentsController < ApplicationController
   end
 
   def document_params
-    params.require(:document).permit(:title, :created_by_id, content: [:text])
+    params.require(:document).permit(:title, :content, :created_by_id)
   end
 
   def permissioned_document_ids

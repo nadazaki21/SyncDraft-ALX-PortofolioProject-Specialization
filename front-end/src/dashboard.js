@@ -3,6 +3,7 @@ import axios from 'axios';
 import logo from './assets/logo.png';
 import search from './assets/search.png'
 import logout from './assets/logout.png'
+import { jwtDecode } from 'jwt-decode';
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const Dashboard = () => {
@@ -11,6 +12,7 @@ const Dashboard = () => {
     documentsCreated: 0,
     documentsShared: 0,
   });
+  const [userName, setUserName] = useState(''); // Store the user's name
   const [requests, setRequests] = useState([
     // fake hardcoded data for testin how would requests look 
     {
@@ -29,13 +31,46 @@ const Dashboard = () => {
     }
   ]);
 
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+          try {
+            // Decode the JWT token
+            const decodedToken = jwtDecode(token); // Ensure the import matches
+            // Extract the user ID from the token payload
+            const userId = decodedToken.user_id;
+
+            // console.log('User ID:', userId);
+
+            // Fetch user details based on the extracted userId
+            const response = await axios.get(`${baseURL}/users/${userId}`, {
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+              },
+            });
+
+            setUserName(response.data.name); // Assuming the API returns a 'name' field in the response
+            // console.log('User name:', response.data.name);
+          } catch (error) {
+            console.error('Error decoding token:', error);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user name:', error);
+      }
+    };
+
+    fetchUserId();
+  }, []);
 
   // Fetch recent documents
   useEffect(() => {
     const fetchRecentDocuments = async () => {
       try {
         const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage or your preferred storage
-        console.log('Saved JWT token:', token);
+        // console.log('Saved JWT token:', token);
         const response = await axios.get(`${baseURL}/api/documents`, {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the Authorization header
@@ -104,6 +139,16 @@ const Dashboard = () => {
         <div className="flex items-center space-x-4">
           <i className="fas fa-search text-gray-600"></i>
           <i className="fas fa-bell text-gray-600"></i>
+          <div>
+          {/* User Name - Clickable to redirect to profile */}
+           {userName && (
+              <button 
+                // onClick={() => window.location.href = '/profile'} 
+                className="text-gray-800 font-semibold hover:text-blue-600 transition">
+                {userName}
+              </button>
+            )}
+          </div>
           {/* <img src={search} alt="Search"  className="bg-yellow-100 rounded-full w-12 h-12"></img> */}
           <div className="bg-blue-100 rounded-full shadow  w-12 h-10" >
             <button  className=" text-xl font-semibold text-gray-800"  onClick={handleLogout}>
