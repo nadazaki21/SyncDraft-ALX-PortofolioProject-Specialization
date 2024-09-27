@@ -32,6 +32,7 @@ class Api::DocumentsController < ApplicationController
   # POST /api/documents
   def create
     @document = Document.new(document_params)
+    @document.created_by_id = current_user.id # Set the creator to the current user
 
     if @document.save
       render json: @document, status: :created

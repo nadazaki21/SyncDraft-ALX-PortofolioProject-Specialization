@@ -10,6 +10,7 @@ const MarkdownEditor = () => {
     const [selectedDocument, setSelectedDocument] = useState(null);
     const [documents, setDocuments] = useState([]); // State for documents
     const [documentName, setDocumentName] = useState('Untitled Document'); // State for document name
+    const [isNewDocument, setIsNewDocument] = useState(false); // State for new document creation
     const quillRef = useRef(null); // Reference for the Quill editor
     const quillInstance = useRef(null); // Reference to store the Quill instance
 
@@ -56,7 +57,7 @@ const MarkdownEditor = () => {
 
     useEffect(() => {
         const fetchDocumentName = async () => {
-            if (selectedDocument !== null) {
+            if (selectedDocument !== null && !isNewDocument) {
                 try {
                     const token = localStorage.getItem('jwtToken');
                     const response = await axios.get(`${baseURL}/api/documents/${selectedDocument}`, {
@@ -76,7 +77,7 @@ const MarkdownEditor = () => {
         };
     
         fetchDocumentName();
-    }, [selectedDocument]);
+    }, [selectedDocument, isNewDocument]);
 
     const handleSave = async () => {
         const delta = quillInstance.current.getContents(); // Get delta JSON
@@ -87,29 +88,49 @@ const MarkdownEditor = () => {
         try {
             const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage
     
-            const response = await axios.put(
-                `${baseURL}/api/documents/${selectedDocument}`,  // Update specific document
-                {
-                    content: contentJson,         // JSON string of the content
-                    documentId: selectedDocument, // Document ID
-                },
-                {
+            if (isNewDocument) {
+                // Make a POST request to create a new document
+                const response = await axios.post(`${baseURL}/api/documents`, {
+                    title: documentName, // Use the document name
+                    content: contentJson, // Initial content is empty
+                }, {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`, // JWT token
                     },
-                }
-            );
-    
+                });
+
+                // Set the selected document to the new document ID
+                setSelectedDocument(response.data.id);
+                setIsNewDocument(false); // Mark it as not a new document anymore
+            } else {
+                // Make a PUT request to update the existing document
+                const response = await axios.put(`${baseURL}/api/documents/${selectedDocument}`, {
+                    title: documentName, // Use the updated document name
+                    content: contentJson, // Updated content
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`, // JWT token
+                    },
+                });
+                console.log('Updated document:', response.data);
+            }
+
             // Optionally update the editor with the saved content
-            console.log('Document saved successfully:', response.data);
-            quillInstance.current.setContents(delta); // Set the current content back to the editor
+            console.log('Document saved successfully');
             
         } catch (error) {
-            // Handle error
             console.error('Error saving document:', error.response ? error.response.data : error.message);
-            alert('Failed to save document. Please try again.'); // User feedback
+            alert('Failed to save document. Please try again.');
         }
+    };
+
+    const handleNewDocument = () => {
+        setDocumentName('Untitled Document'); // Reset to default title
+        quillInstance.current.setContents(''); // Clear the editor content
+        setSelectedDocument(null); // No selected document yet
+        setIsNewDocument(true); // Mark it as a new document
     };
     
 
@@ -121,23 +142,30 @@ const MarkdownEditor = () => {
                     <img src={logo} alt="SyncDraft Logo" className="w-4 h-4 bg-gray-400 rounded-full mr-2"></img>
                     <span className="text-xl font-bold">SyncDraft</span>
                 </div>
-                <button className="w-full bg-gray-800 text-white py-2 px-4 rounded mb-4">New Document</button>
+                <button className="w-full bg-gray-800 text-white py-2 px-4 rounded mb-4" onClick={handleNewDocument}>New Document</button>
                 <h2 className="text-lg font-semibold mb-2">Most recent:</h2>
                 <ul>
                     {documents.map((doc) => (
                         <li
-                            key={doc.id} // Assuming each document has a unique id
+                            key={doc.id}
                             className={`py-2 px-4 rounded mb-2 cursor-pointer ${selectedDocument === doc.id ? 'bg-white' : 'bg-gray-100'}`}
-                            onClick={() => setSelectedDocument(doc.id)} // Use doc.id for setting selectedDocument
+                            onClick={() => {
+                                setSelectedDocument(doc.id);
+                                setIsNewDocument(false);
+                            }}
                         >
-                            {doc.title} {/* Assuming each document has a title */}
+                            {doc.title}
                         </li>
                     ))}
                 </ul>
             </div>
             <div className="w-3/4 bg-gray-50 p-6">
                 <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-2xl font-bold">{documentName}</h1> {/* Display the fetched document name */}
+                <input
+                        className="text-2xl font-bold border-b focus:outline-none"
+                        value={documentName}
+                        onChange={(e) => setDocumentName(e.target.value)} // Make the title editable
+                    />
                     <div className="flex items-center">
                         <i className="fas fa-user-circle text-2xl mr-2" title="User Profile"></i>
                         <i className="fas fa-users text-2xl mr-2" title="Share with Users"></i>
