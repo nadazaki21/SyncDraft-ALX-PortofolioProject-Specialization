@@ -11,54 +11,37 @@ import DocumentVersionControl from './Versions';
 
 function App() {
   return (
-    // <Dashboard/>
-    <Router>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        {/* Protect the dashboard route */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+    <Dashboard/>
+    // <Router>
+    //   <Routes>
+    //     <Route path="/login" element={<LoginPage />} />
+    //     <Route path="/signup" element={<SignupPage />} />
+    //     {/* Protect the dashboard route */}
+    //     <Route
+    //       path="/"
+    //       element={
+    //         <ProtectedRoute>
+    //           <Dashboard />
+    //         </ProtectedRoute>
+    //       }
+    //     />
 
-        <Route
-          path="/editor"
-          element={
-            <ProtectedRoute>
-              <MarkdownEditor />
-            </ProtectedRoute>
-          }
-        />
 
-        <Route
-          path="/permissions"
-          element={
-            <ProtectedRoute>
-              <DocumentSharing />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/versions"
-          element={
-            <ProtectedRoute>
-              <DocumentVersionControl />
-            </ProtectedRoute>
-          }
-        />
+    //     <Route
+    //       path="/versions"
+    //       element={
+    //         <ProtectedRoute>
+    //           <DocumentVersionControl />
+    //         </ProtectedRoute>
+    //       }
+    //     />
 
        
 
 
 
-      </Routes>
-    </Router>
+    //   </Routes>
+    // </Router>
   );
 }
 
