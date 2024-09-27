@@ -10,7 +10,7 @@ const MarkdownEditor = () => {
     const [selectedDocument, setSelectedDocument] = useState(null);
     const [documents, setDocuments] = useState([]); // State for documents
     const [documentName, setDocumentName] = useState('Untitled Document'); // State for document name
-    const [isNewDocument, setIsNewDocument] = useState(false); // State for new document creation
+    const [isNewDocument, setIsNewDocument] = useState(true); // State for new document creation
     const quillRef = useRef(null); // Reference for the Quill editor
     const quillInstance = useRef(null); // Reference to store the Quill instance
 
@@ -46,7 +46,7 @@ const MarkdownEditor = () => {
                     },
                 });
     
-                setDocuments(response.data); // Assuming the response data is an array of documents
+                setDocuments(response.data || []); // Assuming the response data is an array of documents
             } catch (error) {
                 console.error('Error fetching documents:', error);
             }
@@ -82,7 +82,11 @@ const MarkdownEditor = () => {
     const handleSave = async () => {
         const delta = quillInstance.current.getContents(); // Get delta JSON
         const contentJson = JSON.stringify(delta); // Convert to JSON string
-    
+        // Prevent saving empty document
+        if (delta.length() === 1 && delta.ops[0].insert.trim() === "") {
+            alert("Document cannot be empty.");
+            return;
+        }
         console.log('Saving document...');
     
         try {
@@ -103,6 +107,7 @@ const MarkdownEditor = () => {
                 // Set the selected document to the new document ID
                 setSelectedDocument(response.data.id);
                 setIsNewDocument(false); // Mark it as not a new document anymore
+                setDocuments([...documents, response.data]);
             } else {
                 // Make a PUT request to update the existing document
                 const response = await axios.put(`${baseURL}/api/documents/${selectedDocument}`, {
@@ -115,9 +120,12 @@ const MarkdownEditor = () => {
                     },
                 });
                 console.log('Updated document:', response.data);
+                // Update the document in the state (find and replace the document)
+            setDocuments(documents.map((doc) =>
+                doc.id === selectedDocument ? response.data : doc
+            ));
+        
             }
-
-            // Optionally update the editor with the saved content
             console.log('Document saved successfully');
             
         } catch (error) {
@@ -126,11 +134,33 @@ const MarkdownEditor = () => {
         }
     };
 
+    const handleDelete = async () => {
+        if (window.confirm("Are you sure you want to delete this document?")) {
+            try {
+                const token = localStorage.getItem('jwtToken');
+                await axios.delete(`${baseURL}/api/documents/${selectedDocument}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setDocuments(documents.filter(doc => doc.id !== selectedDocument));
+                setSelectedDocument(null);
+                setIsNewDocument(true); // Mark it as a new document
+                quillInstance.current.setContents(''); // Clear the editor
+                alert('Document deleted successfully.');
+            } catch (error) {
+                console.error('Error deleting document:', error);
+                alert('Failed to delete document. Please try again.');
+            }
+        }
+    };
+
     const handleNewDocument = () => {
         setDocumentName('Untitled Document'); // Reset to default title
         quillInstance.current.setContents(''); // Clear the editor content
         setSelectedDocument(null); // No selected document yet
         setIsNewDocument(true); // Mark it as a new document
+        // handleSave();
     };
     
 
@@ -169,8 +199,9 @@ const MarkdownEditor = () => {
                     <div className="flex items-center">
                         <i className="fas fa-user-circle text-2xl mr-2" title="User Profile"></i>
                         <i className="fas fa-users text-2xl mr-2" title="Share with Users"></i>
-                        <button className="bg-gray-200 text-gray-800 py-1 px-3 rounded mr-2" title="Share">Share</button>
-                        <button className="bg-gray-200 text-gray-800 py-1 px-3 rounded" title="Save" onClick={handleSave}>Save</button>
+                        <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2" title="Share">Share</button>
+                        <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-6" title="Save" onClick={handleSave}>Save</button>
+                        <button className="bg-red-500 text-white py-1 px-3 rounded" title="Delete" onClick={handleDelete} disabled={!selectedDocument}>Delete</button>
                     </div>
                 </div>
                 <div ref={quillRef} className="h-96 bg-white border rounded"></div>

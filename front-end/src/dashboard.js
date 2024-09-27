@@ -162,7 +162,7 @@ const Dashboard = () => {
       <main className="p-6">
         {/* Action Buttons */}
         <div className="bg-white shadow p-4 flex justify-between items-center mb-6">
-          <button className="bg-blue-900 text-white px-4 py-2 rounded flex items-center shadow-md hover:bg-blue-700 transition">
+          <button className="bg-blue-900 text-white px-4 py-2 rounded flex items-center shadow-md hover:bg-blue-700 transition" onClick={ () => window.location.href = '/editor'}>
             <i className="fas fa-plus mr-2"></i> New Document
           </button>
           <img src={search} alt="Search"  className="bg-yellow-50 rounded-full w-12 h-12"></img>
