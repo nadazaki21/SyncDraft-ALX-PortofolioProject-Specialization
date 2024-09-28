@@ -12,23 +12,8 @@ const Dashboard = () => {
     documentsCreated: 0,
     documentsShared: 0,
   });
-  const [userName, setUserName] = useState(''); // Store the user's name
+  const [userName, setUserName] = useState('');
   const [requests, setRequests] = useState([
-    // fake hardcoded data for testin how would requests look 
-    {
-      id: 1,
-      document_title: 'Project Plan',
-      requester_name: 'John Doe',
-      permission_type: 'Editor',
-      created_at: '2024-09-23T10:20:30Z',
-    },
-    {
-      id: 2,
-      document_title: 'Budget Report',
-      requester_name: 'Jane Smith',
-      permission_type: 'Viewer',
-      created_at: '2024-09-22T08:15:45Z',
-    }
   ]);
 
   useEffect(() => {
@@ -111,8 +96,14 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const response = await axios.get('END_POINT_PLACEHOLDR');  // Adjust the API endpoint based on your backend
-        setRequests(response.data);
+        const token = localStorage.getItem('jwtToken');
+        const response = await axios.get(`${baseURL}/requests`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        // Assuming the response data is an array of request objects
+        setRequests(response.data); 
       } catch (error) {
         console.error('Error fetching requests:', error);
       }
@@ -121,6 +112,70 @@ const Dashboard = () => {
     fetchRequests();
   }, []);
   
+  
+  // Log requests state after it updates
+  useEffect(() => {
+    console.log('Current requests:', requests);
+  }, [requests]); // Logs requests whenever it updates
+  
+
+
+
+  // Handle accept action
+    const handleAccept = async (request) => {
+      try {
+        const token = localStorage.getItem('jwtToken');
+        
+        // 1. Call API to add permission to the 'permissions' table
+        await axios.post(
+          `${baseURL}/permissions`, // API endpoint
+          {
+            permission: {
+              user: request.user_id, // Use request's user ID
+              document: request.document_id, // Use request's document ID
+              access_type: request.permission, // Use the permission from request
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include token
+            },
+          }
+        );
+
+        // 2. Call API to delete the request from the 'requests' table
+        await axios.delete(`${baseURL}/requests/${request.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Remove the request from the state after successful deletion
+        setRequests(requests.filter((r) => r.id !== request.id));
+      } catch (error) {
+        console.error('Error processing accept request:', error);
+      }
+    };
+
+
+  // Handle decline action
+    const handleDecline = async (request) => {
+      try {
+        const token = localStorage.getItem('jwtToken');
+
+        // Call API to delete the request from the 'requests' table
+        await axios.delete(`${baseURL}/requests/${request.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Remove the request from the state after successful deletion
+        setRequests(requests.filter((r) => r.id !== request.id));
+      } catch (error) {
+        console.error('Error processing decline request:', error);
+      }
+    };
 
 
   const handleLogout = () => {
@@ -181,9 +236,9 @@ const Dashboard = () => {
                   documents.map((doc) => (
                     <div key={doc.id} className="flex items-center justify-between p-2 border-b">
                       <div className="flex items-center">
-                        <div className="bg-blue-600 rounded-full w-10 h-10 flex items-center justify-center">
+                        {/* <div className="bg-blue-600 rounded-full w-10 h-10 flex items-center justify-center">
                           <span className="text-white font-bold">SD</span>
-                        </div>
+                        </div> */}
                         <div className="ml-4">
                           <h3 className="font-semibold text-gray-800">{doc.title}</h3>
                           <p className="text-gray-600 text-sm">
@@ -219,38 +274,38 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Requests Section */}
-        <div className="bg-white p-6 rounded shadow mb-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Requests</h2>
-          <div className="space-y-4">
-            {requests.length > 0 ? (
-              requests.map((request) => (
-                <div key={request.id} className="flex items-center justify-between p-2 border-b">
-                  <div>
-                    <h3 className="font-semibold text-gray-800">{request.document_title}</h3>
-                    <p className="text-gray-600 text-sm">
-                      Request from <span className="font-semibold">{request.requester_name}</span> 
-                      to access as <span className="font-semibold">{request.permission_type}</span>
-                    </p>
-                    <p className="text-gray-500 text-xs">
-                      Requested on {new Date(request.created_at).toLocaleString()}
-                    </p>
-                  </div>
-                  <div className="flex space-x-2">
-                    <button className="bg-green-500 text-white px-4 py-1 rounded shadow hover:bg-green-600">
-                      Accept
-                    </button>
-                    <button className="bg-red-500 text-white px-4 py-1 rounded shadow hover:bg-red-600">
-                      Decline
-                    </button>
-                  </div>
+      {/* Requests Section */}
+      <div className="bg-white p-6 rounded shadow mb-6">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">Document Access Invitations</h2>
+        <div className="space-y-4">
+          {requests.length > 0 ? (
+            requests.map((request) => (
+              <div key={request.id} className="flex items-center justify-between p-4 border-b">
+                <div>
+                  <h3 className="font-semibold text-gray-800">{request.document_title}</h3>
+                  <p className="text-gray-600 text-sm">
+                    You have been invited to access the document as a <span className="font-semibold">{request.permission}</span>.
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    Invitation sent on {new Date(request.created_at).toLocaleString()}
+                  </p>
                 </div>
-              ))
-            ) : (
-              <p className="text-gray-600">No requests available.</p>
-            )}
-          </div>
+                <div className="flex space-x-2">
+                  <button onClick={() => handleAccept(request)} className="bg-green-500 text-white px-4 py-1 rounded shadow hover:bg-green-600">
+                    Accept
+                  </button>
+                  <button onClick={() => handleDecline(request)} className="bg-red-500 text-white px-4 py-1 rounded shadow hover:bg-red-600">
+                    Decline
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-600">No invitations available.</p>
+          )}
         </div>
+      </div>
+
 
 
       </main>

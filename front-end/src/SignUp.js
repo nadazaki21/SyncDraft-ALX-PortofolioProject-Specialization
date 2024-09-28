@@ -20,7 +20,7 @@ const SignupPage = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    user: { // Correctly wrapping parameters in "user"
+                    user: { 
                         name: Name,
                         email: email,
                         password: password,

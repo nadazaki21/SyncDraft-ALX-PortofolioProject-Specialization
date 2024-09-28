@@ -3,14 +3,16 @@ class UsersController < ApplicationController
   
     # GET /users/:id
     def show
-      render json: @user
+      user = User.find(params[:id])
+      if user
+        render json: user, status: :ok
+      else 
+        render json: {error: 'User not Found'} , status: :not_found
+      end
     end
   
     # POST /users
     def create
-
-        puts "Received parameters:"
-        puts params.inspect
 
         @user = User.new(user_params)
         

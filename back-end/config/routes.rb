@@ -8,6 +8,15 @@ Rails.application.routes.draw do
   resources :users, only: [:show, :create, :destroy]
   resources :access_tokens , only: [:create, :destroy, :update, :show] 
 
+  # requests routes
+  resources :requests , only: [:create, :destroy]
+  get 'requests', to: 'requests#show'
+
+  resources :permissions , only: [:create, :destroy , :show , :update]
+  
+
+  
+
   
   # This line mounts the Action Cable server to the /cable endpoint.
   # This is how your front end will connect to the WebSocket.

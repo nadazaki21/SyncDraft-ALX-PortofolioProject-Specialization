@@ -67,12 +67,14 @@ const MarkdownEditor = () => {
                     });
     
                     setDocumentName(response.data.title);
+                    
     
                     const content = JSON.parse(response.data.content); // Parse if it's a string
                     quillInstance.current.setContents(content); // Set the Delta content directly
                 } catch (error) {
                     console.error('Error fetching document:', error);
                 }
+               
             }
         };
     
@@ -108,6 +110,7 @@ const MarkdownEditor = () => {
                 setSelectedDocument(response.data.id);
                 setIsNewDocument(false); // Mark it as not a new document anymore
                 setDocuments([...documents, response.data]);
+
             } else {
                 // Make a PUT request to update the existing document
                 const response = await axios.put(`${baseURL}/api/documents/${selectedDocument}`, {
@@ -163,6 +166,17 @@ const MarkdownEditor = () => {
         // handleSave();
     };
     
+    const handleShare = () => {
+        localStorage.setItem('selectedDocumentId', selectedDocument);
+        
+        console.log("Set the current document ID to: ", selectedDocument);
+    
+        // Delay navigation to ensure the localStorage update completes
+        setTimeout(() => {
+            window.location.href = '/permissions';
+        }, 100); // 100ms delay should be sufficient
+    };
+    
 
     
     return (
@@ -198,8 +212,8 @@ const MarkdownEditor = () => {
                     />
                     <div className="flex items-center">
                         <i className="fas fa-user-circle text-2xl mr-2" title="User Profile"></i>
-                        <i className="fas fa-users text-2xl mr-2" title="Share with Users"></i>
-                        <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2" title="Share">Share</button>
+                        <i className="fas fa-users text-2xl mr-2"  title="Share with Users"></i>
+                        <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2" onClick={handleShare}  title="Share">Share</button>
                         <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-6" title="Save" onClick={handleSave}>Save</button>
                         <button className="bg-red-500 text-white py-1 px-3 rounded" title="Delete" onClick={handleDelete} disabled={!selectedDocument}>Delete</button>
                     </div>
