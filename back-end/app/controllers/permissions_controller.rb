@@ -2,37 +2,33 @@ class PermissionsController < ApplicationController
     
     def create
 
-        permission = Permission.new(access_type: permission_params[:permission], user_id: permission_params[:user], document_id: permission_params[:document])
+        permission = Permission.new(access_type: permission_params[:access_type], user_id: permission_params[:user], document_id: permission_params[:document])
 
-        if permission
-            if permission.save
-                render json: permission , status: :created
-            else
-                render json: permission.errors.full_message , status: :unprocessable_entity
-            end
-        else
-            render json: {"error": "Error creatin the Permission"}, status: unprocessable_entity
-        end
+        if permission.save
+            render json: permission, status: :created
+          else
+            render json: permission.errors.full_messages, status: :unprocessable_entity
+          end
     end
 
 
     def show
         permissions = Permission.where(document_id: params[:id])
         if permissions.any?
-            render json: permissions, status: :ok
+          render json: permissions, status: :ok
         else
-            render status: :no_content
+          render json: { message: 'No permissions found for this document' }, status: :not_found
         end
     end
 
     def update
         permission = Permission.find(params[:id])
         new_permission = {access_type: params[:permission]}
-        if permission
-            permission.update(new_permission)
-        else
-            render status: :not_found
-        end
+        if permission.update(new_permission)
+            render json: { message: 'Permission updated successfully' }, status: :ok
+          else
+            render json: permission.errors.full_messages, status: :unprocessable_entity
+          end
     end
 
     def destroy

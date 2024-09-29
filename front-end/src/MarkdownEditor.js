@@ -214,7 +214,8 @@ const MarkdownEditor = () => {
                         <i className="fas fa-user-circle text-2xl mr-2" title="User Profile"></i>
                         <i className="fas fa-users text-2xl mr-2"  title="Share with Users"></i>
                         <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2" onClick={handleShare}  title="Share">Share</button>
-                        <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-6" title="Save" onClick={handleSave}>Save</button>
+                        <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2" title="Save" onClick={handleSave}>Save</button>
+                        <button className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-3 rounded mr-8" title="Create New Version">Create New Version</button>
                         <button className="bg-red-500 text-white py-1 px-3 rounded" title="Delete" onClick={handleDelete} disabled={!selectedDocument}>Delete</button>
                     </div>
                 </div>

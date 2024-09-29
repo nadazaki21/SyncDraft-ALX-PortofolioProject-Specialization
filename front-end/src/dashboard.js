@@ -122,60 +122,72 @@ const Dashboard = () => {
 
 
   // Handle accept action
-    const handleAccept = async (request) => {
-      try {
+  const handleAccept = async (request) => {
+    // Optimistically remove the request from the state
+    setRequests((prevRequests) => prevRequests.filter((r) => r.id !== request.id));
+
+    try {
         const token = localStorage.getItem('jwtToken');
-        
+
         // 1. Call API to add permission to the 'permissions' table
         await axios.post(
-          `${baseURL}/permissions`, // API endpoint
-          {
-            permission: {
-              user: request.user_id, // Use request's user ID
-              document: request.document_id, // Use request's document ID
-              access_type: request.permission, // Use the permission from request
+            `${baseURL}/permissions`, // API endpoint
+            {
+                permission: {
+                    user: request.user_id, // Use request's user ID
+                    document: request.document_id, // Use request's document ID
+                    access_type: request.permission, // Use the permission from request
+                },
             },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Include token
-            },
-          }
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Include token
+                },
+            }
         );
 
         // 2. Call API to delete the request from the 'requests' table
         await axios.delete(`${baseURL}/requests/${request.id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
 
-        // Remove the request from the state after successful deletion
-        setRequests(requests.filter((r) => r.id !== request.id));
-      } catch (error) {
+        // No need to setRequests again since we've already done it optimistically
+    } catch (error) {
         console.error('Error processing accept request:', error);
-      }
-    };
+
+        // If the API call fails, you may want to re-add the request back to state
+        setRequests((prevRequests) => [...prevRequests, request]); // Revert optimistic update
+    }
+};
+
 
 
   // Handle decline action
-    const handleDecline = async (request) => {
-      try {
+  const handleDecline = async (request) => {
+    // Optimistically remove the request from the state
+    setRequests((prevRequests) => prevRequests.filter((r) => r.id !== request.id));
+
+    try {
         const token = localStorage.getItem('jwtToken');
 
         // Call API to delete the request from the 'requests' table
         await axios.delete(`${baseURL}/requests/${request.id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
 
-        // Remove the request from the state after successful deletion
-        setRequests(requests.filter((r) => r.id !== request.id));
-      } catch (error) {
+        // No need to setRequests again since we've already done it optimistically
+    } catch (error) {
         console.error('Error processing decline request:', error);
-      }
-    };
+
+        // If the API call fails, you may want to re-add the request back to state
+        setRequests((prevRequests) => [...prevRequests, request]); // Revert optimistic update
+    }
+};
+
 
 
   const handleLogout = () => {
@@ -275,36 +287,42 @@ const Dashboard = () => {
         </div>
 
       {/* Requests Section */}
-      <div className="bg-white p-6 rounded shadow mb-6">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Document Access Invitations</h2>
-        <div className="space-y-4">
-          {requests.length > 0 ? (
+<div className="bg-white p-6 rounded shadow mb-6">
+    <h2 className="text-xl font-semibold text-gray-800 mb-4">Document Access Invitations</h2>
+    <div className="space-y-4">
+        {requests.length > 0 ? (
             requests.map((request) => (
-              <div key={request.id} className="flex items-center justify-between p-4 border-b">
-                <div>
-                  <h3 className="font-semibold text-gray-800">{request.document_title}</h3>
-                  <p className="text-gray-600 text-sm">
-                    You have been invited to access the document as a <span className="font-semibold">{request.permission}</span>.
-                  </p>
-                  <p className="text-gray-500 text-xs">
-                    Invitation sent on {new Date(request.created_at).toLocaleString()}
-                  </p>
+                <div key={request.id} className="flex items-center justify-between p-4 border-b">
+                    <div>
+                        <h3 className="font-semibold text-gray-800">{request.document_title}</h3>
+                        <p className="text-gray-600 text-sm">
+                            You have been invited to access the document as a <span className="font-semibold">{request.permission}</span>.
+                        </p>
+                        <p className="text-gray-500 text-xs">
+                            Invitation sent on {new Date(request.created_at).toLocaleString()}
+                        </p>
+                    </div>
+                    <div className="flex space-x-2">
+                        <button 
+                            onClick={() => handleAccept(request)} 
+                            className="bg-green-500 text-white px-4 py-1 rounded shadow hover:bg-green-600"
+                        >
+                            Accept
+                        </button>
+                        <button 
+                            onClick={() => handleDecline(request)} 
+                            className="bg-red-500 text-white px-4 py-1 rounded shadow hover:bg-red-600"
+                        >
+                            Decline
+                        </button>
+                    </div>
                 </div>
-                <div className="flex space-x-2">
-                  <button onClick={() => handleAccept(request)} className="bg-green-500 text-white px-4 py-1 rounded shadow hover:bg-green-600">
-                    Accept
-                  </button>
-                  <button onClick={() => handleDecline(request)} className="bg-red-500 text-white px-4 py-1 rounded shadow hover:bg-red-600">
-                    Decline
-                  </button>
-                </div>
-              </div>
             ))
-          ) : (
+        ) : (
             <p className="text-gray-600">No invitations available.</p>
-          )}
-        </div>
-      </div>
+        )}
+    </div>
+</div>
 
 
 
