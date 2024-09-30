@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_30_154506) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_30_193159) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,7 +22,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_30_154506) do
     t.text "change_description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "description"
     t.index ["created_by_id"], name: "index_document_versions_on_created_by_id"
     t.index ["document_id", "version_number"], name: "index_document_versions_on_doc_id_and_version_number", unique: true
     t.index ["document_id"], name: "index_document_versions_on_document_id"

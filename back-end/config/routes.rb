@@ -1,39 +1,40 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Health status check
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # Users and access tokens
   resources :users, only: [:show, :create, :destroy]
-  resources :access_tokens , only: [:create, :destroy, :update, :show] 
+  resources :access_tokens, only: [:create, :destroy, :update, :show]
 
-  # requests routes
-  resources :requests , only: [:create, :destroy]
+  # Requests routes
+  resources :requests, only: [:create, :destroy]
   get 'requests', to: 'requests#show'
 
-  resources :permissions , only: [:create, :destroy , :show , :update]
-  resources :document_versions , only: [:create, :destroy , :show , :update]
-  
+  # Permissions routes
+  resources :permissions, only: [:create, :destroy, :show, :update]
 
-  
-
-  
-  # This line mounts the Action Cable server to the /cable endpoint.
-  # This is how your front end will connect to the WebSocket.
+  # Action Cable for WebSocket connection
   mount ActionCable.server => '/cable'
 
-
-  # Defines the root path route ("/")
-  # root "posts#index"
-  
-  # Documents APIs routes
+  # Documents API routes
   namespace :api do
     resources :documents, only: [:index, :show, :create, :update, :destroy] do
       collection do
         get 'recent'  # Fetch recent documents opened by the user
       end
+    
+      # Nested routes for document versions
+      resources :versions, controller: 'document_versions', only: [:index, :show, :create, :update, :destroy] do
+        member do
+          post :restore  # Restore a specific version
+        end
+        collection do
+          get :compare  # Compare two versions
+        end
+      end
     end
+    
+    # Route to fetch user activity related to documents
     get 'user/activity', to: 'documents#user_activity'
   end
 end
