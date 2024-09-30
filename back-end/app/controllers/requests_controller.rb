@@ -30,7 +30,7 @@ class RequestsController < ApplicationController
     end
 
       def destroy
-        request = Request.find_by(params[:id], user_id: current_user.id)
+        request = Request.find_by(id: params[:id], user_id: current_user.id)
       
         if request
           request.destroy

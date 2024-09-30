@@ -6,9 +6,9 @@ class PermissionsController < ApplicationController
 
         if permission.save
             render json: permission, status: :created
-          else
+        else
             render json: permission.errors.full_messages, status: :unprocessable_entity
-          end
+        end
     end
 
 
@@ -26,9 +26,9 @@ class PermissionsController < ApplicationController
         new_permission = {access_type: params[:permission]}
         if permission.update(new_permission)
             render json: { message: 'Permission updated successfully' }, status: :ok
-          else
+        else
             render json: permission.errors.full_messages, status: :unprocessable_entity
-          end
+        end
     end
 
     def destroy
@@ -40,7 +40,7 @@ class PermissionsController < ApplicationController
         else
           render json: { error: "Permission to delete is not found" }, status: :not_found
         end
-      end
+    end
 
     private
 

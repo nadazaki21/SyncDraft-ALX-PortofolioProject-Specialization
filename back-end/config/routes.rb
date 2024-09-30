@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get 'requests', to: 'requests#show'
 
   resources :permissions , only: [:create, :destroy , :show , :update]
+  resources :document_versions , only: [:create, :destroy , :show , :update]
   
 
   
