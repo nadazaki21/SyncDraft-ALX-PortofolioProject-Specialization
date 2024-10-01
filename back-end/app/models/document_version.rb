@@ -4,5 +4,5 @@ class DocumentVersion < ApplicationRecord
 
   validates :content, presence: true
   validates :version_number, presence: true
-  validates :description, presence: true
+  validates :change_description, presence: true
 end

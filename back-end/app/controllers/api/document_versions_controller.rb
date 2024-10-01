@@ -17,6 +17,7 @@ class Api::DocumentVersionsController < ApplicationController
   # POST /document_versions
   def create
     @document_version = DocumentVersion.new(document_version_params)
+    @document_version.created_by_id = current_user.id # Set the creator to the current user
 
     if @document_version.save
       render json: @document_version, status: :created
@@ -49,6 +50,6 @@ class Api::DocumentVersionsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def document_version_params
-    params.require(:document_version).permit(:document_id, :content, :version_number, :description)
+    params.require(:document_version).permit(:document_id, :content, :version_number, :change_description)
   end
 end

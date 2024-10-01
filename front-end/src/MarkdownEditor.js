@@ -177,7 +177,83 @@ const MarkdownEditor = () => {
         }, 100); // 100ms delay should be sufficient
     };
 
-    const handleCreateNewVersion = () => {
+    const getNextVersionNumber = async (selectedDocument) => {
+        try {
+          const token = localStorage.getItem('jwtToken');
+          const response = await axios.get(`${baseURL}/api/documents/${selectedDocument}/versions`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const versions = response.data;
+      
+          if (versions.length === 0) {
+            return 1; // No versions exist, start from 1
+          }
+      
+          // Find the highest version number
+          const maxVersionNumber = Math.max(...versions.map(version => version.version_number));
+          return maxVersionNumber + 1; // Increment by 1 for the new version
+        } catch (error) {
+          console.error('Error fetching document versions:', error);
+          throw error; // Re-throw the error for further handling
+        }
+      };
+
+
+    const handleCreateNewVersion = async (documentId) => {
+        // Prompt the user for a description
+        const description = window.prompt("Enter a description for the new version:");
+        const token = localStorage.getItem('jwtToken');
+        const nextVersionNumber = await getNextVersionNumber(documentId);
+        const deltaContent = quillInstance.current.getContents(); // Get delta JSON
+        if (deltaContent.ops.length === 0 || (deltaContent.ops.length === 1 && deltaContent.ops[0].insert.trim() === "")) {
+            alert("Document cannot be empty.");
+            return;
+    }
+        const jsonContent = JSON.stringify(deltaContent); // Convert to JSON string
+        console.log("Document ID:", documentId);
+            console.log("Content:", jsonContent);
+            console.log("Version number:", nextVersionNumber);
+        if (description) {
+            try {
+                // Make a POST request to create a new version with Authorization header
+                const response = await axios.post(
+                    `${baseURL}/api/documents/${documentId}/versions`,
+                    {
+                        document_id: documentId,
+                        content: jsonContent,
+                        version_number: nextVersionNumber,
+                        change_description: description,
+                        // Include any other necessary fields
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`, // Add Authorization header
+                        },
+                    }
+                );
+            // Handle success (e.g., display success message, update UI)
+            console.log("Document ID:", documentId);
+            console.log("Content:", jsonContent);
+            console.log("Version number:", nextVersionNumber);
+            console.log("New version created:", response.data);
+            alert("New version created successfully!");
+    
+            // Optionally, refresh or update the version list here
+    
+          } catch (error) {
+            console.error("Error creating new version:", error);
+            alert("Failed to create a new version. Please try again.");
+          }
+        }
+        else {
+            alert("Please enter a description for the new version.");
+        }
+      };
+    
+    const handleDocunetVersions = () => {
         localStorage.setItem('selectedDocumentId', selectedDocument);
         localStorage.setItem('selectedDocumentTitle', documentName);
         
@@ -226,8 +302,9 @@ const MarkdownEditor = () => {
                         <i className="fas fa-user-circle text-2xl mr-2" title="User Profile"></i>
                         <i className="fas fa-users text-2xl mr-2"  title="Share with Users"></i>
                         <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2" onClick={handleShare}  title="Share">Share</button>
-                        <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2" title="Save" onClick={handleSave}>Save</button>
-                        <button className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-3 rounded mr-8" title="Create New Version" onClick={handleCreateNewVersion}>Create New Version</button>
+                        <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-8" title="Save" onClick={handleSave}>Save</button>
+                        <button className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-3 rounded mr-2" title="Create New Version" onClick={() => handleCreateNewVersion(selectedDocument)}>Create New Version</button>
+                        <button className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-3 rounded mr-8" title="Document Versions" onClick={() => handleDocunetVersions()}>Document Versions</button>
                         <button className="bg-red-500 text-white py-1 px-3 rounded" title="Delete" onClick={handleDelete} disabled={!selectedDocument}>Delete</button>
                     </div>
                 </div>
