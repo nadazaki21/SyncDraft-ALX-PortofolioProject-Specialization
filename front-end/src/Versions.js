@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Assuming you're using axios for API requests
+import axios from 'axios';
+import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const DocumentVersionControl = () => {
     const [documentId, setDocumentId] = useState(localStorage.getItem('selectedDocumentId'));
     const [documentTitle, setDocumentTitle] = useState(localStorage.getItem('selectedDocumentTitle'));
     const [versions, setVersions] = useState([]);
-    const [selectedVersion, setSelectedVersion] = useState(null);
-    const [comparisonVersion, setComparisonVersion] = useState(null);
-    const [diffs, setDiffs] = useState([]);
+    const [selectedVersionContent, setSelectedVersionContent] = useState(null);
+    const [comparisonVersionContent, setComparisonVersionContent] = useState(null);
+    const [selectedVersion, setSelectedVersion] = useState('');
+    const [comparisonVersion, setComparisonVersion] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -39,59 +41,82 @@ const DocumentVersionControl = () => {
         }
     }, [documentId]);
 
-    const handleViewVersion = (versionId) => {
-        const token = localStorage.getItem('jwtToken');
-        axios.get(`${baseURL}/api/documents/${documentId}/versions/${versionId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-        .then(response => setSelectedVersion(response.data))
-        .catch(error => {
-            setError('Error fetching version. Please try again.');
-            console.error('Error fetching version:', error);
-        });
-    };
+    // const handleViewVersion = (versionId) => {
+    //     const token = localStorage.getItem('jwtToken');
+    //     axios.get(`${baseURL}/api/documents/${documentId}/versions/${versionId}`, {
+    //         headers: {
+    //             Authorization: `Bearer ${token}`,
+    //         },
+    //     })
+    //     .then(response => setSelectedVersionContent(response.data.content)) 
+    //     .catch(error => {
+    //         setError('Error fetching version. Please try again.');
+    //         console.error('Error fetching version:', error);
+    //     });
+    // };
 
-    const handleRestoreVersion = (versionId) => {
+    // const handleRestoreVersion = (versionId) => {
+    //     const token = localStorage.getItem('jwtToken');
+    //     axios.post(`${baseURL}/api/documents/${documentId}/versions/${versionId}/restore`, {}, {
+    //         headers: {
+    //             Authorization: `Bearer ${token}`,
+    //         },
+    //     })
+    //     .then(() => {
+    //         alert('Version restored successfully');
+    //         return axios.get(`${baseURL}/api/documents/${documentId}/versions`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`,
+    //             },
+    //         });
+    //     })
+    //     .then(response => setVersions(response.data))
+    //     .catch(error => {
+    //         setError('Error restoring version. Please try again.');
+    //         console.error('Error restoring version:', error);
+    //     });
+    // };
+
+    const handleCompareVersions = (selectedVersionId, comparisonVersionId) => {
+        setLoading(true);
+        setError(null);
+
         const token = localStorage.getItem('jwtToken');
-        axios.post(`${baseURL}/api/documents/${documentId}/versions/${versionId}/restore`, {}, {
+
+        const selectedVersionRequest = axios.get(`${baseURL}/api/documents/${documentId}/versions/${selectedVersionId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-        })
-        .then(() => {
-            alert('Version restored successfully');
-            return axios.get(`${baseURL}/api/documents/${documentId}/versions`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+        });
+
+        const comparisonVersionRequest = axios.get(`${baseURL}/api/documents/${documentId}/versions/${comparisonVersionId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        Promise.all([selectedVersionRequest, comparisonVersionRequest])
+            .then(([response1, response2]) => {
+                const content1 = JSON.parse(response1.data.content);
+                const content2 = JSON.parse(response2.data.content);
+                setSelectedVersionContent(content1);
+                setComparisonVersionContent(content2);
+            })
+            .catch(error => {
+                setError('Error fetching versions for comparison. Please try again.');
+                console.error('Error comparing versions:', error);
+            })
+            .finally(() => {
+                setLoading(false);
             });
-        })
-        .then(response => setVersions(response.data))
-        .catch(error => {
-            setError('Error restoring version. Please try again.');
-            console.error('Error restoring version:', error);
-        });
     };
 
-    const handleCompareVersions = (version1Id, version2Id) => {
-        if (!version1Id || !version2Id) {
-            setError('Please select both versions to compare.');
-            return;
-        }
-
-        const token = localStorage.getItem('jwtToken');
-        axios.get(`${baseURL}/api/documents/${documentId}/compare?version1=${version1Id}&version2=${version2Id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-        .then(response => setDiffs(response.data.diffs))
-        .catch(error => {
-            setError('Error comparing versions. Please try again.');
-            console.error('Error comparing versions:', error);
-        });
+    // Convert Delta to HTML
+    const getHtmlContent = (delta) => {
+        if (!delta) return '';
+    
+        const converter = new QuillDeltaToHtmlConverter(delta.ops, {});
+        return converter.convert();
     };
 
     return (
@@ -123,7 +148,7 @@ const DocumentVersionControl = () => {
                                         <p className="font-semibold">Version {version.version_number}</p>
                                         <p className="text-sm text-gray-600">Edited by {version.editor_name} • {new Date(version.created_at).toLocaleString()}</p>
                                     </div>
-                                    <button 
+                                    {/* <button 
                                         onClick={() => handleViewVersion(version.id)} 
                                         className="bg-gray-400 text-gray-800 px-4 py-2 rounded mr-2"
                                         aria-label={`View Version ${version.version_number}`}
@@ -136,47 +161,67 @@ const DocumentVersionControl = () => {
                                         aria-label={`Restore Version ${version.version_number}`}
                                     >
                                         Restore
-                                    </button>
+                                    </button> */}
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    {/* Version Comparison Section */}
-                    <div className="bg-gray-100 p-4 rounded shadow">
-                        <h2 className="text-xl font-semibold mb-4">Version Comparison</h2>
-                        <div className="flex mb-4">
-                            <select 
-                                className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2" 
-                                onChange={(e) => setSelectedVersion(e.target.value)}
-                            >
-                                <option value="">Select version</option>
-                                {versions.map(version => (
-                                    <option key={version.id} value={version.id}>Version {version.version_number}</option>
-                                ))}
-                            </select>
-                            <select 
-                                className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
-                                onChange={(e) => setComparisonVersion(e.target.value)}
-                            >
-                                <option value="">Select version to compare</option>
-                                {versions.map(version => (
-                                    <option key={version.id} value={version.id}>Version {version.version_number}</option>
-                                ))}
-                            </select>
-                            <button 
-                                onClick={() => handleCompareVersions(selectedVersion, comparisonVersion)} 
-                                className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
-                            >
-                                Compare
-                            </button>
-                        </div>
-                        <div className="bg-gray-100 p-4 rounded">
-                            {diffs.map((diff, index) => (
-                                <p key={index} className={diff.type === 'added' ? 'text-green-600' : diff.type === 'removed' ? 'text-red-600' : diff.type === 'changed' ? 'text-yellow-600' : 'text-gray-800'}>
-                                    {diff.content}
-                                </p>
+                    <div className="flex mb-4">
+                        <select 
+                            className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2" 
+                            onChange={(e) => setSelectedVersion(e.target.value)}
+                        >
+                            <option value="">Select version</option>
+                            {versions.map(version => (
+                                <option key={version.id} value={version.id}>Version {version.version_number}</option>
                             ))}
+                        </select>
+                        <select 
+                            className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
+                            onChange={(e) => setComparisonVersion(e.target.value)}
+                        >
+                            <option value="">Select version to compare</option>
+                            {versions.map(version => (
+                                <option key={version.id} value={version.id}>Version {version.version_number}</option>
+                            ))}
+                        </select>
+                        <button 
+                            onClick={() => handleCompareVersions(selectedVersion, comparisonVersion)} 
+                            className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
+                        >
+                            Compare
+                        </button>
+                    </div>
+
+                    {/* Document Content Display Section */}
+                    <div className="bg-gray-100 p-4 rounded shadow">
+                        <h2 className="text-xl font-semibold mb-4">Document Content</h2>
+                        <div className="flex space-x-4">
+                            {/* Box 1 for Selected Version Content */}
+                            <div>
+            {loading && <div>Loading...</div>}
+            {error && <div className="text-red-500">{error}</div>}
+            {!loading && !error && (
+                <div className="flex space-x-4">
+                    <div className="w-1/2 bg-gray-200 p-4 rounded">
+                        <h3 className="font-bold text-lg">Selected Version Content</h3>
+                        <div 
+                            className="whitespace-pre-wrap" 
+                            dangerouslySetInnerHTML={{ __html: getHtmlContent(selectedVersionContent) }} 
+                        />
+                    </div>
+
+                    <div className="w-1/2 bg-gray-300 p-4 rounded">
+                        <h3 className="font-bold text-lg">Comparison Version Content</h3>
+                        <div 
+                            className="whitespace-pre-wrap" 
+                            dangerouslySetInnerHTML={{ __html: getHtmlContent(comparisonVersionContent) }} 
+                        />
+                    </div>
+                </div>
+            )}
+        </div>
                         </div>
                     </div>
                 </>
@@ -184,5 +229,4 @@ const DocumentVersionControl = () => {
         </div>
     );
 };
-
 export default DocumentVersionControl;

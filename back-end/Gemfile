@@ -18,6 +18,8 @@ gem 'rack-cors'
 gem 'ostruct'
 gem 'logger'
 
+gem 'diffy'
+gem 'json-diff'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"

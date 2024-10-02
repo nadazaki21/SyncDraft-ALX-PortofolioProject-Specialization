@@ -36,5 +36,6 @@ Rails.application.routes.draw do
     
     # Route to fetch user activity related to documents
     get 'user/activity', to: 'documents#user_activity'
+
   end
 end
