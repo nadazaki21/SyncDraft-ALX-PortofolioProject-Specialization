@@ -1,5 +1,3 @@
-require 'json-diff'
-
 class Api::DocumentVersionsController < ApplicationController
   before_action :authenticate_request
   before_action :set_document_version, only: [:show, :update, :destroy]
@@ -17,18 +15,32 @@ class Api::DocumentVersionsController < ApplicationController
 
   # POST /document_versions
   def create
-    @document_version = DocumentVersion.new(document_version_params)
-    @document_version.created_by_id = current_user.id # Set the creator to the current user
-
-    if @document_version.save
-      render json: @document_version, status: :created
+    document = Document.find(document_version_params[:document_id])
+  
+    # Check if the current user is the creator of the document or has the editor role
+    if current_user.id == document.created_by_id || document.permissions.exists?(user_id: current_user.id, access_type: :editor)
+      @document_version = DocumentVersion.new(document_version_params)
+      @document_version.created_by_id = current_user.id # Set the creator to the current user
+  
+      if @document_version.save
+        render json: @document_version, status: :created
+      else
+        render json: @document_version.errors, status: :unprocessable_entity
+      end
     else
-      render json: @document_version.errors, status: :unprocessable_entity
+      render json: { error: 'You are not authorized to create a document version' }, status: :forbidden
     end
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Document not found' }, status: :not_found
   end
 
   # PATCH/PUT /document_versions/:id
   def update
+    # Ensure only the creator can update the version
+    if @document_version.created_by_id != current_user.id
+      return render json: { error: 'Only the creator can update this version.' }, status: :forbidden
+    end
+
     if @document_version.update(document_version_params)
       render json: @document_version
     else
@@ -38,6 +50,11 @@ class Api::DocumentVersionsController < ApplicationController
 
   # DELETE /document_versions/:id
   def destroy
+    # Ensure only the creator can delete the version
+    if @document_version.created_by_id != current_user.id
+      return render json: { error: 'Only the creator can delete this version.' }, status: :forbidden
+    end
+
     @document_version.destroy
     head :no_content
   end

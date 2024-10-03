@@ -29,15 +29,15 @@ const DocumentVersionControl = () => {
                     Authorization: `Bearer ${token}`,
                 },
             })
-            .then(response => {
-                setVersions(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError('Error fetching versions. Please try again.');
-                console.error('Error fetching versions:', error);
-                setLoading(false);
-            });
+                .then(response => {
+                    setVersions(response.data);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    setError('Error fetching versions. Please try again.');
+                    console.error('Error fetching versions:', error);
+                    setLoading(false);
+                });
         }
     }, [documentId]);
 
@@ -114,7 +114,7 @@ const DocumentVersionControl = () => {
     // Convert Delta to HTML
     const getHtmlContent = (delta) => {
         if (!delta) return '';
-    
+
         const converter = new QuillDeltaToHtmlConverter(delta.ops, {});
         return converter.convert();
     };
@@ -125,10 +125,10 @@ const DocumentVersionControl = () => {
                 <h1 className="text-2xl font-bold text-gray-800">Document Version Control</h1>
                 <button className="bg-gray-700 text-white px-4 py-2 rounded" onClick={() => window.location.href = '/editor'}>Back to Editor</button>
             </div>
-            
+
             {/* Error Message */}
             {error && <p className="text-red-600">{error}</p>}
-            
+
             {/* Loading State */}
             {loading ? <p>Loading versions...</p> : (
                 <>
@@ -143,7 +143,7 @@ const DocumentVersionControl = () => {
                         <div className="mb-4">
                             {versions.map(version => (
                                 <div key={version.id} className="flex items-center mb-2">
-                                    <img src="https://placehold.co/40" alt="User avatar" className="w-10 h-10 rounded-full mr-4"/>
+                                    <img src="https://placehold.co/40" alt="User avatar" className="w-10 h-10 rounded-full mr-4" />
                                     <div className="flex-1">
                                         <p className="font-semibold">Version {version.version_number}</p>
                                         <p className="text-sm text-gray-600">Edited by {version.editor_name} • {new Date(version.created_at).toLocaleString()}</p>
@@ -168,8 +168,8 @@ const DocumentVersionControl = () => {
                     </div>
 
                     <div className="flex mb-4">
-                        <select 
-                            className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2" 
+                        <select
+                            className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2"
                             onChange={(e) => setSelectedVersion(e.target.value)}
                         >
                             <option value="">Select version</option>
@@ -177,7 +177,7 @@ const DocumentVersionControl = () => {
                                 <option key={version.id} value={version.id}>Version {version.version_number}</option>
                             ))}
                         </select>
-                        <select 
+                        <select
                             className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
                             onChange={(e) => setComparisonVersion(e.target.value)}
                         >
@@ -186,8 +186,8 @@ const DocumentVersionControl = () => {
                                 <option key={version.id} value={version.id}>Version {version.version_number}</option>
                             ))}
                         </select>
-                        <button 
-                            onClick={() => handleCompareVersions(selectedVersion, comparisonVersion)} 
+                        <button
+                            onClick={() => handleCompareVersions(selectedVersion, comparisonVersion)}
                             className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
                         >
                             Compare
@@ -200,28 +200,28 @@ const DocumentVersionControl = () => {
                         <div className="flex space-x-4">
                             {/* Box 1 for Selected Version Content */}
                             <div>
-            {loading && <div>Loading...</div>}
-            {error && <div className="text-red-500">{error}</div>}
-            {!loading && !error && (
-                <div className="flex space-x-4">
-                    <div className="w-1/2 bg-gray-200 p-4 rounded">
-                        <h3 className="font-bold text-lg">Selected Version Content</h3>
-                        <div 
-                            className="whitespace-pre-wrap" 
-                            dangerouslySetInnerHTML={{ __html: getHtmlContent(selectedVersionContent) }} 
-                        />
-                    </div>
+                                {loading && <div>Loading...</div>}
+                                {error && <div className="text-red-500">{error}</div>}
+                                {!loading && !error && (
+                                    <div className="flex space-x-4">
+                                        <div className="w-1/2 bg-gray-200 p-4 rounded">
+                                            <h3 className="font-bold text-lg">Selected Version Content</h3>
+                                            <div
+                                                className="whitespace-pre-wrap"
+                                                dangerouslySetInnerHTML={{ __html: getHtmlContent(selectedVersionContent) }}
+                                            />
+                                        </div>
 
-                    <div className="w-1/2 bg-gray-300 p-4 rounded">
-                        <h3 className="font-bold text-lg">Comparison Version Content</h3>
-                        <div 
-                            className="whitespace-pre-wrap" 
-                            dangerouslySetInnerHTML={{ __html: getHtmlContent(comparisonVersionContent) }} 
-                        />
-                    </div>
-                </div>
-            )}
-        </div>
+                                        <div className="w-1/2 bg-gray-300 p-4 rounded">
+                                            <h3 className="font-bold text-lg">Comparison Version Content</h3>
+                                            <div
+                                                className="whitespace-pre-wrap"
+                                                dangerouslySetInnerHTML={{ __html: getHtmlContent(comparisonVersionContent) }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </>

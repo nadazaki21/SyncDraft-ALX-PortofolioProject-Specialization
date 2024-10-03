@@ -270,12 +270,14 @@ const MarkdownEditor = () => {
     return (
         <div className="flex h-screen">
             <div className="w-1/4 bg-gray-100 p-4">
+                <button onClick={() => window.location.href = '/'}>
                 <div className="flex items-center mb-6">
-                    <img src={logo} alt="SyncDraft Logo" className="w-4 h-4 bg-gray-400 rounded-full mr-2"></img>
+                    <img src={logo} alt="SyncDraft Logo" className="w-5 h-5 bg-gray-400 rounded-full mr-2"></img>
                     <span className="text-xl font-bold">SyncDraft</span>
                 </div>
+                </button>
                 <button className="w-full bg-gray-800 text-white py-2 px-4 rounded mb-4" onClick={handleNewDocument}>New Document</button>
-                <h2 className="text-lg font-semibold mb-2">Most recent:</h2>
+                <h2 className="text-lg font-semibold mb-2">All Documents:</h2>
                 <ul>
                     {documents.map((doc) => (
                         <li

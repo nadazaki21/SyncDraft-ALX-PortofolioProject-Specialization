@@ -4,6 +4,6 @@ class Request < ApplicationRecord
 
     enum permission: {viewer: 1 , editor: 2}
 
-    # validates :document, :user, :permission, presence: true
+    validates :document, :user, :permission, presence: true
 
 end

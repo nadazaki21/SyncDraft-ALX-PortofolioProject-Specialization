@@ -56,7 +56,7 @@ const Dashboard = () => {
       try {
         const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage or your preferred storage
         // console.log('Saved JWT token:', token);
-        const response = await axios.get(`${baseURL}/api/documents`, {
+        const response = await axios.get(`${baseURL}/api/documents/recent`, {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the Authorization header
           },
