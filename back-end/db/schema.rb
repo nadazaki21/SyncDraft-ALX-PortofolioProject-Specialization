@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_30_193159) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_05_225759) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,7 +39,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_30_193159) do
   create_table "permissions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "document_id", null: false
-    t.string "access_type"
+    t.integer "access_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["document_id"], name: "index_permissions_on_document_id"

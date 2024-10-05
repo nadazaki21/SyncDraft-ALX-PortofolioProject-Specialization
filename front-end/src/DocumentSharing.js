@@ -8,6 +8,8 @@ const DocumentSharing = () => {
     const [permission, setPermission] = useState('Viewer');
     const [documentId, setDocumentId] = useState(localStorage.getItem('selectedDocumentId'));
     const [collaborators, setCollaborators] = useState([]);
+    const [pendingInvitations, setPendingInvitations] = useState([]); // New state for pending invitations
+
     const [documentTitle, setDocumentTitle] = useState('');
 
     useEffect(() => {
@@ -35,6 +37,7 @@ const DocumentSharing = () => {
             });
 
             const permissions = response.data;
+            // console.log('Collaborators:', permissions);
 
             // Fetch user details for each permission
             const collaboratorPromises = permissions.map(async (permission) => {
@@ -45,13 +48,14 @@ const DocumentSharing = () => {
                 });
 
                 const user = userResponse.data;
-
+                // console.log('User:', user);
+                // console.log('Permission:', permission);
                 return {
                     id: permission.id,
                     userId: permission.user_id,
                     name: user.name,
                     email: user.email,
-                    role: permission.role === 1 ? 'Viewer' : 'Editor', // Map permission to a readable string
+                    role: permission.access_type === "viewer" ? 'Viewer' : 'Editor', // Map permission to a readable string
                 };
             });
 
@@ -89,6 +93,14 @@ const DocumentSharing = () => {
                 alert('Invitation sent successfully!');
                 fetchCollaborators(documentId); // Refresh collaborators list
             }
+
+            // Add to pending invitations
+            setPendingInvitations((prev) => [
+                ...prev,
+                { email, role: permission, status: 'Pending' },
+            ]);
+
+            fetchCollaborators(documentId); // Refresh collaborators list
         } catch (error) {
             // Error handling
             if (error.response) {
@@ -237,6 +249,19 @@ const DocumentSharing = () => {
                         ))}
                     </div>
                 </div>
+                {/* Pending Invitations Section */}
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800">Pending Invitations</h2>
+                {pendingInvitations.map((invitation, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 border border-yellow-300 rounded-md bg-yellow-50 shadow-sm">
+                        <div className="flex items-center">
+                            <div>
+                                <p className="font-semibold text-gray-700">{invitation.email}</p>
+                                <p className="text-sm text-gray-500">Permission: <span className="font-semibold text-gray-700">{invitation.role}</span></p>
+                                <p className="text-sm text-gray-500">Status: <span className="font-semibold text-yellow-700">{invitation.status}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
 
                 {/* Permission Levels Section */}
                 <div className="p-4 bg-gray-50 rounded-md">

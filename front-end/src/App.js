@@ -35,7 +35,7 @@ function App() {
           }
         />
 
-<Route
+        <Route
           path="/versions"
           element={
             <ProtectedRoute>
@@ -45,7 +45,7 @@ function App() {
         />
 
 
-          <Route
+        <Route
           path="/editor"
           element={
             <ProtectedRoute>
@@ -65,7 +65,7 @@ function App() {
           }
         />
 
-       
+
 
 
 

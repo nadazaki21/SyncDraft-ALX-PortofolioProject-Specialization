@@ -45,7 +45,7 @@ const MarkdownEditor = () => {
                         Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
                     },
                 });
-    
+
                 setDocuments(response.data || []); // Assuming the response data is an array of documents
             } catch (error) {
                 console.error('Error fetching documents:', error);
@@ -65,19 +65,19 @@ const MarkdownEditor = () => {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-    
+
                     setDocumentName(response.data.title);
-                    
-    
+
+
                     const content = JSON.parse(response.data.content); // Parse if it's a string
                     quillInstance.current.setContents(content); // Set the Delta content directly
                 } catch (error) {
                     console.error('Error fetching document:', error);
                 }
-               
+
             }
         };
-    
+
         fetchDocumentName();
     }, [selectedDocument, isNewDocument]);
 
@@ -90,10 +90,10 @@ const MarkdownEditor = () => {
             return;
         }
         console.log('Saving document...');
-    
+
         try {
             const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage
-    
+
             if (isNewDocument) {
                 // Make a POST request to create a new document
                 const response = await axios.post(`${baseURL}/api/documents`, {
@@ -124,13 +124,13 @@ const MarkdownEditor = () => {
                 });
                 console.log('Updated document:', response.data);
                 // Update the document in the state (find and replace the document)
-            setDocuments(documents.map((doc) =>
-                doc.id === selectedDocument ? response.data : doc
-            ));
-        
+                setDocuments(documents.map((doc) =>
+                    doc.id === selectedDocument ? response.data : doc
+                ));
+
             }
             console.log('Document saved successfully');
-            
+
         } catch (error) {
             console.error('Error saving document:', error.response ? error.response.data : error.message);
             alert('Failed to save document. Please try again.');
@@ -165,12 +165,12 @@ const MarkdownEditor = () => {
         setIsNewDocument(true); // Mark it as a new document
         // handleSave();
     };
-    
+
     const handleShare = () => {
         localStorage.setItem('selectedDocumentId', selectedDocument);
-        
+
         console.log("Set the current document ID to: ", selectedDocument);
-    
+
         // Delay navigation to ensure the localStorage update completes
         setTimeout(() => {
             window.location.href = '/permissions';
@@ -179,26 +179,26 @@ const MarkdownEditor = () => {
 
     const getNextVersionNumber = async (selectedDocument) => {
         try {
-          const token = localStorage.getItem('jwtToken');
-          const response = await axios.get(`${baseURL}/api/documents/${selectedDocument}/versions`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          const versions = response.data;
-      
-          if (versions.length === 0) {
-            return 1; // No versions exist, start from 1
-          }
-      
-          // Find the highest version number
-          const maxVersionNumber = Math.max(...versions.map(version => version.version_number));
-          return maxVersionNumber + 1; // Increment by 1 for the new version
+            const token = localStorage.getItem('jwtToken');
+            const response = await axios.get(`${baseURL}/api/documents/${selectedDocument}/versions`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const versions = response.data;
+
+            if (versions.length === 0) {
+                return 1; // No versions exist, start from 1
+            }
+
+            // Find the highest version number
+            const maxVersionNumber = Math.max(...versions.map(version => version.version_number));
+            return maxVersionNumber + 1; // Increment by 1 for the new version
         } catch (error) {
-          console.error('Error fetching document versions:', error);
-          throw error; // Re-throw the error for further handling
+            console.error('Error fetching document versions:', error);
+            throw error; // Re-throw the error for further handling
         }
-      };
+    };
 
 
     const handleCreateNewVersion = async (documentId) => {
@@ -210,11 +210,11 @@ const MarkdownEditor = () => {
         if (deltaContent.ops.length === 0 || (deltaContent.ops.length === 1 && deltaContent.ops[0].insert.trim() === "")) {
             alert("Document cannot be empty.");
             return;
-    }
+        }
         const jsonContent = JSON.stringify(deltaContent); // Convert to JSON string
         console.log("Document ID:", documentId);
-            console.log("Content:", jsonContent);
-            console.log("Version number:", nextVersionNumber);
+        console.log("Content:", jsonContent);
+        console.log("Version number:", nextVersionNumber);
         if (description) {
             try {
                 // Make a POST request to create a new version with Authorization header
@@ -234,47 +234,47 @@ const MarkdownEditor = () => {
                         },
                     }
                 );
-            // Handle success (e.g., display success message, update UI)
-            console.log("Document ID:", documentId);
-            console.log("Content:", jsonContent);
-            console.log("Version number:", nextVersionNumber);
-            console.log("New version created:", response.data);
-            alert("New version created successfully!");
-    
-            // Optionally, refresh or update the version list here
-    
-          } catch (error) {
-            console.error("Error creating new version:", error);
-            alert("Failed to create a new version. Please try again.");
-          }
+                // Handle success (e.g., display success message, update UI)
+                console.log("Document ID:", documentId);
+                console.log("Content:", jsonContent);
+                console.log("Version number:", nextVersionNumber);
+                console.log("New version created:", response.data);
+                alert("New version created successfully!");
+
+                // Optionally, refresh or update the version list here
+
+            } catch (error) {
+                console.error("Error creating new version:", error);
+                alert("Failed to create a new version. Please try again.");
+            }
         }
         else {
             alert("Please enter a description for the new version.");
         }
-      };
-    
+    };
+
     const handleDocunetVersions = () => {
         localStorage.setItem('selectedDocumentId', selectedDocument);
         localStorage.setItem('selectedDocumentTitle', documentName);
-        
+
         console.log("Set the current document ID to: ", documentName);
-    
+
         // Delay navigation to ensure the localStorage update completes
         setTimeout(() => {
             window.location.href = '/versions';
         }, 100); // 100ms delay should be sufficient
     };
-    
 
-    
+
+
     return (
         <div className="flex h-screen">
             <div className="w-1/4 bg-gray-100 p-4">
                 <button onClick={() => window.location.href = '/'}>
-                <div className="flex items-center mb-6">
-                    <img src={logo} alt="SyncDraft Logo" className="w-5 h-5 bg-gray-400 rounded-full mr-2"></img>
-                    <span className="text-xl font-bold">SyncDraft</span>
-                </div>
+                    <div className="flex items-center mb-6">
+                        <img src={logo} alt="SyncDraft Logo" className="w-5 h-5 bg-gray-400 rounded-full mr-2"></img>
+                        <span className="text-xl font-bold">SyncDraft</span>
+                    </div>
                 </button>
                 <button className="w-full bg-gray-800 text-white py-2 px-4 rounded mb-4" onClick={handleNewDocument}>New Document</button>
                 <h2 className="text-lg font-semibold mb-2">All Documents:</h2>
@@ -295,15 +295,15 @@ const MarkdownEditor = () => {
             </div>
             <div className="w-3/4 bg-gray-50 p-6">
                 <div className="flex justify-between items-center mb-4">
-                <input
+                    <input
                         className="text-2xl font-bold border-b focus:outline-none"
                         value={documentName}
                         onChange={(e) => setDocumentName(e.target.value)} // Make the title editable
                     />
                     <div className="flex items-center">
                         <i className="fas fa-user-circle text-2xl mr-2" title="User Profile"></i>
-                        <i className="fas fa-users text-2xl mr-2"  title="Share with Users"></i>
-                        <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2" onClick={handleShare}  title="Share">Share</button>
+                        <i className="fas fa-users text-2xl mr-2" title="Share with Users"></i>
+                        <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2" onClick={handleShare} title="Share">Share</button>
                         <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-8" title="Save" onClick={handleSave}>Save</button>
                         <button className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-3 rounded mr-2" title="Create New Version" onClick={() => handleCreateNewVersion(selectedDocument)}>Create New Version</button>
                         <button className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-3 rounded mr-8" title="Document Versions" onClick={() => handleDocunetVersions()}>Document Versions</button>

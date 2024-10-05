@@ -11,7 +11,7 @@ const SignupPage = () => {
 
     const handleSignup = async () => {
         setError(null);
-    
+
         try {
             // First API call: Create the user
             const createUserResponse = await fetch(`${baseURL}/users`, {
@@ -20,7 +20,7 @@ const SignupPage = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    user: { 
+                    user: {
                         name: Name,
                         email: email,
                         password: password,
@@ -32,11 +32,11 @@ const SignupPage = () => {
             if (!createUserResponse.ok) {
                 throw new Error('Failed to create an account');
             }
-    
+
             // If user creation is successful, proceed to login
             const user = await createUserResponse.json();
             console.log('User created:', user);
-    
+
             // Second API call: Generate JWT after the user is created
             const loginResponse = await fetch(`${baseURL}/access_tokens`, {
                 method: 'POST',
@@ -44,32 +44,32 @@ const SignupPage = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                        email: email,
-                        password: password,
+                    email: email,
+                    password: password,
                 }),
             });
-    
+
             if (!loginResponse.ok) {
                 throw new Error('Failed to log in');
             }
-    
+
             const result = await loginResponse.json();
             console.log('Login successful:', result);
-    
+
             // Save JWT token in local storage
             localStorage.setItem('jwtToken', result.token);
             console.log('Saved JWT token:', localStorage.getItem('jwtToken'));
-    
+
             // You can redirect or update the UI after successful signup
             window.location.href = '/';  // Redirect to dashboard after signup
         } catch (error) {
             setError(error.message);
         }
     };
-    
+
 
     const switchToLogin = () => {
-        window.location.href = '/login'; 
+        window.location.href = '/login';
         console.log('Switch to login page');
     };
 

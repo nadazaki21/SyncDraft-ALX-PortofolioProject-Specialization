@@ -17,22 +17,22 @@ const LoginPage = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                        email: email,
-                        password: password,
+                    email: email,
+                    password: password,
                 }),
             });
-    
+
             if (!loginResponse.ok) {
                 throw new Error('Failed to log in');
             }
-    
+
             const result = await loginResponse.json();
             console.log('Login successful:', result);
-    
+
             // Save JWT token in local storage
             localStorage.setItem('jwtToken', result.token);
             console.log('Saved JWT token:', localStorage.getItem('jwtToken'));
-    
+
             // You can redirect or update the UI after successful signup
             window.location.href = '/';  // Redirect to dashboard after signup
         } catch (error) {
