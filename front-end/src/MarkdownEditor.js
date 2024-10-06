@@ -3,6 +3,7 @@ import 'quill/dist/quill.snow.css'; // Import Quill's styles
 import Quill from 'quill';
 import logo from './assets/logo.png';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
@@ -13,6 +14,10 @@ const MarkdownEditor = () => {
     const [isNewDocument, setIsNewDocument] = useState(true); // State for new document creation
     const quillRef = useRef(null); // Reference for the Quill editor
     const quillInstance = useRef(null); // Reference to store the Quill instance
+    const [currentUser, setCurrentUser] = useState(null);
+    // const [userRole, setUserRole] = useState(null);
+    const [documentRoles, setDocumentRoles] = useState({}); // Store roles for each document
+
 
     useEffect(() => {
         // Initialize Quill editor only if it hasn't been initialized yet
@@ -37,23 +42,73 @@ const MarkdownEditor = () => {
 
     useEffect(() => {
         // Fetch recent documents when the component mounts
-        const fetchDocuments = async () => {
+        const fetchDocumentsAndRoles = async () => {
             try {
                 const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage
+
+                // Fetch all documents
                 const response = await axios.get(`${baseURL}/api/documents`, {
                     headers: {
                         Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
                     },
                 });
 
-                setDocuments(response.data || []); // Assuming the response data is an array of documents
+                const documents = response.data || []; // Assuming the response data is an array of documents
+                setDocuments(documents); // Set documents state
+
+                // Fetch roles for each document
+                const roles = {};
+                for (const doc of documents) {
+                    let role = '';
+
+                    // Check if the user is the creator
+                    if (doc.created_by_id === currentUser) {
+                        role = 'Creator';
+                    } else {
+                        // Fetch permissions for the current user and document
+                        const permissionResponse = await axios.get(`${baseURL}/permissions/${doc.id}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+                            },
+                        });
+
+                        const userPermission = permissionResponse.data.find(p => p.user_id === currentUser);
+
+                        if (userPermission) {
+                            if (userPermission.access_type === 'viewer') {
+                                role = 'Viewer';
+                            } else if (userPermission.access_type === 'editor') {
+                                role = 'Editor';
+                            }
+                        } else {
+                            role = 'No Role';
+                        }
+                    }
+
+                    // Store role for the document
+                    roles[doc.id] = role;
+                }
+
+                // Update state with document roles
+                setDocumentRoles(roles);
+
             } catch (error) {
-                console.error('Error fetching documents:', error);
+                console.error('Error fetching documents or permissions:', error);
             }
         };
 
-        fetchDocuments();
-    }, []);
+        fetchDocumentsAndRoles(); // Call the function when the component mounts
+    }, [currentUser]); // Ensure currentUser is available in the dependency array
+
+    useEffect(() => {
+        // Decode the JWT token once when the component mounts
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            setCurrentUser(decodedToken.user_id); // Set the current user based on the decoded token
+            console.log('User ID:', decodedToken.user_id);
+        }
+    }, []); // Only runs once when the component mounts
 
     useEffect(() => {
         const fetchDocumentName = async () => {
@@ -65,10 +120,7 @@ const MarkdownEditor = () => {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-
                     setDocumentName(response.data.title);
-
-
                     const content = JSON.parse(response.data.content); // Parse if it's a string
                     quillInstance.current.setContents(content); // Set the Delta content directly
                 } catch (error) {
@@ -282,13 +334,22 @@ const MarkdownEditor = () => {
                     {documents.map((doc) => (
                         <li
                             key={doc.id}
-                            className={`py-2 px-4 rounded mb-2 cursor-pointer ${selectedDocument === doc.id ? 'bg-white' : 'bg-gray-100'}`}
+                            className={`py-4 px-6 rounded mb-4 cursor-pointer flex items-center justify-between transition-colors duration-300 ${selectedDocument === doc.id ? 'bg-white shadow-md' : 'bg-gray-100'
+                                }`}
                             onClick={() => {
                                 setSelectedDocument(doc.id);
                                 setIsNewDocument(false);
                             }}
                         >
-                            {doc.title}
+                            {/* Document title */}
+                            <span className="text-lg font-semibold text-gray-800">
+                                {doc.title}
+                            </span>
+
+                            {/* User role */}
+                            <span className="text-sm font-medium text-gray-500 ml-6">
+                                {documentRoles[doc.id] || 'Loading...'}
+                            </span>
                         </li>
                     ))}
                 </ul>

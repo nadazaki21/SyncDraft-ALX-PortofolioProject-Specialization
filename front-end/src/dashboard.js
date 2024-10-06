@@ -289,14 +289,14 @@ const Dashboard = () => {
         {/* Requests Section */}
         <div className="bg-white p-6 rounded shadow mb-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Document Access Invitations</h2>
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-96 overflow-y-auto">
             {requests.length > 0 ? (
               requests.map((request) => (
                 <div key={request.id} className="flex items-center justify-between p-4 border-b">
                   <div>
-                    <h3 className="font-semibold text-gray-800">{request.document_title}</h3>
+                    <h1 className="font-semibold text-gray-800 text-lg mb-2">{request.document_title}</h1>
                     <p className="text-gray-600 text-sm">
-                      You have been invited to access the document as a <span className="font-semibold">{request.permission}</span>.
+                      You have been invited to access the document <span className="font-semibold">{request.document_title}</span> as a <span className="font-semibold">{request.permission}</span>.
                     </p>
                     <p className="text-gray-500 text-xs">
                       Invitation sent on {new Date(request.created_at).toLocaleString()}

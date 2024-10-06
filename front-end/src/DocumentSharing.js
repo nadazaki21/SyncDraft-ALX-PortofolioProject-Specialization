@@ -9,7 +9,6 @@ const DocumentSharing = () => {
     const [documentId, setDocumentId] = useState(localStorage.getItem('selectedDocumentId'));
     const [collaborators, setCollaborators] = useState([]);
     const [pendingInvitations, setPendingInvitations] = useState([]); // New state for pending invitations
-
     const [documentTitle, setDocumentTitle] = useState('');
 
     useEffect(() => {
@@ -69,14 +68,16 @@ const DocumentSharing = () => {
 
     const handleInvite = async () => {
         const permissionType = permission === 'Viewer' ? 1 : 2;
-
+        console.log('Document Title:', documentTitle);
         const requestData = {
             request: {
                 document: documentId,
                 user: email,
                 permission: permissionType,
+                document_title: documentTitle, // Include the document title here
             },
         };
+        console.log('Request Data:', requestData);
 
         try {
             const token = localStorage.getItem('jwtToken');
