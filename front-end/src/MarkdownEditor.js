@@ -20,7 +20,7 @@ const MarkdownEditor = () => {
     const location = useLocation(); // Use useLocation to access the current URL
     const queryParams = new URLSearchParams(location.search);
     const documentIdFromQuery = queryParams.get('id'); // Extract the document ID from the query string
-
+    const isMounted = useRef(true); 
 
     useEffect(() => {
         // Initialize Quill editor only if it hasn't been initialized yet
@@ -344,6 +344,48 @@ const MarkdownEditor = () => {
 
 
 
+    // for websocket
+    useEffect(() => {
+        const cable = createConsumer('ws://localhost:3000/cable');
+        const subscription = cable.subscriptions.create(
+            { channel: `document_${documentId}`, document_id: documentId },
+            {
+                received(data) {
+                    console.log("Received data: ", data);
+                    setContent(data.changes);
+                },
+            }
+        );
+
+        // Cleanup function
+        return () => {
+            // Before unsubscribing, check if the component is unmounting
+            if (isMounted.current) {
+                // If not unmounting, save the changes to Redis
+                //saveToRedis(content); // Replace with your saving logic
+            }
+            subscription.unsubscribe();
+        };
+    }, [documentId]);
+
+    useEffect(() => {
+        // Set isMounted to true when the component mounts
+        isMounted.current = true;
+
+        return () => {
+            // Set isMounted to false when the component unmounts
+            isMounted.current = false;
+        };
+    }, []);
+
+    // Function to handle document updates (e.g., on typing)
+    const handleChange = (newContent) => {
+        setContent(newContent);
+        // Send changes to the backend
+        subscription.perform('update', { document_id: documentId, changes: newContent });
+      
+    };
+
     return (
         <div className="flex h-screen">
             <div className="w-1/4 bg-gray-100 p-4">
@@ -438,7 +480,12 @@ const MarkdownEditor = () => {
                 <div ref={quillRef} className="h-96 bg-white border rounded"
                     style={{ cursor: documentRoles[selectedDocument] === 'Viewer' ? 'not-allowed' : 'auto' }}
                 >
-
+                    <textarea
+                        value={content} // Bind content state to the textarea
+                        onChange={(e) => handleChange(e.target.value)} // Handle change
+                        className="w-full h-full border border-gray-300 rounded p-2"
+                        placeholder="Edit your document here..."
+                    />
 
                 </div>
             </div>

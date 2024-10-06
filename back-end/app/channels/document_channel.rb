@@ -18,4 +18,10 @@ class DocumentChannel < ApplicationCable::Channel
   end
 
 
+  def update(data)
+    # This method is triggered by the perform call from the client
+    DocumentBroadcastJob.perform_later(data) # Pass the data to a job for broadcasting
+  end
+
+
 end
