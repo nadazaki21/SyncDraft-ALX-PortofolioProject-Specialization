@@ -4,7 +4,8 @@ import Quill from 'quill';
 import logo from './assets/logo.png';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { useLocation } from 'react-router-dom'; // Import useLocation
+import { useLocation } from 'react-router-dom'; 
+import { createConsumer } from "@rails/actioncable";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
@@ -21,6 +22,7 @@ const MarkdownEditor = () => {
     const queryParams = new URLSearchParams(location.search);
     const documentIdFromQuery = queryParams.get('id'); // Extract the document ID from the query string
     const isMounted = useRef(true); 
+    const subscriptionRef = useRef(null); 
 
     useEffect(() => {
         // Initialize Quill editor only if it hasn't been initialized yet
@@ -348,25 +350,27 @@ const MarkdownEditor = () => {
     useEffect(() => {
         const cable = createConsumer('ws://localhost:3000/cable');
         const subscription = cable.subscriptions.create(
-            { channel: `document_${documentId}`, document_id: documentId },
-            {
-                received(data) {
-                    console.log("Received data: ", data);
-                    setContent(data.changes);
-                },
-            }
+          { channel: `document_${selectedDocument}`, document_id: selectedDocument },
+          {
+            received(data) {
+              console.log("Received data: ", data);
+              quillInstance.current.setContents(data.changes); // Assuming quillInstance is a ref for your Quill editor
+            },
+          }
         );
-
+    
+        // Store the subscription in the ref so it can be accessed later
+        subscriptionRef.current = subscription;
+    
         // Cleanup function
         return () => {
-            // Before unsubscribing, check if the component is unmounting
-            if (isMounted.current) {
-                // If not unmounting, save the changes to Redis
-                //saveToRedis(content); // Replace with your saving logic
-            }
-            subscription.unsubscribe();
+          if (isMounted.current) {
+            // Save to Redis or perform other actions before unsubscribing
+            //saveToRedis(content); // Replace with your saving logic
+          }
+          subscription.unsubscribe(); // Unsubscribe from the WebSocket channel
         };
-    }, [documentId]);
+      }, [selectedDocument]);
 
     useEffect(() => {
         // Set isMounted to true when the component mounts
@@ -379,11 +383,11 @@ const MarkdownEditor = () => {
     }, []);
 
     // Function to handle document updates (e.g., on typing)
-    const handleChange = (newContent) => {
-        setContent(newContent);
-        // Send changes to the backend
-        subscription.perform('update', { document_id: documentId, changes: newContent });
-      
+    const handleChange = () => {
+        // Use the stored subscription from the ref to perform the update action
+        if (subscriptionRef.current) {
+          subscriptionRef.current.perform('update', { document_id: selectedDocument, changes: quillInstance.current.getContents() });
+        }
     };
 
     return (
@@ -481,7 +485,7 @@ const MarkdownEditor = () => {
                     style={{ cursor: documentRoles[selectedDocument] === 'Viewer' ? 'not-allowed' : 'auto' }}
                 >
                     <textarea
-                        value={content} // Bind content state to the textarea
+                        //value={quillRef} // Bind content state to the textarea
                         onChange={(e) => handleChange(e.target.value)} // Handle change
                         className="w-full h-full border border-gray-300 rounded p-2"
                         placeholder="Edit your document here..."
