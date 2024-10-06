@@ -256,7 +256,7 @@ const Dashboard = () => {
                     <div
                       key={doc.id}
                       className="flex items-center justify-between p-4 border border-gray-200 rounded-md hover:shadow hover:bg-gray-50 transition ease-in-out duration-150 cursor-pointer"
-                      onClick={() => handleDocumentClick(doc)} // Make the entire div clickable
+                      onClick={() => handleDocumentClick(doc.id)} // Make the entire div clickable
                     >
                       <div className="flex-1">
                         <h3 className="font-semibold text-gray-800 text-lg">{doc.title}</h3>

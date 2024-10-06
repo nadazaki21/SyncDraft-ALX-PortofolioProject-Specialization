@@ -29,7 +29,7 @@ const MarkdownEditor = () => {
                 theme: 'snow',
                 modules: {
                     toolbar: {
-                        container: [
+                        container:[
                             [{ 'header': [1, 2, false] }], // Header options
                             ['bold', 'italic', 'underline'], // toggled buttons
                             ['link', 'image'], // add's image and link
@@ -42,6 +42,19 @@ const MarkdownEditor = () => {
             });
         }
     }, []);
+
+    // Utility function to check if a button should be disabled based on user role
+    const isDisabled = (role, buttonType) => {
+        if (role === "Viewer") {
+            // Viewers can't share, save, create new version, or delete
+            return ["share", "save", "create", "createVersion", "delete"].includes(buttonType);
+        } else if (role === "Editor") {
+            // Editors can't share or delete
+            return ["share", "delete"].includes(buttonType);
+        }
+        // Creators can do everything
+        return false;
+    };
 
     useEffect(() => {
         // Fetch recent documents when the component mounts
@@ -276,9 +289,9 @@ const MarkdownEditor = () => {
             return;
         }
         const jsonContent = JSON.stringify(deltaContent); // Convert to JSON string
-        console.log("Document ID:", documentId);
-        console.log("Content:", jsonContent);
-        console.log("Version number:", nextVersionNumber);
+        // console.log("Document ID:", documentId);
+        // console.log("Content:", jsonContent);
+        // console.log("Version number:", nextVersionNumber);
         if (description) {
             try {
                 // Make a POST request to create a new version with Authorization header
@@ -299,9 +312,9 @@ const MarkdownEditor = () => {
                     }
                 );
                 // Handle success (e.g., display success message, update UI)
-                console.log("Document ID:", documentId);
-                console.log("Content:", jsonContent);
-                console.log("Version number:", nextVersionNumber);
+                // console.log("Document ID:", documentId);
+                // console.log("Content:", jsonContent);
+                // console.log("Version number:", nextVersionNumber);
                 console.log("New version created:", response.data);
                 alert("New version created successfully!");
 
@@ -346,8 +359,7 @@ const MarkdownEditor = () => {
                     {documents.map((doc) => (
                         <li
                             key={doc.id}
-                            className={`py-4 px-6 rounded mb-4 cursor-pointer flex items-center justify-between transition-colors duration-300 ${selectedDocument === doc.id ? 'bg-white shadow-md' : 'bg-gray-100'
-                                }`}
+                            className={`py-4 px-6 rounded mb-4 cursor-pointer flex items-center justify-between transition-colors duration-300 ${selectedDocument === doc.id ? 'bg-white shadow-md' : 'bg-gray-100'}`}
                             onClick={() => {
                                 setSelectedDocument(doc.id);
                                 setIsNewDocument(false);
@@ -366,6 +378,7 @@ const MarkdownEditor = () => {
                     ))}
                 </ul>
             </div>
+
             <div className="w-3/4 bg-gray-50 p-6">
                 <div className="flex justify-between items-center mb-4">
                     <input
@@ -376,14 +389,58 @@ const MarkdownEditor = () => {
                     <div className="flex items-center">
                         <i className="fas fa-user-circle text-2xl mr-2" title="User Profile"></i>
                         <i className="fas fa-users text-2xl mr-2" title="Share with Users"></i>
-                        <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2" onClick={handleShare} title="Share">Share</button>
-                        <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-8" title="Save" onClick={handleSave}>Save</button>
-                        <button className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-3 rounded mr-2" title="Create New Version" onClick={() => handleCreateNewVersion(selectedDocument)}>Create New Version</button>
-                        <button className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-3 rounded mr-8" title="Document Versions" onClick={() => handleDocunetVersions()}>Document Versions</button>
-                        <button className="bg-red-500 text-white py-1 px-3 rounded" title="Delete" onClick={handleDelete} disabled={!selectedDocument}>Delete</button>
+                        {/* Share Button */}
+                        <button
+                            className="btn share-btn bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2 disabled:opacity-50 hover:bg-gray-300"
+                            disabled={isDisabled(documentRoles[selectedDocument], "share")}
+                            title={isDisabled(documentRoles[selectedDocument], "share") ? "You don't have permission to share" : ""}
+                            onClick={() => handleShare(selectedDocument)}
+                        >
+                            Share
+                        </button>
+                        {/* Save Button */}
+                        <button
+                            className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-8 disabled:opacity-50 hover:bg-gray-300"
+                            title={isDisabled(documentRoles[selectedDocument], "save") ? "You don't have permission to save" : ""}
+                            onClick={handleSave}
+                            disabled={isDisabled(documentRoles[selectedDocument], "save")}
+                        >
+                            Save
+                        </button>
+                        {/* Create New Version Button */}
+                        <button
+                            className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-3 rounded mr-2 disabled:opacity-50"
+                            title={isDisabled(documentRoles[selectedDocument], "createVersion") ? "You don't have permission to create a new version" : ""}
+                            onClick={() => handleCreateNewVersion(selectedDocument)}
+                            disabled={isDisabled(documentRoles[selectedDocument], "createVersion")}
+                        >
+                            Create New Version
+                        </button>
+                        {/* Document Versions Button */}
+                        <button
+                            className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-3 rounded mr-8"
+                            title="Document Versions"
+                            onClick={() => handleDocunetVersions()}
+                        >
+                            Document Versions
+                        </button>
+                        {/* Delete Button */}
+                        <button
+                            className="bg-red-500 text-white py-1 px-3 rounded disabled:opacity-50 hover:bg-red-600"
+                            title={isDisabled(documentRoles[selectedDocument], "delete") ? "You don't have permission to delete" : ""}
+                            onClick={handleDelete}
+                            disabled={isDisabled(documentRoles[selectedDocument], "delete")}
+                        >
+                            Delete
+                        </button>
                     </div>
                 </div>
-                <div ref={quillRef} className="h-96 bg-white border rounded"></div>
+                <div ref={quillRef} className="h-96 bg-white border rounded"
+                    style={{ cursor: documentRoles[selectedDocument] === 'Viewer' ? 'not-allowed' : 'auto' }}
+                >
+
+
+                </div>
             </div>
         </div>
     );
