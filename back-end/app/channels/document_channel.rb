@@ -1,4 +1,5 @@
 class DocumentChannel < ApplicationCable::Channel
+  #  logic for handling connections and broadcasting changes.
 
   # called when the client subscribes to the channel 
   def subscribed
