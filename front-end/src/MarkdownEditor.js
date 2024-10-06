@@ -4,6 +4,7 @@ import Quill from 'quill';
 import logo from './assets/logo.png';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import { useLocation } from 'react-router-dom'; // Import useLocation
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
@@ -15,8 +16,10 @@ const MarkdownEditor = () => {
     const quillRef = useRef(null); // Reference for the Quill editor
     const quillInstance = useRef(null); // Reference to store the Quill instance
     const [currentUser, setCurrentUser] = useState(null);
-    // const [userRole, setUserRole] = useState(null);
     const [documentRoles, setDocumentRoles] = useState({}); // Store roles for each document
+    const location = useLocation(); // Use useLocation to access the current URL
+    const queryParams = new URLSearchParams(location.search);
+    const documentIdFromQuery = queryParams.get('id'); // Extract the document ID from the query string
 
 
     useEffect(() => {
@@ -110,6 +113,15 @@ const MarkdownEditor = () => {
         }
     }, []); // Only runs once when the component mounts
 
+
+    useEffect(() => {
+        // If there is a document ID in the query, update selectedDocument
+        if (documentIdFromQuery) {
+            setSelectedDocument(documentIdFromQuery);
+            setIsNewDocument(false);
+        }
+    }, [documentIdFromQuery]);
+
     useEffect(() => {
         const fetchDocumentName = async () => {
             if (selectedDocument !== null && !isNewDocument) {
@@ -131,7 +143,7 @@ const MarkdownEditor = () => {
         };
 
         fetchDocumentName();
-    }, [selectedDocument, isNewDocument]);
+    }, [selectedDocument, isNewDocument, documentIdFromQuery]);
 
     const handleSave = async () => {
         const delta = quillInstance.current.getContents(); // Get delta JSON

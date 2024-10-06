@@ -4,9 +4,12 @@ import logo from './assets/logo.png';
 import search from './assets/search.png'
 import logout from './assets/logout.png'
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [documents, setDocuments] = useState([]);
   const [userActivity, setUserActivity] = useState({
     documentsCreated: 0,
@@ -49,6 +52,10 @@ const Dashboard = () => {
 
     fetchUserId();
   }, []);
+
+  const handleDocumentClick = (docId) => {
+    navigate(`/editor?id=${docId}`); // Navigate to the editor page with the document ID
+  };
 
   // Fetch recent documents
   useEffect(() => {
@@ -230,7 +237,7 @@ const Dashboard = () => {
         {/* Action Buttons */}
         <div className="bg-white shadow p-4 flex justify-between items-center mb-6">
           <button className="bg-blue-900 text-white px-4 py-2 rounded flex items-center shadow-md hover:bg-blue-700 transition" onClick={() => window.location.href = '/editor'}>
-            <i className="fas fa-plus mr-2"></i> New Document
+            <i className="fas fa-plus mr-2"></i> All Document
           </button>
           <img src={search} alt="Search" className="bg-yellow-50 rounded-full w-12 h-12"></img>
         </div>
@@ -239,63 +246,64 @@ const Dashboard = () => {
         <div className="grid grid-cols-3 gap-6">
           {/* Recent Documents */}
           <div className="col-span-2">
-            <div className="bg-white p-6 rounded shadow mb-6">
+            <div className="bg-white p-6 rounded-lg shadow-md mb-6">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-gray-800">Recent Documents</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">Recent Documents</h2>
               </div>
               <div className="space-y-4">
                 {documents.length > 0 ? (
                   documents.map((doc) => (
-                    <div key={doc.id} className="flex items-center justify-between p-2 border-b">
-                      <div className="flex items-center">
-                        {/* <div className="bg-blue-600 rounded-full w-10 h-10 flex items-center justify-center">
-                          <span className="text-white font-bold">SD</span>
-                        </div> */}
-                        <div className="ml-4">
-                          <h3 className="font-semibold text-gray-800">{doc.title}</h3>
-                          <p className="text-gray-600 text-sm">
-                            Last edited {new Date(doc.updated_at).toLocaleString()}
-                          </p>
-                        </div>
+                    <div
+                      key={doc.id}
+                      className="flex items-center justify-between p-4 border border-gray-200 rounded-md hover:shadow hover:bg-gray-50 transition ease-in-out duration-150 cursor-pointer"
+                      onClick={() => handleDocumentClick(doc)} // Make the entire div clickable
+                    >
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-800 text-lg">{doc.title}</h3>
+                        <p className="text-gray-600 text-sm">
+                          Last edited {new Date(doc.updated_at).toLocaleString()}
+                        </p>
                       </div>
-                      <i className="fas fa-ellipsis-h text-gray-600"></i>
+                      <i className="fas fa-ellipsis-h text-gray-400"></i> {/* Optional: add an icon for more options */}
                     </div>
                   ))
                 ) : (
-                  <p className="text-gray-600">No recent documents available.</p>
+                  <p className="text-gray-600 text-center">No recent documents available.</p>
                 )}
               </div>
             </div>
           </div>
 
+
           {/* User Activity */}
           <div>
-            <div className="bg-white p-6 rounded shadow mb-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">User Activity</h2>
+            <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">User Activity</h2>
               <div className="space-y-4">
-                <div className="flex justify-between">
+                <div className="flex justify-between p-4 border border-gray-200 rounded-md hover:bg-gray-50 transition ease-in-out duration-150">
                   <span className="text-gray-600">Documents Created</span>
-                  <span className="font-semibold text-gray-800">{userActivity.documentsCreated}</span>
+                  <span className="font-semibold text-gray-800 text-lg">{userActivity.documentsCreated}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between p-4 border border-gray-200 rounded-md hover:bg-gray-50 transition ease-in-out duration-150">
                   <span className="text-gray-600">Shared Documents</span>
-                  <span className="font-semibold text-gray-800">{userActivity.documentsShared}</span>
+                  <span className="font-semibold text-gray-800 text-lg">{userActivity.documentsShared}</span>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
 
         {/* Requests Section */}
-        <div className="bg-white p-6 rounded shadow mb-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Document Access Invitations</h2>
+        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Document Access Invitations</h2>
           <div className="space-y-4 max-h-96 overflow-y-auto">
             {requests.length > 0 ? (
               requests.map((request) => (
-                <div key={request.id} className="flex items-center justify-between p-4 border-b">
-                  <div>
+                <div key={request.id} className="flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-50 transition ease-in-out duration-150">
+                  <div className="flex-grow">
                     <h1 className="font-semibold text-gray-800 text-lg mb-2">{request.document_title}</h1>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-gray-600 text-sm mb-1">
                       You have been invited to access the document <span className="font-semibold">{request.document_title}</span> as a <span className="font-semibold">{request.permission}</span>.
                     </p>
                     <p className="text-gray-500 text-xs">
@@ -305,13 +313,13 @@ const Dashboard = () => {
                   <div className="flex space-x-2">
                     <button
                       onClick={() => handleAccept(request)}
-                      className="bg-green-500 text-white px-4 py-1 rounded shadow hover:bg-green-600"
+                      className="bg-green-500 text-white px-4 py-1 rounded shadow hover:bg-green-600 transition ease-in-out duration-150"
                     >
                       Accept
                     </button>
                     <button
                       onClick={() => handleDecline(request)}
-                      className="bg-red-500 text-white px-4 py-1 rounded shadow hover:bg-red-600"
+                      className="bg-red-500 text-white px-4 py-1 rounded shadow hover:bg-red-600 transition ease-in-out duration-150"
                     >
                       Decline
                     </button>
