@@ -1,0 +1,24 @@
+Started GET "/cable" for ::1 at 2024-10-08 00:19:39 +0300
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/cable" [WebSocket] for ::1 at 2024-10-08 00:19:39 +0300
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/cable" for ::1 at 2024-10-08 00:19:39 +0300
+Started GET "/cable" [WebSocket] for ::1 at 2024-10-08 00:19:39 +0300
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DocumentChannel is transmitting the subscription confirmation
+DocumentChannel is streaming from document_30
+Started GET "/cable" for ::1 at 2024-10-08 00:19:40 +0300
+Started GET "/cable" [WebSocket] for ::1 at 2024-10-08 00:19:40 +0300
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/cable" for ::1 at 2024-10-08 00:19:42 +0300
+Started GET "/cable" [WebSocket] for ::1 at 2024-10-08 00:19:42 +0300
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/cable" for ::1 at 2024-10-08 00:19:43 +0300
+Started GET "/cable" [WebSocket] for ::1 at 2024-10-08 00:19:43 +0300
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/cable" for ::1 at 2024-10-08 00:19:44 +0300
+Started GET "/cable" [WebSocket] for ::1 at 2024-10-08 00:19:44 +0300
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/cable" for ::1 at 2024-10-08 00:19:47 +0300
+Started GET "/cable" [WebSocket] for ::1 at 2024-10-08 00:19:47 +0300
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
