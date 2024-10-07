@@ -350,7 +350,7 @@ const MarkdownEditor = () => {
     useEffect(() => {
         const cable = createConsumer('ws://localhost:3000/cable');
         const subscription = cable.subscriptions.create(
-          { channel: `document_${selectedDocument}`, document_id: selectedDocument },
+          { channel: "DocumentChannel", document_id: selectedDocument },
           {
             received(data) {
               console.log("Received data: ", data);

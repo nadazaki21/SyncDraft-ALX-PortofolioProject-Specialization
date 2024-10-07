@@ -3,7 +3,7 @@ class DocumentChannel < ApplicationCable::Channel
 
   # called when the client subscribes to the channel 
   def subscribed
-    # stream_from "some_channel"
+    stream_from "document_#{params[:document_id]}"
   end
 
   # called when the client disconnects from  the channel 
