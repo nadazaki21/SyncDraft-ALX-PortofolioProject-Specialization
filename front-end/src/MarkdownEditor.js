@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import 'quill/dist/quill.snow.css'; // Import Quill's styles
 import Quill from 'quill';
 import logo from './assets/logo.png';
@@ -23,7 +23,6 @@ const MarkdownEditor = () => {
     const documentIdFromQuery = queryParams.get('id'); // Extract the document ID from the query string
     const isMounted = useRef(true); 
     const subscriptionRef = useRef(null); 
-
     useEffect(() => {
         // Initialize Quill editor only if it hasn't been initialized yet
         if (!quillInstance.current) {
@@ -344,51 +343,95 @@ const MarkdownEditor = () => {
         }, 100); // 100ms delay should be sufficient
     };
 
+    // A debounce function that delays the execution of the function
+    // until after a specified time period (e.g., 300ms) after the last call.
+    const debounce = (func, delay) => {
+        let timeout;
+        return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
+        };
+    };
+    
+    const debouncedUpdate = useMemo(() => debounce(() => {
+        if (subscriptionRef.current) {
+            subscriptionRef.current.perform('update', {
+                document_id: selectedDocument,
+                changes: JSON.stringify(quillInstance.current.getContents()),
+            });
+        }
+    }, 300), [selectedDocument]);
+    
+    const handleChange = useCallback(() => {
+        debouncedUpdate();
+    }, [debouncedUpdate]);
 
+    useEffect(() => {
+        const handleTextChange = () => {
+            handleChange();
+        };
+    
+        quillInstance.current.on('text-change', handleTextChange);
+    
+        return () => {
+            quillInstance.current.off('text-change', handleTextChange);
+        };
+    }, [handleChange]);
 
     // for websocket
     useEffect(() => {
         const cable = createConsumer('ws://localhost:3000/cable');
         const subscription = cable.subscriptions.create(
-          { channel: "DocumentChannel", document_id: selectedDocument },
-          {
-            received(data) {
-              console.log("Received data: ", data);
-              quillInstance.current.setContents(data.changes); // Assuming quillInstance is a ref for your Quill editor
-            },
-          }
+            { channel: "DocumentChannel", document_id: selectedDocument },
+            {
+                received(data) {
+                    if (data) {
+                        try {
+                            const content = JSON.parse(data);
+                            // Only update if the content is different
+                            const currentContents = quillInstance.current.getContents();
+                            if (JSON.stringify(currentContents) !== JSON.stringify(content)) {
+                                quillInstance.current.setContents(content); // Use setContents instead of updateContents if necessary
+                            }
+                        } catch (error) {
+                            console.error("Error parsing data:", error);
+                        }
+                    }
+                },
+            }
         );
-    
-        // Store the subscription in the ref so it can be accessed later
+
         subscriptionRef.current = subscription;
-    
+
         // Cleanup function
         return () => {
-          if (isMounted.current) {
-            // Save to Redis or perform other actions before unsubscribing
-            //saveToRedis(content); // Replace with your saving logic
-          }
-          subscription.unsubscribe(); // Unsubscribe from the WebSocket channel
+            if (isMounted.current) {
+                // Perform any saving logic before unsubscribing
+            }
+            subscription.unsubscribe(); // Unsubscribe from the WebSocket channel
         };
-      }, [selectedDocument]);
+    }, [selectedDocument]);
 
-    useEffect(() => {
-        // Set isMounted to true when the component mounts
+      useEffect(() => {
+        const quill = quillInstance.current;
+
+        if (quill) {
+            quill.on('text-change', handleChange); // Listen for text changes
+        }
+
         isMounted.current = true;
 
         return () => {
-            // Set isMounted to false when the component unmounts
+            if (quill) {
+                quill.off('text-change', handleChange); // Cleanup listener
+            }
             isMounted.current = false;
         };
-    }, []);
+    }, [handleChange]); // This effect is necessary for setting up and cleaning up the listener
 
-    // Function to handle document updates (e.g., on typing)
-    const handleChange = () => {
-        // Use the stored subscription from the ref to perform the update action
-        if (subscriptionRef.current) {
-          subscriptionRef.current.perform('update', { document_id: selectedDocument, changes: quillInstance.current.getContents() });
-        }
-    };
+    
 
     return (
         <div className="flex h-screen">
@@ -484,13 +527,6 @@ const MarkdownEditor = () => {
                 <div ref={quillRef} className="h-96 bg-white border rounded"
                     style={{ cursor: documentRoles[selectedDocument] === 'Viewer' ? 'not-allowed' : 'auto' }}
                 >
-                    <textarea
-                        //value={quillRef} // Bind content state to the textarea
-                        onChange={(e) => handleChange(e.target.value)} // Handle change
-                        className="w-full h-full border border-gray-300 rounded p-2"
-                        placeholder="Edit your document here..."
-                    />
-
                 </div>
             </div>
         </div>

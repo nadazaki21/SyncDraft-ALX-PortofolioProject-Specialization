@@ -1,9 +1,10 @@
 class DocumentBroadcastJob < ApplicationJob
   queue_as :default
 
-  def perform(data)
-     changes = data[:changes]
-     # Broadcast the changes to the document's WebSocket channel
-     ActionCable.server.broadcast("document_#{data[:document_id]}", changes: changes)
+  def perform(document_id:, changes:)
+    Rails.logger.info("Broadcasting changes for Document ID: #{document_id}")
+
+    # Ensure that the data being broadcast is structured correctly
+    ActionCable.server.broadcast("document_#{document_id}", changes)
   end
 end

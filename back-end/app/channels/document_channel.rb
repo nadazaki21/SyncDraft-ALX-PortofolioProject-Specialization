@@ -19,8 +19,15 @@ class DocumentChannel < ApplicationCable::Channel
 
 
   def update(data)
-    # This method is triggered by the perform call from the client
-    DocumentBroadcastJob.perform_later(data) # Pass the data to a job for broadcasting
+    document_id = data['document_id'] # or data[:document_id]
+    changes = data['changes']          # or data[:changes]
+  
+    if document_id.blank? || changes.blank?
+      Rails.logger.error("Missing document_id or changes in data")
+      return
+    end
+  
+    DocumentBroadcastJob.perform_later(document_id: document_id, changes: changes)
   end
 
 
