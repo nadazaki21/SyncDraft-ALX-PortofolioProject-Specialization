@@ -4,7 +4,7 @@ import Quill from 'quill';
 import logo from './assets/logo.png';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { useLocation } from 'react-router-dom'; 
+import { useLocation } from 'react-router-dom';
 import { createConsumer } from "@rails/actioncable";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
@@ -21,8 +21,8 @@ const MarkdownEditor = () => {
     const location = useLocation(); // Use useLocation to access the current URL
     const queryParams = new URLSearchParams(location.search);
     const documentIdFromQuery = queryParams.get('id'); // Extract the document ID from the query string
-    const isMounted = useRef(true); 
-    const subscriptionRef = useRef(null); 
+    const isMounted = useRef(true);
+    const subscriptionRef = useRef(null);
     useEffect(() => {
         // Initialize Quill editor only if it hasn't been initialized yet
         if (!quillInstance.current) {
@@ -30,7 +30,7 @@ const MarkdownEditor = () => {
                 theme: 'snow',
                 modules: {
                     toolbar: {
-                        container:[
+                        container: [
                             [{ 'header': [1, 2, false] }], // Header options
                             ['bold', 'italic', 'underline'], // toggled buttons
                             ['link', 'image'], // add's image and link
@@ -343,19 +343,20 @@ const MarkdownEditor = () => {
         }, 100); // 100ms delay should be sufficient
     };
 
-    // A debounce function that delays the execution of the function
-    // until after a specified time period (e.g., 300ms) after the last call.
-    const debounce = (func, delay) => {
-        let timeout;
+    // A throttle function that limits the execution of the function
+    // to only once every specified time period (e.g., 100ms).
+    const throttle = (func, limit) => {
+        let inThrottle;
         return (...args) => {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
+            if (!inThrottle) {
                 func.apply(this, args);
-            }, delay);
+                inThrottle = true;
+                setTimeout(() => (inThrottle = false), limit);
+            }
         };
     };
-    
-    const debouncedUpdate = useMemo(() => debounce(() => {
+
+    const throttledUpdate = useMemo(() => throttle(() => {
         if (subscriptionRef.current) {
             subscriptionRef.current.perform('update', {
                 document_id: selectedDocument,
@@ -363,24 +364,36 @@ const MarkdownEditor = () => {
             });
         }
     }, 300), [selectedDocument]);
-    
+
     const handleChange = useCallback(() => {
-        debouncedUpdate();
-    }, [debouncedUpdate]);
+        throttledUpdate();
+    }, [throttledUpdate]);
 
     useEffect(() => {
         const handleTextChange = () => {
             handleChange();
         };
-    
+
         quillInstance.current.on('text-change', handleTextChange);
-    
+
         return () => {
             quillInstance.current.off('text-change', handleTextChange);
         };
     }, [handleChange]);
 
-    // for websocket
+    // For managing cursor position
+    const saveCursorPosition = () => {
+        const quill = quillInstance.current;
+        const range = quill.getSelection();
+        return range ? range.index : 0; // Return cursor index or 0 if no selection
+    };
+
+    const restoreCursorPosition = (index) => {
+        const quill = quillInstance.current;
+        quill.setSelection(index);
+    };
+
+    // For WebSocket
     useEffect(() => {
         const cable = createConsumer('ws://localhost:3000/cable');
         const subscription = cable.subscriptions.create(
@@ -390,10 +403,18 @@ const MarkdownEditor = () => {
                     if (data) {
                         try {
                             const content = JSON.parse(data);
+
                             // Only update if the content is different
                             const currentContents = quillInstance.current.getContents();
                             if (JSON.stringify(currentContents) !== JSON.stringify(content)) {
-                                quillInstance.current.setContents(content); // Use setContents instead of updateContents if necessary
+                                // Save the current cursor position
+                                const currentPosition = saveCursorPosition();
+
+                                // Update the content
+                                quillInstance.current.setContents(content);
+
+                                // Restore the cursor position
+                                restoreCursorPosition(currentPosition);
                             }
                         } catch (error) {
                             console.error("Error parsing data:", error);
@@ -414,7 +435,7 @@ const MarkdownEditor = () => {
         };
     }, [selectedDocument]);
 
-      useEffect(() => {
+    useEffect(() => {
         const quill = quillInstance.current;
 
         if (quill) {
@@ -431,7 +452,8 @@ const MarkdownEditor = () => {
         };
     }, [handleChange]); // This effect is necessary for setting up and cleaning up the listener
 
-    
+
+
 
     return (
         <div className="flex h-screen">
