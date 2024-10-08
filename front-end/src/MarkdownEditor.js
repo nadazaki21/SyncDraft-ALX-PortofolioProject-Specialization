@@ -255,6 +255,7 @@ const MarkdownEditor = () => {
         }, 100); // 100ms delay should be sufficient
     };
 
+
     const getNextVersionNumber = async (selectedDocument) => {
         try {
             const token = localStorage.getItem('jwtToken');
@@ -334,6 +335,8 @@ const MarkdownEditor = () => {
     const handleDocunetVersions = () => {
         localStorage.setItem('selectedDocumentId', selectedDocument);
         localStorage.setItem('selectedDocumentTitle', documentName);
+        localStorage.setItem('UserRole', documentRoles[selectedDocument]);
+
 
         console.log("Set the current document ID to: ", documentName);
 
@@ -502,7 +505,7 @@ const MarkdownEditor = () => {
                         <i className="fas fa-users text-2xl mr-2" title="Share with Users"></i>
                         {/* Share Button */}
                         <button
-                            className="btn share-btn bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2 disabled:opacity-50 hover:bg-gray-300"
+                            className="btn share-btn bg-gray-200 text-gray-800 py-2 px-4 rounded mr-2 disabled:opacity-50 disabled:bg-gray-300 hover:bg-gray-300"
                             disabled={isDisabled(documentRoles[selectedDocument], "share")}
                             title={isDisabled(documentRoles[selectedDocument], "share") ? "You don't have permission to share" : ""}
                             onClick={() => handleShare(selectedDocument)}
@@ -511,7 +514,7 @@ const MarkdownEditor = () => {
                         </button>
                         {/* Save Button */}
                         <button
-                            className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-8 disabled:opacity-50 hover:bg-gray-300"
+                            className="bg-gray-200 text-gray-800 py-2 px-4 rounded mr-8 disabled:opacity-50 disabled:bg-gray-300 hover:bg-gray-300"
                             title={isDisabled(documentRoles[selectedDocument], "save") ? "You don't have permission to save" : ""}
                             onClick={handleSave}
                             disabled={isDisabled(documentRoles[selectedDocument], "save")}
@@ -520,7 +523,7 @@ const MarkdownEditor = () => {
                         </button>
                         {/* Create New Version Button */}
                         <button
-                            className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-3 rounded mr-2 disabled:opacity-50"
+                            className="bg-blue-500 text-white hover:bg-blue-600 py-2 px-3 rounded mr-2 disabled:opacity-50 disabled:bg-blue-300"
                             title={isDisabled(documentRoles[selectedDocument], "createVersion") ? "You don't have permission to create a new version" : ""}
                             onClick={() => handleCreateNewVersion(selectedDocument)}
                             disabled={isDisabled(documentRoles[selectedDocument], "createVersion")}
@@ -537,7 +540,7 @@ const MarkdownEditor = () => {
                         </button>
                         {/* Delete Button */}
                         <button
-                            className="bg-red-500 text-white py-1 px-3 rounded disabled:opacity-50 hover:bg-red-600"
+                            className="bg-red-500 text-white py-1 px-3 rounded disabled:opacity-50 hover:bg-red-600 disabled:bg-red-300"
                             title={isDisabled(documentRoles[selectedDocument], "delete") ? "You don't have permission to delete" : ""}
                             onClick={handleDelete}
                             disabled={isDisabled(documentRoles[selectedDocument], "delete")}

@@ -6,6 +6,7 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
 const DocumentVersionControl = () => {
     const [documentId, setDocumentId] = useState(localStorage.getItem('selectedDocumentId'));
     const [documentTitle, setDocumentTitle] = useState(localStorage.getItem('selectedDocumentTitle'));
+    const [userRole, setUserRole] = useState(localStorage.getItem('UserRole'));
     const [versions, setVersions] = useState([]);
     const [selectedVersionContent, setSelectedVersionContent] = useState(null);
     const [comparisonVersionContent, setComparisonVersionContent] = useState(null);
@@ -19,9 +20,11 @@ const DocumentVersionControl = () => {
     useEffect(() => {
         const id = localStorage.getItem('selectedDocumentId');
         const title = localStorage.getItem('selectedDocumentTitle');
+        const role = localStorage.getItem('UserRole');
 
         setDocumentId(id);
         setDocumentTitle(title);
+        setUserRole(role);
 
         if (id) {
             const token = localStorage.getItem('jwtToken');
@@ -127,6 +130,15 @@ const DocumentVersionControl = () => {
         return converter.convert();
     };
 
+    // Utility function to check if a button should be disabled based on user role
+    const isDisabled = (role, buttonType) => {
+        if (role === "Viewer") {
+            // Viewers can't Restore the version
+            return ["restore" ].includes(buttonType);
+        }
+    };
+ 
+
     return (
         <div className="max-w-4xl mx-auto p-4">
             <div className="flex justify-between items-center mb-4">
@@ -158,8 +170,10 @@ const DocumentVersionControl = () => {
                                     </div>
 
                                     <button
+                                        disabled={isDisabled(userRole, "restore")}
+                                        title={isDisabled(userRole, "restore") ? "You don't have permission to restore versions" : "Restore this version"}
                                         onClick={() => handleRestoreVersion(version.id)}
-                                        className="bg-gray-400 text-gray-800 px-4 py-2 rounded mr-2 hover:bg-gray-500"
+                                        className="bg-gray-400 text-gray-800 px-4 py-2 rounded mr-2 hover:bg-gray-500 disabled:bg-gray-300 disabled:opacity-50"
                                         aria-label={`Restore Version ${version.version_number}`}
                                     >
                                         Restore
