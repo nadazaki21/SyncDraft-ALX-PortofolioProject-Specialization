@@ -123,7 +123,7 @@ const MarkdownEditor = () => {
         if (token) {
             const decodedToken = jwtDecode(token);
             setCurrentUser(decodedToken.user_id); // Set the current user based on the decoded token
-            console.log('User ID:', decodedToken.user_id);
+            // console.log('User ID:', decodedToken.user_id);
         }
     }, []); // Only runs once when the component mounts
 
@@ -363,10 +363,10 @@ const MarkdownEditor = () => {
         if (subscriptionRef.current) {
             subscriptionRef.current.perform('update', {
                 document_id: selectedDocument,
-                changes: JSON.stringify(quillInstance.current.getContents()),
+                changes: quillInstance.current.getContents(),
             });
         }
-    }, 300), [selectedDocument]);
+    }, 150), [selectedDocument]);
 
     const handleChange = useCallback(() => {
         throttledUpdate();
@@ -405,7 +405,8 @@ const MarkdownEditor = () => {
                 received(data) {
                     if (data) {
                         try {
-                            const content = JSON.parse(data);
+                            const content = data;
+                            // console.log("Received data:", data);
 
                             // Only update if the content is different
                             const currentContents = quillInstance.current.getContents();
@@ -417,7 +418,7 @@ const MarkdownEditor = () => {
                                 quillInstance.current.setContents(content);
 
                                 // Restore the cursor position
-                                restoreCursorPosition(currentPosition);
+                                restoreCursorPosition(currentPosition + 1);
                             }
                         } catch (error) {
                             console.error("Error parsing data:", error);
