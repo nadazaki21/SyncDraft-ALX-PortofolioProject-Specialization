@@ -18,6 +18,10 @@ const Dashboard = () => {
   const [userName, setUserName] = useState('');
   const [requests, setRequests] = useState([
   ]);
+  const [showSearch, setShowSearch] = useState(false); // Add state for search input
+  const [filteredDocuments, setFilteredDocuments] = useState([]); // Holds filtered documents
+  const [searchTerm, setSearchTerm] = useState(''); // Add state for search term
+  const [allDocuments, setAllDocuments] = useState([]);
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -202,6 +206,41 @@ const Dashboard = () => {
     window.location.href = '/login';  // Redirect to the login page
   };
 
+
+  // Fetch documents for the user
+useEffect(() => {
+  const fetchUserDocuments = async () => {
+    try {
+      const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage
+      const response = await axios.get(`${baseURL}/api/documents`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        },
+      });
+      setAllDocuments(response.data); // Update the state with the documents fetched
+      setFilteredDocuments(response.data);
+      // console.log('Fetched documents:', allDocuments);
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+    }
+  };
+
+  fetchUserDocuments();
+}, []);
+
+  const toggleSearchBar = () => {
+    setShowSearch(!showSearch); // Toggle search bar visibility
+  };
+
+  const handleSearch = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term); // Update search term state
+    const filteredDocs = allDocuments.filter((doc) =>
+      doc.title.toLowerCase().includes(term.toLowerCase())
+    ); // Filter documents based on the search term
+    setFilteredDocuments(filteredDocs); // Update filtered documents state
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -233,14 +272,64 @@ const Dashboard = () => {
       </header>
 
       {/* Main Content */}
-      <main className="p-6">
-        {/* Action Buttons */}
-        <div className="bg-white shadow p-4 flex justify-between items-center mb-6">
-          <button className="bg-blue-900 text-white px-4 py-2 rounded flex items-center shadow-md hover:bg-blue-700 transition" onClick={() => window.location.href = '/editor'}>
-            <i className="fas fa-plus mr-2"></i> All Document
-          </button>
-          <img src={search} alt="Search" className="bg-yellow-50 rounded-full w-12 h-12"></img>
-        </div>
+<main className="p-6 bg-gray-50 min-h-screen">
+  {/* Action Buttons and Search Bar */}
+  <div className="bg-white shadow-lg p-4 rounded-lg flex justify-between items-center mb-6">
+    {/* "All Document" Button */}
+    <button
+      className="bg-blue-900 text-white px-6 py-2 font-semibold rounded-lg flex items-center shadow-md hover:bg-blue-700 transition-transform duration-150 transform hover:scale-105"
+      onClick={() => window.location.href = '/editor'}
+    >
+      <i className="fas fa-plus mr-2"></i> All Documents
+    </button>
+    
+    {/* Search Icon */}
+    <div className="relative w-full flex justify-end items-center ">
+  <div className="flex items-center bg-white border rounded-full shadow-md px-4 py-2 w-full max-w-lg">
+    <button 
+      aria-label={showSearch ? "Close search" : "Open search"} 
+      onClick={toggleSearchBar} 
+      className="text-gray-600 focus:outline-none"
+    >
+      {showSearch ? (
+        <span className="text-lg">✖</span>
+      ) : (
+        <img 
+          src={search} 
+          alt="Search icon" 
+          className="w-8 h-8"
+        />
+      )}
+    </button>
+    <input 
+      type="text" 
+      placeholder="Search documents..." 
+      value={searchTerm} 
+      onChange={handleSearch} 
+      className={`ml-4 flex-1 bg-transparent focus:outline-none transition-all duration-300 ${showSearch ? 'block' : 'hidden'}`}
+    />
+  </div>
+
+  {showSearch && searchTerm.length > 0 && ( // Render results only if showSearch is true and searchTerm is not empty
+    <ul className="absolute right-0 mt-1 max-w-lg bg-white shadow-lg rounded-md p-2 z-10 top-12 w-full max-h-60 overflow-y-auto overflow-x-hidden">
+      {filteredDocuments.length > 0 ? (
+        filteredDocuments.map((doc) => (
+          <li 
+            key={doc.id} 
+            className="p-2 hover:bg-gray-100 rounded-md cursor-pointer"
+          >
+            {doc.title}
+          </li>
+        ))
+      ) : (
+        <li className="text-gray-500">No documents found</li>
+      )}
+    </ul>
+  )}
+</div>
+</div>
+
+
 
         {/* Recent Documents & User Activity */}
         <div className="grid grid-cols-3 gap-6">
