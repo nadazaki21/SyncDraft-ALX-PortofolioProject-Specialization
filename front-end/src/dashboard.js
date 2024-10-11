@@ -317,6 +317,7 @@ useEffect(() => {
           <li 
             key={doc.id} 
             className="p-2 hover:bg-gray-100 rounded-md cursor-pointer"
+            onClick={() => handleDocumentClick(doc.id)}
           >
             {doc.title}
           </li>
