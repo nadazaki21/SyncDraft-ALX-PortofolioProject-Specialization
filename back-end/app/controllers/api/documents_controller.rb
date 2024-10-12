@@ -43,7 +43,20 @@ class Api::DocumentsController < ApplicationController
 
   # GET /api/documents/:id
   def show
-    render json: @document
+    redis_key_content = "document_#{@document.id}_content"
+
+  
+    # Check if content and title exist in Redis
+    content = Redis.current.get(redis_key_content)
+    
+
+    if content && title
+      # If found in Redis, return the content from Redis
+      render json: { id: @document.id, content: content, source: 'redis' }
+    else
+      # If not found in Redis, fetch from PostgreSQL as usual
+      render json: { id: @document.id, content: @document.content, source: 'postgresql' }
+    end
   end
 
   # PUT /api/documents/:id

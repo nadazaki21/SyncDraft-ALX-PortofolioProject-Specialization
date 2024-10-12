@@ -137,27 +137,36 @@ const MarkdownEditor = () => {
     }, [documentIdFromQuery]);
 
     useEffect(() => {
-        const fetchDocumentName = async () => {
+        const fetchDocumentContent = async () => {
             if (selectedDocument !== null && !isNewDocument) {
                 try {
                     const token = localStorage.getItem('jwtToken');
+    
+                    // Make a request to the backend to check Redis or PostgreSQL for content
                     const response = await axios.get(`${baseURL}/api/documents/${selectedDocument}`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-                    setDocumentName(response.data.title);
-                    const content = JSON.parse(response.data.content); // Parse if it's a string
-                    quillInstance.current.setContents(content); // Set the Delta content directly
+    
+                    // If Redis content exists, it will be returned; otherwise, data from PostgreSQL
+                    const { title, content, source } = response.data;
+    
+                    setDocumentName(title); // Set the document title
+                    const parsedContent = JSON.parse(content); // Parse content if stored as a string
+                    quillInstance.current.setContents(parsedContent); // Set content in the editor
+    
+                    console.log(`Document fetched from: ${source}`); // Debug message
                 } catch (error) {
-                    console.error('Error fetching document:', error);
+                    console.error('Error fetching document content:', error);
                 }
-
             }
         };
-
-        fetchDocumentName();
+    
+        fetchDocumentContent();
     }, [selectedDocument, isNewDocument, documentIdFromQuery]);
+    
+
 
     const handleSave = async () => {
         const delta = quillInstance.current.getContents(); // Get delta JSON
@@ -359,6 +368,8 @@ const MarkdownEditor = () => {
         };
     };
 
+
+    // sending updates user has made , thorugh the websocket 
     const throttledUpdate = useMemo(() => throttle(() => {
         if (subscriptionRef.current) {
             subscriptionRef.current.perform('update', {
@@ -396,6 +407,8 @@ const MarkdownEditor = () => {
         quill.setSelection(index);
     };
 
+
+    // receiving updates other users have made, through the web socket 
     // For WebSocket
     useEffect(() => {
         const cable = createConsumer('ws://localhost:3000/cable');
@@ -423,6 +436,7 @@ const MarkdownEditor = () => {
                         } catch (error) {
                             console.error("Error parsing data:", error);
                         }
+                        
                     }
                 },
             }
@@ -455,7 +469,6 @@ const MarkdownEditor = () => {
             isMounted.current = false;
         };
     }, [handleChange]); // This effect is necessary for setting up and cleaning up the listener
-
 
 
 
