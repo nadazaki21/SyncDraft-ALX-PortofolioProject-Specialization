@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import 'quill/dist/quill.snow.css'; // Import Quill's styles
 import Quill from 'quill';
 import logo from './assets/logo.png';
@@ -6,23 +6,33 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useLocation } from 'react-router-dom';
 import { createConsumer } from "@rails/actioncable";
+import QuillCursors from 'quill-cursors';
+import './custom-cursor.css';
+
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
+Quill.register('modules/cursors', QuillCursors);
+
+
 
 const MarkdownEditor = () => {
     const [selectedDocument, setSelectedDocument] = useState(null);
     const [documents, setDocuments] = useState([]); // State for documents
     const [documentName, setDocumentName] = useState('Untitled Document'); // State for document name
     const [isNewDocument, setIsNewDocument] = useState(true); // State for new document creation
-    const quillRef = useRef(null); // Reference for the Quill editor
-    const quillInstance = useRef(null); // Reference to store the Quill instance
+
     const [currentUser, setCurrentUser] = useState(null);
+    const [currentUserName, setCurrentUserName] = useState(null);
     const [documentRoles, setDocumentRoles] = useState({}); // Store roles for each document
     const location = useLocation(); // Use useLocation to access the current URL
     const queryParams = new URLSearchParams(location.search);
     const documentIdFromQuery = queryParams.get('id'); // Extract the document ID from the query string
     const isMounted = useRef(true);
     const subscriptionRef = useRef(null);
+    // Get the cursors module once and store it in a ref
+    const cursorsRef = useRef(null);
+    const quillRef = useRef(null); // Reference for the Quill editor
+    const quillInstance = useRef(null); // Reference to store the Quill instance
     useEffect(() => {
         // Initialize Quill editor only if it hasn't been initialized yet
         if (!quillInstance.current) {
@@ -39,10 +49,20 @@ const MarkdownEditor = () => {
                             ['clean'] // remove formatting button
                         ],
                     },
+                    cursors: true,
                 },
+
             });
+            // Store the cursors module in a ref
+            try {
+                cursorsRef.current = quillInstance.current.getModule('cursors');
+            } catch (error) {
+                console.error('Error retrieving cursors module:', error);
+            }
         }
     }, []);
+
+
 
     // Utility function to check if a button should be disabled based on user role
     const isDisabled = (role, buttonType) => {
@@ -118,14 +138,39 @@ const MarkdownEditor = () => {
     }, [currentUser]); // Ensure currentUser is available in the dependency array
 
     useEffect(() => {
-        // Decode the JWT token once when the component mounts
-        const token = localStorage.getItem('jwtToken');
-        if (token) {
-            const decodedToken = jwtDecode(token);
-            setCurrentUser(decodedToken.user_id); // Set the current user based on the decoded token
-            // console.log('User ID:', decodedToken.user_id);
-        }
-    }, []); // Only runs once when the component mounts
+        const fetchUserId = async () => {
+            try {
+                const token = localStorage.getItem('jwtToken');
+                if (token) {
+                    try {
+                        // Decode the JWT token
+                        const decodedToken = jwtDecode(token); // Ensure the import matches
+                        // Extract the user ID from the token payload
+                        const userId = decodedToken.user_id;
+                        setCurrentUser(decodedToken.user_id);
+
+                        // console.log('User ID:', userId);
+
+                        // Fetch user details based on the extracted userId
+                        const response = await axios.get(`${baseURL}/users/${userId}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+                            },
+                        });
+
+                        setCurrentUserName(response.data.name); // Assuming the API returns a 'name' field in the response
+                        // console.log('User name:', response.data.name);
+                    } catch (error) {
+                        console.error('Error decoding token:', error);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching user name:', error);
+            }
+        };
+
+        fetchUserId();
+    }, []);
 
 
     useEffect(() => {
@@ -368,21 +413,24 @@ const MarkdownEditor = () => {
         }
     }, 150), [selectedDocument]);
 
-    const handleChange = useCallback(() => {
-        throttledUpdate();
-    }, [throttledUpdate]);
-
     useEffect(() => {
-        const handleTextChange = () => {
-            handleChange();
-        };
-
-        quillInstance.current.on('text-change', handleTextChange);
-
+        const quill = quillInstance.current;
+        if (quill) {
+            quill.on('text-change', (delta, oldDelta, source) => {
+                if (source === 'user') { // Avoid updates triggered by incoming data
+                    const content = quill.getContents();
+                    throttledUpdate(content);
+                }
+            });
+        }
+        isMounted.current = true;
         return () => {
-            quillInstance.current.off('text-change', handleTextChange);
+            if (quill) {
+                quill.off('text-change');
+            }
+            isMounted.current = false;
         };
-    }, [handleChange]);
+    }, [throttledUpdate]);
 
     // For managing cursor position
     const saveCursorPosition = () => {
@@ -404,21 +452,25 @@ const MarkdownEditor = () => {
             {
                 received(data) {
                     if (data) {
+                        // console.log('Data received:', data);
+                        // console.log("Data type:", data.type);
                         try {
-                            const content = data;
-                            // console.log("Received data:", data);
-
-                            // Only update if the content is different
-                            const currentContents = quillInstance.current.getContents();
-                            if (JSON.stringify(currentContents) !== JSON.stringify(content)) {
-                                // Save the current cursor position
-                                const currentPosition = saveCursorPosition();
-
-                                // Update the content
-                                quillInstance.current.setContents(content);
-
-                                // Restore the cursor position
-                                restoreCursorPosition(currentPosition + 1);
+                            if (data.type === 'update') {
+                                // Handle document content changes
+                                const content = data.changes;
+                                const currentContents = quillInstance.current.getContents();
+                                if (JSON.stringify(currentContents) !== JSON.stringify(content)) {
+                                    const currentPosition = saveCursorPosition();
+                                    quillInstance.current.setContents(content);
+                                    restoreCursorPosition(currentPosition + 1);
+                                }
+                            } else if (data.type === 'cursor_update') {
+                                const cursors = quillInstance.current.getModule('cursors');
+                                if (data.user_id !== currentUser) { // Only apply other users' cursor updates
+                                    cursors.createCursor(data.user_id, data.user_name, data.cursor_color);
+                                    cursors.moveCursor(data.user_id, { index: data.cursor_position, length: data.cursor_length });
+                                    console.log("Cursor updated for:", data.user_name, "at position:", data.cursor_position, "with length:", data.cursor_length);
+                                }
                             }
                         } catch (error) {
                             console.error("Error parsing data:", error);
@@ -437,28 +489,59 @@ const MarkdownEditor = () => {
             }
             subscription.unsubscribe(); // Unsubscribe from the WebSocket channel
         };
-    }, [selectedDocument]);
+    }, [selectedDocument, currentUser]);
 
+
+    // Attach listener for selection changes
     useEffect(() => {
         const quill = quillInstance.current;
-
         if (quill) {
-            quill.on('text-change', handleChange); // Listen for text changes
-        }
+            quill.on('selection-change', function (range, oldRange, source) {
+                if (source === 'user')
+                    if (range) {
+                        const cursorPosition = range.index;
+                        const cursorLength = range.length;
+                        const userName = currentUserName;
+                        const userColor = getRandomColor();
 
-        isMounted.current = true;
+                        // Throttle the cursor update to avoid excessive WebSocket messages
+                        if (subscriptionRef.current) {
+                            subscriptionRef.current.perform('cursor_update', {
+                                document_id: selectedDocument,
+                                user_id: currentUser,
+                                user_name: userName,
+                                cursor_position: cursorPosition,
+                                cursor_length: cursorLength,
+                                cursor_color: userColor
+                            });
+                            console.log("Sending cursor update: ", userName, cursorPosition, userColor, currentUser, cursorLength);
+                        }
+
+                    }
+                    else {
+                        // User has deselected or moved the cursor to an empty space
+                        console.log('Cursor is not in a valid range (i.e., no selection).');
+                    }
+
+
+            });
+        }
 
         return () => {
             if (quill) {
-                quill.off('text-change', handleChange); // Cleanup listener
+                quill.off('selection-change');
             }
-            isMounted.current = false;
         };
-    }, [handleChange]); // This effect is necessary for setting up and cleaning up the listener
+    }, [currentUserName, currentUser, selectedDocument]);
 
-
-
-
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
     return (
         <div className="flex h-screen">
             <div className="w-1/4 bg-gray-100 p-4">

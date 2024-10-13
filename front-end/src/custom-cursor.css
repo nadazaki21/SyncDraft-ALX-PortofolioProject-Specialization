@@ -1,0 +1,15 @@
+.custom-cursor {
+    position: absolute;
+    background-color: rgba(0, 0, 255, 0.3); /* Example color */
+    border-left: 2px solid blue; /* Example color */
+  }
+  .cursor-flag {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background-color: blue; /* Example color */
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+  }
+  

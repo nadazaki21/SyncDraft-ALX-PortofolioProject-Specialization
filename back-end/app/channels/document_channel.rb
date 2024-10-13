@@ -1,34 +1,61 @@
 class DocumentChannel < ApplicationCable::Channel
-  #  logic for handling connections and broadcasting changes.
+  # Logic for handling connections and broadcasting changes.
 
-  # called when the client subscribes to the channel 
+  # Called when the client subscribes to the channel 
   def subscribed
     stream_from "document_#{params[:document_id]}"
   end
 
-  # called when the client disconnects from  the channel 
+  # Called when the client disconnects from the channel 
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
   end
 
   # This method handles incoming messages from the client. 
-  # send message to all subsucribers of the channel 
+  # Send message to all subscribers of the channel 
   def send_message(data)
     ActionCable.server.broadcast("document_#{params[:document_id]}", message: data['message'])
   end
 
-
+  # Handle incoming document updates
   def update(data)
     document_id = data['document_id'] # or data[:document_id]
     changes = data['changes']          # or data[:changes]
-  
+
     if document_id.blank? || changes.blank?
       Rails.logger.error("Missing document_id or changes in data")
       return
     end
-  
+
+    # Offload the document update to a background job
     DocumentBroadcastJob.perform_later(document_id: document_id, changes: changes)
   end
+  # Handle incoming cursor updates
+  def cursor_update(data)
+    document_id = data['document_id']   # Get document_id from params
+    user_id = data['user_id']           # Extract user_id from data
+    user_name = data['user_name']       # Extract user_name from data
+    index = data['cursor_position']             # Extract the cursor index
+    length = data['cursor_length']
+    color = data['cursor_color']               # Extract color data
 
+   # Ensure required fields are present
+  if document_id.blank? || user_id.blank? || index.blank?
+    Rails.logger.error("Missing document_id, user_id, or cursor_position in data: #{data.inspect}")
+    return
+  end
 
+  # Log incoming data for debugging
+  Rails.logger.info("Processing cursor update: document_id=#{document_id}, user_id=#{user_id}, user_name=#{user_name}, index=#{index}, length=#{length}, color=#{color}")
+
+    # Directly broadcast cursor updates for immediate feedback
+    ActionCable.server.broadcast("document_#{document_id}", {
+      type: 'cursor_update',
+      user_id: user_id,
+      user_name: user_name,
+      cursor_position: index,
+      cursor_length: length,
+      cursor_color: color
+    })
+  end
 end
