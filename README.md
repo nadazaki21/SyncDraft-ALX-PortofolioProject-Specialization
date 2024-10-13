@@ -135,10 +135,6 @@ By using **ActionCable**, we ensure that collaboration remains smooth and respon
 - **Collaboration Features**: Enhance real-time collaboration with comments and annotations.
 - **Offline Mode**: Enable editing documents offline with synchronization upon reconnection.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
 ## Contributors
 
 - **Your Name** (GitHub: [@MahmoudElSherbinee](https://github.com/MahmoudElSherbinee))
