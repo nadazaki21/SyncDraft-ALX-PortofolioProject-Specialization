@@ -22,15 +22,25 @@ This project is a **real-time collaborative Markdown editor** that allows multip
 - **Database**: 
   - **PostgreSQL**: Stores user data, document content, and permission settings with scalability and consistency.
 - **Real-time Collaboration**: 
-  - **WebSockets**: Used for synchronizing document changes between users in real-time.
+  - **WebSockets (ActionCable)**: Used for synchronizing document changes between users in real-time.
 - **Authentication & Authorization**: 
   - **JWT (JSON Web Tokens)**: Manages user authentication and authorization for secure access control.
 - **Markdown Processing**: 
-  - **Marked.js**: Enables real-time parsing and rendering of Markdown content.
+  - **Quill.js**: Enables real-time parsing and rendering of Markdown content.
 - **Version Control**: 
   - **Git & GitHub**: Tracks changes in the codebase and allows collaborative development.
 - **Containerization & Deployment**: 
   - **Docker**: Ensures consistency between development and production environments for deployment.
+
+## WebSockets (ActionCable)
+
+To implement real-time collaboration, the project utilizes **ActionCable**, a built-in WebSocket framework in Ruby on Rails. ActionCable enables real-time bi-directional communication between the server and clients, which is essential for live editing. Here's how it works:
+
+- **Document Channel**: Each document has its own ActionCable channel. When a user opens a document, they subscribe to this channel, allowing real-time updates to be pushed and received.
+- **Broadcasting Changes**: When a user makes changes to the document (e.g., adding text), those changes are broadcasted via WebSockets to other connected users, ensuring that everyone sees the updates in real-time.
+- **Conflict Resolution**: The system uses optimistic updates to handle simultaneous edits. Document changes are synchronized in the background to prevent conflicts.
+
+By using **ActionCable**, we ensure that collaboration remains smooth and responsive, even when multiple users are editing the document simultaneously.
 
 ## Installation
 
@@ -45,7 +55,7 @@ This project is a **real-time collaborative Markdown editor** that allows multip
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/your-repo.git
+   git clone https://github.com/MahmoudElSherbinee/your-repo.git
    cd your-repo
    ```
 
@@ -111,7 +121,7 @@ This project is a **real-time collaborative Markdown editor** that allows multip
 
 ## Real-time Collaboration
 
-- **WebSockets** are used for real-time synchronization, ensuring that multiple users can collaborate on documents without conflict. When a user makes changes to a document, those changes are immediately broadcast to all other collaborators.
+- **WebSockets (ActionCable)** are used for real-time synchronization, ensuring that multiple users can collaborate on documents without conflict. When a user makes changes to a document, those changes are immediately broadcast to all other collaborators.
 
 ## Challenges Identified
 
@@ -131,9 +141,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contributors
 
-- **Your Name** (GitHub: [@MahmoudElsherbinee](https://github.com/MahmoudElsherbinee))
+- **Your Name** (GitHub: [@MahmoudElSherbinee](https://github.com/MahmoudElSherbinee))
 - **Your Partner's Name** (GitHub: [@nadazaki21](https://github.com/nadazaki21))
-
-```
-
-This README file follows markdown syntax and includes all necessary sections like project overview, features, technologies used, installation, usage, API endpoints, challenges, and future improvements. Make sure to replace placeholders like `your-username` and `your-repo` with actual information before using it.
