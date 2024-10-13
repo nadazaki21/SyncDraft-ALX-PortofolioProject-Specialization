@@ -1,4 +1,3 @@
-```markdown
 # Real-time Collaborative Markdown Editor
 
 ## Project Overview
