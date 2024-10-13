@@ -448,7 +448,9 @@ const MarkdownEditor = () => {
     useEffect(() => {
         const cable = createConsumer('ws://localhost:3000/cable');
         const subscription = cable.subscriptions.create(
-            { channel: "DocumentChannel", document_id: selectedDocument },
+            { channel: "DocumentChannel", document_id: selectedDocument,
+                user_id: currentUser, user_name: currentUserName,
+             },
             {
                 received(data) {
                     if (data) {
@@ -472,6 +474,12 @@ const MarkdownEditor = () => {
                                     console.log("Cursor updated for:", data.user_name, "at position:", data.cursor_position, "with length:", data.cursor_length);
                                 }
                             }
+                            else if (data.type === 'user_disconnected') {
+                                // Remove cursor of disconnected user
+                                const cursors = quillInstance.current.getModule('cursors');
+                                cursors.removeCursor(data.user_id);
+                                console.log(`User ${data.user_name} disconnected, cursor removed.`);
+                              }
                         } catch (error) {
                             console.error("Error parsing data:", error);
                         }
@@ -489,7 +497,7 @@ const MarkdownEditor = () => {
             }
             subscription.unsubscribe(); // Unsubscribe from the WebSocket channel
         };
-    }, [selectedDocument, currentUser]);
+    }, [selectedDocument, currentUser, currentUserName]);
 
 
     // Attach listener for selection changes

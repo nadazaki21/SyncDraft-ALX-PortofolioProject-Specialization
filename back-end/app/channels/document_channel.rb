@@ -3,12 +3,22 @@ class DocumentChannel < ApplicationCable::Channel
 
   # Called when the client subscribes to the channel 
   def subscribed
+    # Access the user_id and user_name from params
+    user_id = params[:user_id]
+    user_name = params[:user_name]
+
+    Rails.logger.info("User subscribed: #{user_name} (ID: #{user_id})")
     stream_from "document_#{params[:document_id]}"
   end
 
   # Called when the client disconnects from the channel 
   def unsubscribed
-    # Any cleanup needed when channel is unsubscribed
+    # Notify other clients that the user has disconnected
+    ActionCable.server.broadcast("document_#{params[:document_id]}", {
+      type: 'user_disconnected',
+      user_id: params[:user_id],     # Use params[:user_id]
+      user_name: params[:user_name]  # Use params[:user_name]
+    })
   end
 
   # This method handles incoming messages from the client. 
