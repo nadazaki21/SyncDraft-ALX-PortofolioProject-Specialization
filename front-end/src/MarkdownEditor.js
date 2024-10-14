@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import 'quill/dist/quill.snow.css'; // Import Quill's styles
 import Quill from 'quill';
 import logo from './assets/logo.png';
@@ -77,9 +77,9 @@ const MarkdownEditor = () => {
         return false;
     };
 
-    useEffect(() => {
+
         // Fetch recent documents when the component mounts
-        const fetchDocumentsAndRoles = async () => {
+        const fetchDocumentsAndRoles = useCallback(async () => {
             try {
                 const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage
 
@@ -132,10 +132,12 @@ const MarkdownEditor = () => {
             } catch (error) {
                 console.error('Error fetching documents or permissions:', error);
             }
-        };
+}, [currentUser]);
 
-        fetchDocumentsAndRoles(); // Call the function when the component mounts
-    }, [currentUser]); // Ensure currentUser is available in the dependency array
+        
+        useEffect(() => {
+            fetchDocumentsAndRoles(); // Call the function when the component mounts
+        }, [fetchDocumentsAndRoles]); // Only include currentUser in the dependency array
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -233,6 +235,7 @@ const MarkdownEditor = () => {
                 setSelectedDocument(response.data.id);
                 setIsNewDocument(false); // Mark it as not a new document anymore
                 setDocuments([...documents, response.data]);
+                fetchDocumentsAndRoles();
 
             } else {
                 // Make a PUT request to update the existing document
