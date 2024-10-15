@@ -49,7 +49,6 @@ class Api::DocumentsController < ApplicationController
   
     # Check if content and title exist in Redis
     content = Redis.current.get(redis_key_content)
-    title = Redis.current.get(redis_key_title)
     puts ("Redis key #{redis_key_title} set with value: #{Redis.current.get(redis_key_content)}")
 
     if content
