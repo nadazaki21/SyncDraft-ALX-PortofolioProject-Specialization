@@ -118,7 +118,7 @@ const MarkdownEditor = () => {
                                 role = 'Editor';
                             }
                         } else {
-                            role = 'No Role';
+                            role = 'Creator';
                         }
                     }
 
@@ -193,9 +193,19 @@ const MarkdownEditor = () => {
                             Authorization: `Bearer ${token}`,
                         },
                     });
+                    console.log(response.data);
                     setDocumentName(response.data.title);
-                    const content = JSON.parse(response.data.content); // Parse if it's a string
+                    if (response.data.source === 'postgresql') {
+                        const content = JSON.parse(response.data.content); // Parse if it's a string
                     quillInstance.current.setContents(content); // Set the Delta content directly
+                    }
+                    else {
+                         const responsed = (response.data.content).replace(/=>/g, ":");
+                        quillInstance.current.setContents(JSON.parse(responsed));
+                        // console.log(`Document fetched from: ${response.data.source}`); // Debug message
+                    }
+                    
+                    
                 } catch (error) {
                     console.error('Error fetching document:', error);
                 }
@@ -413,6 +423,8 @@ const MarkdownEditor = () => {
                 document_id: selectedDocument,
                 changes: quillInstance.current.getContents(),
             });
+            console.log('ID sent:', selectedDocument);
+            console.log('Content sent:', quillInstance.current.getContents());
         }
     }, 150), [selectedDocument]);
 
