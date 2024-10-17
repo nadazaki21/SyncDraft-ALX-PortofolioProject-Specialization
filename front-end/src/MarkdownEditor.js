@@ -30,7 +30,6 @@ const MarkdownEditor = () => {
     const isMounted = useRef(true);
     const subscriptionRef = useRef(null);
     // Get the cursors module once and store it in a ref
-    const cursorsRef = useRef(null);
     const quillRef = useRef(null); // Reference for the Quill editor
     const quillInstance = useRef(null); // Reference to store the Quill instance
     useEffect(() => {
@@ -53,15 +52,19 @@ const MarkdownEditor = () => {
                 },
 
             });
-            // Store the cursors module in a ref
-            try {
-                cursorsRef.current = quillInstance.current.getModule('cursors');
-            } catch (error) {
-                console.error('Error retrieving cursors module:', error);
-            }
-        }
-    }, []);
 
+        }
+    }, [selectedDocument, documentRoles]);
+    useEffect(() => {
+        // Set the Quill editor to read-only if the user is a Viewer
+        const currentRole = documentRoles[selectedDocument]; // Get the user's role for the selected document
+        console.log(currentRole);
+        if (currentRole === 'Viewer') {
+            quillInstance.current.enable(false); // Disable the editor (read-only mode)
+        } else {
+            quillInstance.current.enable(true); // Enable the editor for Editors or Creators
+        }
+    })
 
 
     // Utility function to check if a button should be disabled based on user role
@@ -78,66 +81,66 @@ const MarkdownEditor = () => {
     };
 
 
-        // Fetch recent documents when the component mounts
-        const fetchDocumentsAndRoles = useCallback(async () => {
-            try {
-                const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage
+    // Fetch recent documents when the component mounts
+    const fetchDocumentsAndRoles = useCallback(async () => {
+        try {
+            const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage
 
-                // Fetch all documents
-                const response = await axios.get(`${baseURL}/api/documents`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
-                    },
-                });
+            // Fetch all documents
+            const response = await axios.get(`${baseURL}/api/documents`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+                },
+            });
 
-                const documents = response.data || []; // Assuming the response data is an array of documents
-                setDocuments(documents); // Set documents state
+            const documents = response.data || []; // Assuming the response data is an array of documents
+            setDocuments(documents); // Set documents state
 
-                // Fetch roles for each document
-                const roles = {};
-                for (const doc of documents) {
-                    let role = '';
+            // Fetch roles for each document
+            const roles = {};
+            for (const doc of documents) {
+                let role = '';
 
-                    // Check if the user is the creator
-                    if (doc.created_by_id === currentUser) {
-                        role = 'Creator';
-                    } else {
-                        // Fetch permissions for the current user and document
-                        const permissionResponse = await axios.get(`${baseURL}/permissions/${doc.id}`, {
-                            headers: {
-                                Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
-                            },
-                        });
+                // Check if the user is the creator
+                if (doc.created_by_id === currentUser) {
+                    role = 'Creator';
+                } else {
+                    // Fetch permissions for the current user and document
+                    const permissionResponse = await axios.get(`${baseURL}/permissions/${doc.id}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`, // Include the JWT token in the Authorization header
+                        },
+                    });
 
-                        const userPermission = permissionResponse.data.find(p => p.user_id === currentUser);
+                    const userPermission = permissionResponse.data.find(p => p.user_id === currentUser);
 
-                        if (userPermission) {
-                            if (userPermission.access_type === 'viewer') {
-                                role = 'Viewer';
-                            } else if (userPermission.access_type === 'editor') {
-                                role = 'Editor';
-                            }
-                        } else {
-                            role = 'Creator';
+                    if (userPermission) {
+                        if (userPermission.access_type === 'viewer') {
+                            role = 'Viewer';
+                        } else if (userPermission.access_type === 'editor') {
+                            role = 'Editor';
                         }
+                    } else {
+                        role = 'Creator';
                     }
-
-                    // Store role for the document
-                    roles[doc.id] = role;
                 }
 
-                // Update state with document roles
-                setDocumentRoles(roles);
-
-            } catch (error) {
-                console.error('Error fetching documents or permissions:', error);
+                // Store role for the document
+                roles[doc.id] = role;
             }
-}, [currentUser]);
 
-        
-        useEffect(() => {
-            fetchDocumentsAndRoles(); // Call the function when the component mounts
-        }, [fetchDocumentsAndRoles]); // Only include currentUser in the dependency array
+            // Update state with document roles
+            setDocumentRoles(roles);
+
+        } catch (error) {
+            console.error('Error fetching documents or permissions:', error);
+        }
+    }, [currentUser]);
+
+
+    useEffect(() => {
+        fetchDocumentsAndRoles(); // Call the function when the component mounts
+    }, [fetchDocumentsAndRoles]); // Only include currentUser in the dependency array
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -197,15 +200,15 @@ const MarkdownEditor = () => {
                     setDocumentName(response.data.title);
                     if (response.data.source === 'postgresql') {
                         const content = JSON.parse(response.data.content); // Parse if it's a string
-                    quillInstance.current.setContents(content); // Set the Delta content directly
+                        quillInstance.current.setContents(content); // Set the Delta content directly
                     }
                     else {
-                         const responsed = (response.data.content).replace(/=>/g, ":");
+                        const responsed = (response.data.content).replace(/=>/g, ":");
                         quillInstance.current.setContents(JSON.parse(responsed));
                         // console.log(`Document fetched from: ${response.data.source}`); // Debug message
                     }
-                    
-                    
+
+
                 } catch (error) {
                     console.error('Error fetching document:', error);
                 }
@@ -426,7 +429,7 @@ const MarkdownEditor = () => {
             console.log('ID sent:', selectedDocument);
             console.log('Content sent:', quillInstance.current.getContents());
         }
-    }, 150), [selectedDocument]);
+    }, 50), [selectedDocument]);
 
     useEffect(() => {
         const quill = quillInstance.current;
@@ -463,9 +466,10 @@ const MarkdownEditor = () => {
     useEffect(() => {
         const cable = createConsumer('ws://localhost:3000/cable');
         const subscription = cable.subscriptions.create(
-            { channel: "DocumentChannel", document_id: selectedDocument,
+            {
+                channel: "DocumentChannel", document_id: selectedDocument,
                 user_id: currentUser, user_name: currentUserName,
-             },
+            },
             {
                 received(data) {
                     if (data) {
@@ -494,7 +498,7 @@ const MarkdownEditor = () => {
                                 const cursors = quillInstance.current.getModule('cursors');
                                 cursors.removeCursor(data.user_id);
                                 console.log(`User ${data.user_name} disconnected, cursor removed.`);
-                              }
+                            }
                         } catch (error) {
                             console.error("Error parsing data:", error);
                         }
@@ -529,6 +533,7 @@ const MarkdownEditor = () => {
 
                         // Throttle the cursor update to avoid excessive WebSocket messages
                         if (subscriptionRef.current) {
+                            if (documentRoles[selectedDocument] !== 'Viewer') {
                             subscriptionRef.current.perform('cursor_update', {
                                 document_id: selectedDocument,
                                 user_id: currentUser,
@@ -539,6 +544,7 @@ const MarkdownEditor = () => {
                             });
                             console.log("Sending cursor update: ", userName, cursorPosition, userColor, currentUser, cursorLength);
                         }
+                    }
 
                     }
                     else {
@@ -555,7 +561,7 @@ const MarkdownEditor = () => {
                 quill.off('selection-change');
             }
         };
-    }, [currentUserName, currentUser, selectedDocument]);
+    }, [currentUserName, currentUser, selectedDocument, documentRoles]);
 
     function getRandomColor() {
         const letters = '0123456789ABCDEF';
