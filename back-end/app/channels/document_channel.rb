@@ -21,13 +21,22 @@ class DocumentChannel < ApplicationCable::Channel
       user_id: params[:user_id],     # Use params[:user_id]
       user_name: params[:user_name]  # Use params[:user_name]
     })
+    
     redis_key = "document_#{params[:document_id]}_subscribers"
-    subscriber_count = Redis.current.decr(redis_key)  # Decrement the subscriber count
-
-    # If no more subscribers, remove the document's content from Redis
-    if subscriber_count <= 0
-      Redis.current.del("document_#{params[:document_id]}_content")
-      Redis.current.del(redis_key)  # Clean up the subscriber count key as well
+    # content_key = "document_#{params[:document_id]}_content"
+  
+    # Use Redis transaction to ensure atomic decrement and check
+    Redis.current.multi do |multi|
+      multi.decr(redis_key)           # Decrement the subscriber count
+      multi.get(redis_key)            # Get the current count after decrement
+    end.tap do |(_, subscriber_count)|
+      subscriber_count = subscriber_count.to_i
+  
+      if subscriber_count <= 0
+        # If no more subscribers, remove the document's content from Redis
+        # Redis.current.del(content_key)
+        Redis.current.del(redis_key)  # Clean up the subscriber count key as well
+      end
     end
   end
 

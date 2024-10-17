@@ -65,6 +65,10 @@ class Api::DocumentsController < ApplicationController
     # Check if the current user is the creator of the document or has the editor role
     if current_user.id == @document.created_by_id || @document.permissions.exists?(user_id: current_user.id, access_type: :editor)
       if @document.update(document_params)
+        # Clear the document's content from Redis after it is successfully updated in PostgreSQL
+        redis_key_content = "document_#{@document.id}_content"
+        Redis.current.del(redis_key_content)
+
         render json: @document, status: :ok
       else
         render json: @document.errors, status: :unprocessable_entity

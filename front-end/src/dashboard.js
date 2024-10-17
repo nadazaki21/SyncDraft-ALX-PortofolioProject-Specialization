@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import logo from './assets/logo.png';
 import search from './assets/search.png'
@@ -62,8 +62,7 @@ const Dashboard = () => {
   };
 
   // Fetch recent documents
-  useEffect(() => {
-    const fetchRecentDocuments = async () => {
+    const fetchRecentDocuments = useCallback (async () => {
       try {
         const token = localStorage.getItem('jwtToken'); // Retrieve the JWT token from local storage or your preferred storage
         // console.log('Saved JWT token:', token);
@@ -76,11 +75,11 @@ const Dashboard = () => {
       } catch (error) {
         console.error('Error fetching recent documents:', error);
       }
-    };
+    }, []);
 
-    fetchRecentDocuments();
-  }, []);
-
+    useEffect(() => {
+      fetchRecentDocuments();
+    }, [fetchRecentDocuments]);
   // Fetch user activity
   useEffect(() => {
     const fetchUserActivity = async () => {
@@ -163,6 +162,7 @@ const Dashboard = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      fetchRecentDocuments();
 
       // No need to setRequests again since we've already done it optimistically
     } catch (error) {
